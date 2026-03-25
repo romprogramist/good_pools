@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Каталог чаш v2 — Хорошие Бассейны</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Montserrat','Segoe UI',sans-serif; background:#f8fbff; overflow-x:hidden; }
+
+  .catalog {
+    padding:100px 80px 100px; max-width:1440px; margin:0 auto; position:relative;
+  }
+
+  /* ===== HEADER — bold style ===== */
+  .cat-header {
+    display:flex; justify-content:space-between; align-items:flex-end;
+    margin-bottom:60px;
+  }
+  .cat-header-left {}
+  .cat-header-left .label {
+    font-size:12px; font-weight:600; letter-spacing:5px; text-transform:uppercase;
+    color:#0ea5e9; margin-bottom:12px;
+  }
+  .cat-header-left h2 {
+    font-size:64px; line-height:0.95;
+  }
+  .cat-header-left h2 .bold { font-weight:900; color:#0c4a6e; letter-spacing:2px; }
+  .cat-header-left h2 .thin { font-weight:200; color:#0284c7; letter-spacing:4px; }
+
+  .cat-header-right {
+    max-width:360px; text-align:right;
+  }
+  .cat-header-right p {
+    font-size:14px; color:#64748b; line-height:1.7; margin-bottom:16px;
+  }
+  .btn-all-top {
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:inherit; font-size:13px; font-weight:700; color:#0c4a6e;
+    background:none; border:none; cursor:pointer;
+    letter-spacing:1px; text-transform:uppercase;
+    transition:color 0.2s;
+  }
+  .btn-all-top:hover { color:#0ea5e9; }
+  .btn-all-top .arrow { font-size:18px; transition:transform 0.3s; }
+  .btn-all-top:hover .arrow { transform:translateX(5px); }
+
+  /* ===== GRID 2x2 ===== */
+  .cat-grid {
+    display:grid; grid-template-columns:1fr 1fr; gap:32px;
+  }
+
+  /* ===== POOL CARD v2 ===== */
+  .pcard {
+    background:#fff; border-radius:28px; overflow:hidden;
+    display:grid; grid-template-columns:1fr 1fr;
+    box-shadow:0 4px 24px rgba(3,105,161,0.06);
+    transition:all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    cursor:pointer; position:relative; min-height:360px;
+  }
+  .pcard:hover {
+    transform:translateY(-8px);
+    box-shadow:0 20px 60px rgba(3,105,161,0.12);
+  }
+
+  /* Image side */
+  .pcard-img {
+    position:relative; overflow:hidden; min-height:360px;
+  }
+  .pcard-img .pool-visual {
+    width:100%; height:100%; position:absolute; top:0; left:0;
+  }
+  .pcard:hover .pcard-img .pool-visual { transform:scale(1.03); transition:transform 0.6s; }
+
+  /* CSS pool bowl shapes */
+  .pool-shape {
+    width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+    position:relative;
+  }
+  .pool-shape .water {
+    position:absolute; bottom:0; left:10%; right:10%; height:65%;
+    border-radius:0 0 50% 50% / 0 0 40% 40%;
+    overflow:hidden;
+  }
+  .pool-shape .water::after {
+    content:''; position:absolute; top:0; left:0; right:0; bottom:0;
+    background:linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 30%);
+  }
+  .pool-shape .label-3d {
+    position:absolute; top:20px; left:50%; transform:translateX(-50%);
+    font-size:48px; font-weight:900; color:rgba(255,255,255,0.12);
+    letter-spacing:6px; text-transform:uppercase;
+  }
+
+  /* Shape variants */
+  .shape-rect .water {
+    border-radius:8px 8px 16px 16px;
+    background:linear-gradient(180deg, #38bdf8 0%, #0284c7 60%, #0369a1 100%);
+  }
+  .shape-sport .water {
+    border-radius:8px 8px 40% 40%;
+    background:linear-gradient(180deg, #22d3ee 0%, #0ea5e9 50%, #0369a1 100%);
+  }
+  .shape-ergo .water {
+    border-radius:30% 8px 40% 20%;
+    background:linear-gradient(180deg, #67e8f9 0%, #06b6d4 50%, #0e7490 100%);
+  }
+  .shape-free .water {
+    border-radius:40% 30% 50% 35%;
+    background:linear-gradient(135deg, #a5f3fc 0%, #22d3ee 40%, #0284c7 100%);
+  }
+
+  /* Pool shape background */
+  .pool-bg-rect { background:linear-gradient(135deg, #e0f2fe, #bae6fd); }
+  .pool-bg-sport { background:linear-gradient(135deg, #ecfeff, #a5f3fc); }
+  .pool-bg-ergo { background:linear-gradient(135deg, #f0fdfa, #99f6e4); }
+  .pool-bg-free { background:linear-gradient(135deg, #f0f9ff, #bfdbfe); }
+
+  /* Badges */
+  .pcard-badge {
+    position:absolute; top:20px; left:20px; z-index:2;
+    background:linear-gradient(135deg,#0ea5e9,#06b6d4);
+    padding:8px 16px; border-radius:10px;
+    font-size:11px; font-weight:700; color:#fff; letter-spacing:0.5px;
+    box-shadow:0 4px 14px rgba(14,165,233,0.3);
+  }
+  .pcard-size {
+    position:absolute; bottom:20px; right:20px; z-index:2;
+    background:rgba(255,255,255,0.9); backdrop-filter:blur(8px);
+    padding:8px 16px; border-radius:10px;
+    font-size:13px; font-weight:700; color:#0c4a6e;
+  }
+
+  /* Info side */
+  .pcard-info {
+    padding:36px 32px; display:flex; flex-direction:column; justify-content:center;
+  }
+  .pcard-name {
+    font-size:36px; font-weight:900; color:#0c4a6e; letter-spacing:2px;
+    text-transform:uppercase; margin-bottom:4px;
+  }
+  .pcard-subtitle {
+    font-size:12px; font-weight:600; letter-spacing:3px; text-transform:uppercase;
+    color:#0ea5e9; margin-bottom:16px;
+  }
+  .pcard-desc {
+    font-size:14px; color:#64748b; line-height:1.7; margin-bottom:24px;
+  }
+
+  /* Specs */
+  .pcard-specs {
+    display:flex; gap:12px; margin-bottom:28px;
+  }
+  .pspec {
+    background:#f0f9ff; padding:12px 16px; border-radius:14px;
+    text-align:center; flex:1;
+  }
+  .pspec-val { font-size:20px; font-weight:800; color:#0c4a6e; }
+  .pspec-unit { font-size:10px; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; }
+
+  /* Price row */
+  .pcard-bottom {
+    display:flex; justify-content:space-between; align-items:center;
+    padding-top:20px; border-top:1px solid #e0f2fe;
+  }
+  .pcard-price { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; }
+  .pcard-price strong { display:block; font-size:26px; font-weight:800; color:#0c4a6e; letter-spacing:0; text-transform:none; }
+  .btn-card {
+    background:linear-gradient(135deg,#0ea5e9,#0284c7); color:#fff;
+    padding:14px 28px; border-radius:14px; border:none;
+    font-family:inherit; font-size:13px; font-weight:700; cursor:pointer;
+    box-shadow:0 4px 16px rgba(14,165,233,0.25);
+    transition:all 0.3s;
+  }
+  .btn-card:hover {
+    transform:translateY(-2px);
+    box-shadow:0 6px 22px rgba(14,165,233,0.35);
+  }
+
+  /* ===== FEATURED (first card spans full width) ===== */
+  .pcard.featured {
+    grid-column:1 / -1;
+    grid-template-columns:1.2fr 1fr;
+    min-height:420px;
+  }
+  .featured .pcard-name { font-size:48px; }
+  .featured .pcard-img { min-height:420px; }
+
+  /* ===== BOTTOM CTA ===== */
+  .cat-bottom {
+    margin-top:50px; padding:40px; text-align:center;
+    background:linear-gradient(135deg, rgba(14,165,233,0.05), rgba(6,182,212,0.08));
+    border-radius:24px; border:1px solid rgba(14,165,233,0.1);
+  }
+  .cat-bottom p { font-size:18px; color:#0c4a6e; font-weight:600; margin-bottom:6px; }
+  .cat-bottom .sub { font-size:14px; color:#64748b; font-weight:400; margin-bottom:24px; }
+  .btn-consult {
+    background:linear-gradient(135deg,#0ea5e9,#0284c7); color:#fff;
+    padding:16px 40px; border-radius:14px; border:none;
+    font-family:inherit; font-size:15px; font-weight:700; cursor:pointer;
+    box-shadow:0 6px 20px rgba(14,165,233,0.25); transition:all 0.3s;
+  }
+  .btn-consult:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(14,165,233,0.35); }
+
+  /* Water caustic animation on pool shapes */
+  .caustic-overlay {
+    position:absolute; top:0; left:0; right:0; bottom:0; pointer-events:none;
+    background:
+      radial-gradient(ellipse 80px 60px at 30% 40%, rgba(255,255,255,0.25) 0%, transparent 70%),
+      radial-gradient(ellipse 60px 80px at 70% 60%, rgba(255,255,255,0.15) 0%, transparent 70%);
+    animation:causticPool 6s ease-in-out infinite alternate;
+  }
+  @keyframes causticPool {
+    0% { opacity:0.3; transform:translate(0,0); }
+    100% { opacity:0.8; transform:translate(5px,-3px); }
+  }
+</style>
+</head>
+<body>
+
+<section class="catalog">
+
+  <div class="cat-header">
+    <div class="cat-header-left">
+      <div class="label">Композитные чаши</div>
+      <h2>
+        <span class="bold">КАТАЛОГ</span><br>
+        <span class="thin">ЧАШ</span>
+      </h2>
+    </div>
+    <div class="cat-header-right">
+      <p>Каждая модель — проверенная геометрия, усиленный корпус и гарантия 10 лет</p>
+      <button class="btn-all-top">Все модели <span class="arrow">→</span></button>
+    </div>
+  </div>
+
+  <div class="cat-grid">
+
+    <!-- HIIT — featured -->
+    <div class="pcard featured">
+      <div class="pcard-img pool-bg-sport">
+        <div class="pool-shape pool-visual">
+          <div class="label-3d">HIIT</div>
+          <div class="water shape-sport">
+            <div class="caustic-overlay"></div>
+          </div>
+        </div>
+        <div class="pcard-badge">Хит продаж</div>
+        <div class="pcard-size">8.0 × 3.6 м</div>
+      </div>
+      <div class="pcard-info">
+        <div class="pcard-name">HIIT</div>
+        <div class="pcard-subtitle">Спортивная серия</div>
+        <div class="pcard-desc">Увеличенная длина для активного плавания. Обтекаемая форма, оптимальная глубина 1.6м, усиленное дно. Выбор №1 среди наших клиентов.</div>
+        <div class="pcard-specs">
+          <div class="pspec"><div class="pspec-val">8.0</div><div class="pspec-unit">длина, м</div></div>
+          <div class="pspec"><div class="pspec-val">3.6</div><div class="pspec-unit">ширина, м</div></div>
+          <div class="pspec"><div class="pspec-val">1.6</div><div class="pspec-unit">глубина, м</div></div>
+        </div>
+        <div class="pcard-bottom">
+          <div class="pcard-price">от<strong>1 250 000 ₽</strong></div>
+          <button class="btn-card">Подробнее</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ZEN -->
+    <div class="pcard">
+      <div class="pcard-img pool-bg-rect">
+        <div class="pool-shape pool-visual">
+          <div class="label-3d">ZEN</div>
+          <div class="water shape-rect">
+            <div class="caustic-overlay"></div>
+          </div>
+        </div>
+        <div class="pcard-size">6.2 × 3.2 м</div>
+      </div>
+      <div class="pcard-info">
+        <div class="pcard-name">ZEN</div>
+        <div class="pcard-subtitle">Классическая серия</div>
+        <div class="pcard-desc">Прямоугольная форма для ценителей чистых линий. Компактный, идеален для небольших участков.</div>
+        <div class="pcard-specs">
+          <div class="pspec"><div class="pspec-val">6.2</div><div class="pspec-unit">длина, м</div></div>
+          <div class="pspec"><div class="pspec-val">3.2</div><div class="pspec-unit">ширина, м</div></div>
+          <div class="pspec"><div class="pspec-val">1.5</div><div class="pspec-unit">глубина, м</div></div>
+        </div>
+        <div class="pcard-bottom">
+          <div class="pcard-price">от<strong>890 000 ₽</strong></div>
+          <button class="btn-card">Подробнее</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TETTA -->
+    <div class="pcard">
+      <div class="pcard-img pool-bg-ergo">
+        <div class="pool-shape pool-visual">
+          <div class="label-3d">TETTA</div>
+          <div class="water shape-ergo">
+            <div class="caustic-overlay"></div>
+          </div>
+        </div>
+        <div class="pcard-size">7.0 × 3.4 м</div>
+      </div>
+      <div class="pcard-info">
+        <div class="pcard-name">TETTA</div>
+        <div class="pcard-subtitle">Семейная серия</div>
+        <div class="pcard-desc">Эргономичная форма со встроенными ступенями и зоной отдыха. Удобный вход, безопасно для детей.</div>
+        <div class="pcard-specs">
+          <div class="pspec"><div class="pspec-val">7.0</div><div class="pspec-unit">длина, м</div></div>
+          <div class="pspec"><div class="pspec-val">3.4</div><div class="pspec-unit">ширина, м</div></div>
+          <div class="pspec"><div class="pspec-val">1.5</div><div class="pspec-unit">глубина, м</div></div>
+        </div>
+        <div class="pcard-bottom">
+          <div class="pcard-price">от<strong>1 100 000 ₽</strong></div>
+          <button class="btn-card">Подробнее</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CUSTOM -->
+    <div class="pcard" style="grid-column:1/-1;">
+      <div class="pcard-img pool-bg-free" style="min-height:300px;">
+        <div class="pool-shape pool-visual">
+          <div class="label-3d">YOUR</div>
+          <div class="water shape-free">
+            <div class="caustic-overlay"></div>
+          </div>
+        </div>
+        <div class="pcard-size">Любой размер</div>
+      </div>
+      <div class="pcard-info">
+        <div class="pcard-name">CUSTOM</div>
+        <div class="pcard-subtitle">Индивидуальный проект</div>
+        <div class="pcard-desc">Любая форма, размер и глубина. Спроектируем и изготовим чашу под ваш участок. Вы рисуете мечту — мы воплощаем.</div>
+        <div class="pcard-specs">
+          <div class="pspec"><div class="pspec-val">∞</div><div class="pspec-unit">длина</div></div>
+          <div class="pspec"><div class="pspec-val">∞</div><div class="pspec-unit">ширина</div></div>
+          <div class="pspec"><div class="pspec-val">∞</div><div class="pspec-unit">глубина</div></div>
+        </div>
+        <div class="pcard-bottom">
+          <div class="pcard-price">Цена<strong>По проекту</strong></div>
+          <button class="btn-card">Обсудить проект</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="cat-bottom">
+    <p>Не уверены в выборе?</p>
+    <p class="sub">Расскажите, что вы хотите — подберём идеальную чашу за 15 минут</p>
+    <button class="btn-consult">Бесплатная консультация</button>
+  </div>
+
+</section>
+
+</body>
+</html>
