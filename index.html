@@ -119,46 +119,36 @@
     display:flex; flex-direction:column; align-items:center; text-align:center;
   }
 
-  /* ===== 3D CAROUSEL ===== */
+  /* ===== CAROUSEL ===== */
   .carousel-scene {
-    width:350px; height:450px; perspective:1000px;
+    width:100%; max-width:1200px; height:450px;
     position:relative; margin:0 auto 40px;
+    overflow:visible;
   }
   .carousel-rotor {
     width:100%; height:100%; position:relative;
-    transform-style:preserve-3d;
-    transition:transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
   }
   .carousel-card {
-    position:absolute; top:0; left:0; width:100%; height:100%;
-    backface-visibility:hidden;
+    position:absolute; top:0; left:50%;
+    width:320px; height:420px;
     border-radius:20px; overflow:hidden;
     box-shadow:0 10px 40px rgba(0,0,0,0.4);
     cursor:pointer;
-    transition:filter 0.6s ease, opacity 0.6s ease;
+    transition:transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94),
+               opacity 0.6s ease,
+               filter 0.6s ease;
+    will-change:transform, opacity, filter;
   }
   .carousel-card img {
     width:100%; height:100%; object-fit:cover;
+    pointer-events:none;
   }
   .carousel-card .card-label {
     position:absolute; bottom:0; left:0; right:0;
     padding:40px 20px 20px;
     background:linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
     color:#fff; font-size:18px; font-weight:700; letter-spacing:1px;
-    text-transform:uppercase;
-  }
-  .carousel-card.active {
-    filter:brightness(1);
-    z-index:10;
-  }
-  .carousel-card.neighbor {
-    filter:brightness(0.6);
-  }
-  .carousel-card.far {
-    filter:brightness(0.4);
-  }
-  .carousel-card.hidden {
-    opacity:0; pointer-events:none;
+    text-transform:uppercase; text-align:center;
   }
 
   /* ===== CTA BUTTON ===== */
@@ -180,10 +170,13 @@
   @media (max-width:768px) {
     .hero { padding:60px 20px 100px; }
     .carousel-scene {
-      width:250px; height:320px; perspective:600px;
+      height:340px;
+    }
+    .carousel-card {
+      width:220px; height:290px;
     }
     .carousel-card .card-label {
-      font-size:14px; padding:30px 14px 14px;
+      font-size:13px; padding:30px 14px 14px;
     }
     .hero-section-btn {
       padding:14px 32px; font-size:13px;
@@ -536,16 +529,16 @@
 
   <!-- Background images -->
   <div class="hero-bg-layer" id="heroBg">
-    <img src="https://images.unsplash.com/photo-1572331165267-854da2b021b1?w=1920&q=80" alt="" class="active">
-    <img src="https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?w=1920&q=80" alt="">
-    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80" alt="">
-    <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1920&q=80" alt="">
-    <img src="https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?w=1920&q=80" alt="">
-    <img src="https://images.unsplash.com/photo-1499793983394-e58e3a9b999a?w=1920&q=80" alt="">
-    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1920&q=80" alt="">
-    <img src="https://images.unsplash.com/photo-1563855072100-a8873a6eb5f3?w=1920&q=80" alt="">
-    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=1920&q=80" alt="">
-    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1920&q=80" alt="">
+    <img src="https://images.pexels.com/photos/261327/pexels-photo-261327.jpeg?auto=compress&w=1280" alt="" class="active">
+    <img src="https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&w=1280" alt="">
+    <img src="https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&w=1280" alt="">
+    <img src="https://images.pexels.com/photos/261403/pexels-photo-261403.jpeg?auto=compress&w=1280" alt="">
+    <img src="https://images.pexels.com/photos/261041/pexels-photo-261041.jpeg?auto=compress&w=1280" alt="">
+    <img src="https://images.pexels.com/photos/221457/pexels-photo-221457.jpeg?auto=compress&w=1280" alt="">
+    <img src="https://images.pexels.com/photos/261185/pexels-photo-261185.jpeg?auto=compress&w=1280" alt="">
+    <img src="https://images.pexels.com/photos/261045/pexels-photo-261045.jpeg?auto=compress&w=1280" alt="">
+    <img src="https://images.pexels.com/photos/261043/pexels-photo-261043.jpeg?auto=compress&w=1280" alt="">
+    <img src="https://images.pexels.com/photos/261039/pexels-photo-261039.jpeg?auto=compress&w=1280" alt="">
   </div>
   <div class="hero-overlay"></div>
 
@@ -568,43 +561,43 @@
     <div class="carousel-scene" id="carouselScene">
       <div class="carousel-rotor" id="carouselRotor">
         <div class="carousel-card" data-index="0">
-          <img src="https://images.unsplash.com/photo-1572331165267-854da2b021b1?w=600&q=80" alt="Композитные чаши">
+          <img src="https://images.pexels.com/photos/261327/pexels-photo-261327.jpeg?auto=compress&w=600" alt="Композитные чаши">
           <div class="card-label">Композитные чаши</div>
         </div>
         <div class="carousel-card" data-index="1">
-          <img src="https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?w=600&q=80" alt="Композитные бассейны">
+          <img src="https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&w=600" alt="Композитные бассейны">
           <div class="card-label">Композитные бассейны</div>
         </div>
         <div class="carousel-card" data-index="2">
-          <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80" alt="Строительство бассейнов">
+          <img src="https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&w=600" alt="Строительство бассейнов">
           <div class="card-label">Строительство бассейнов</div>
         </div>
         <div class="carousel-card" data-index="3">
-          <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80" alt="Сервисное обслуживание">
+          <img src="https://images.pexels.com/photos/261403/pexels-photo-261403.jpeg?auto=compress&w=600" alt="Сервисное обслуживание">
           <div class="card-label">Сервисное обслуживание</div>
         </div>
         <div class="carousel-card" data-index="4">
-          <img src="https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?w=600&q=80" alt="Оборудование">
+          <img src="https://images.pexels.com/photos/261041/pexels-photo-261041.jpeg?auto=compress&w=600" alt="Оборудование">
           <div class="card-label">Оборудование</div>
         </div>
         <div class="carousel-card" data-index="5">
-          <img src="https://images.unsplash.com/photo-1499793983394-e58e3a9b999a?w=600&q=80" alt="Павильоны">
+          <img src="https://images.pexels.com/photos/221457/pexels-photo-221457.jpeg?auto=compress&w=600" alt="Павильоны">
           <div class="card-label">Павильоны</div>
         </div>
         <div class="carousel-card" data-index="6">
-          <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&q=80" alt="Отделка бассейнов">
+          <img src="https://images.pexels.com/photos/261185/pexels-photo-261185.jpeg?auto=compress&w=600" alt="Отделка бассейнов">
           <div class="card-label">Отделка бассейнов</div>
         </div>
         <div class="carousel-card" data-index="7">
-          <img src="https://images.unsplash.com/photo-1563855072100-a8873a6eb5f3?w=600&q=80" alt="Химия для бассейнов">
+          <img src="https://images.pexels.com/photos/261045/pexels-photo-261045.jpeg?auto=compress&w=600" alt="Химия для бассейнов">
           <div class="card-label">Химия для бассейнов</div>
         </div>
         <div class="carousel-card" data-index="8">
-          <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&q=80" alt="Подогрев воды">
+          <img src="https://images.pexels.com/photos/261043/pexels-photo-261043.jpeg?auto=compress&w=600" alt="Подогрев воды">
           <div class="card-label">Подогрев воды</div>
         </div>
         <div class="carousel-card" data-index="9">
-          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&q=80" alt="Освещение">
+          <img src="https://images.pexels.com/photos/261039/pexels-photo-261039.jpeg?auto=compress&w=600" alt="Освещение">
           <div class="card-label">Освещение</div>
         </div>
       </div>
@@ -636,119 +629,100 @@
 </div>
 
 <script>
-// ===== 3D CAROUSEL =====
+// ===== CAROUSEL =====
 (function() {
-  const rotor = document.getElementById('carouselRotor');
-  const cards = Array.from(rotor.querySelectorAll('.carousel-card'));
-  const bgImages = Array.from(document.getElementById('heroBg').querySelectorAll('img'));
-  const heroBtn = document.getElementById('heroBtn');
-  const scene = document.getElementById('carouselScene');
-  const total = cards.length;
-  const angleStep = 360 / total; // 36 degrees
-  let currentIndex = 0;
+  var cards = Array.from(document.querySelectorAll('.carousel-card'));
+  var bgImages = Array.from(document.getElementById('heroBg').querySelectorAll('img'));
+  var scene = document.getElementById('carouselScene');
+  var total = cards.length;
+  var currentIndex = 0;
+  var visibleDesktop = 5;
+  var visibleMobile = 3;
 
-  function getRadius() {
-    return window.innerWidth <= 768 ? 250 : 450;
-  }
-
-  function layoutCards() {
-    const radius = getRadius();
-    cards.forEach(function(card, i) {
-      card.style.transform = 'rotateY(' + (i * angleStep) + 'deg) translateZ(' + radius + 'px)';
-    });
-  }
+  function getGap() { return window.innerWidth <= 768 ? 240 : 350; }
+  function getVisible() { return window.innerWidth <= 768 ? visibleMobile : visibleDesktop; }
 
   function goTo(index) {
     currentIndex = ((index % total) + total) % total;
-    var radius = getRadius();
-    rotor.style.transform = 'translateZ(-' + radius + 'px) rotateY(' + (-currentIndex * angleStep) + 'deg)';
+    var gap = getGap();
+    var visible = getVisible();
+    var halfVisible = Math.floor(visible / 2);
 
     cards.forEach(function(card, i) {
-      var diff = Math.abs(currentIndex - i);
-      if (diff > total / 2) diff = total - diff;
+      var diff = i - currentIndex;
+      // Wrap around for shortest path
+      if (diff > total / 2) diff -= total;
+      if (diff < -total / 2) diff += total;
 
-      card.classList.remove('active', 'neighbor', 'far', 'hidden');
-      if (diff === 0) {
-        card.classList.add('active');
-      } else if (diff === 1) {
-        card.classList.add('neighbor');
-      } else if (diff === 2) {
-        card.classList.add('far');
+      var absDiff = Math.abs(diff);
+      var x = diff * gap;
+      var scale = 1 - absDiff * 0.15;
+      var zIndex = 10 - absDiff;
+      var opacity, brightness;
+
+      if (absDiff === 0) {
+        scale = 1; brightness = 1; opacity = 1;
+      } else if (absDiff === 1) {
+        scale = 0.85; brightness = 0.6; opacity = 1;
+      } else if (absDiff === 2) {
+        scale = 0.7; brightness = 0.4; opacity = 1;
+      } else if (absDiff <= halfVisible) {
+        scale = 0.6; brightness = 0.3; opacity = 0.6;
       } else {
-        card.classList.add('hidden');
+        scale = 0.5; brightness = 0; opacity = 0;
       }
+
+      card.style.transform = 'translateX(' + (x - 160) + 'px) scale(' + scale + ')';
+      card.style.zIndex = zIndex;
+      card.style.opacity = opacity;
+      card.style.filter = 'brightness(' + brightness + ')';
+      card.style.pointerEvents = absDiff <= halfVisible ? 'auto' : 'none';
     });
 
+    // Crossfade background
     bgImages.forEach(function(img, i) {
       img.classList.toggle('active', i === currentIndex);
     });
   }
 
+  // Click to select card
   cards.forEach(function(card) {
     card.addEventListener('click', function() {
       var idx = parseInt(card.getAttribute('data-index'), 10);
+      if (idx === currentIndex) return;
       goTo(idx);
     });
   });
 
   // Touch swipe
-  var touchStartX = 0;
-  var touchStartY = 0;
-  var isSwiping = false;
-
+  var touchStartX = 0, isSwiping = false;
   scene.addEventListener('touchstart', function(e) {
     touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
     isSwiping = false;
   }, { passive: true });
-
   scene.addEventListener('touchmove', function(e) {
-    if (!isSwiping) {
-      var dx = Math.abs(e.touches[0].clientX - touchStartX);
-      var dy = Math.abs(e.touches[0].clientY - touchStartY);
-      if (dx > dy && dx > 10) {
-        isSwiping = true;
-      }
-    }
+    var dx = Math.abs(e.touches[0].clientX - touchStartX);
+    if (dx > 15) isSwiping = true;
   }, { passive: true });
-
   scene.addEventListener('touchend', function(e) {
     if (!isSwiping) return;
     var dx = e.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(dx) > 40) {
-      goTo(currentIndex + (dx < 0 ? 1 : -1));
-    }
+    if (Math.abs(dx) > 40) goTo(currentIndex + (dx < 0 ? 1 : -1));
   });
 
   // Mouse drag
-  var mouseStartX = 0;
-  var mouseDragging = false;
-
+  var mouseStartX = 0, mouseDragging = false;
   scene.addEventListener('mousedown', function(e) {
-    mouseStartX = e.clientX;
-    mouseDragging = true;
-    e.preventDefault();
+    mouseStartX = e.clientX; mouseDragging = true; e.preventDefault();
   });
-
-  document.addEventListener('mousemove', function(e) {
-    if (!mouseDragging) return;
-  });
-
   document.addEventListener('mouseup', function(e) {
     if (!mouseDragging) return;
     mouseDragging = false;
     var dx = e.clientX - mouseStartX;
-    if (Math.abs(dx) > 40) {
-      goTo(currentIndex + (dx < 0 ? 1 : -1));
-    }
+    if (Math.abs(dx) > 40) goTo(currentIndex + (dx < 0 ? 1 : -1));
   });
 
-  window.addEventListener('resize', function() {
-    layoutCards();
-    goTo(currentIndex);
-  });
-
-  layoutCards();
+  window.addEventListener('resize', function() { goTo(currentIndex); });
   goTo(0);
 })();
 
