@@ -635,6 +635,122 @@
 </div>
 
 <script>
+// ===== 3D CAROUSEL =====
+(function() {
+  const rotor = document.getElementById('carouselRotor');
+  const cards = Array.from(rotor.querySelectorAll('.carousel-card'));
+  const bgImages = Array.from(document.getElementById('heroBg').querySelectorAll('img'));
+  const heroBtn = document.getElementById('heroBtn');
+  const scene = document.getElementById('carouselScene');
+  const total = cards.length;
+  const angleStep = 360 / total; // 36 degrees
+  let currentIndex = 0;
+
+  function getRadius() {
+    return window.innerWidth <= 768 ? 250 : 450;
+  }
+
+  function layoutCards() {
+    const radius = getRadius();
+    cards.forEach(function(card, i) {
+      card.style.transform = 'rotateY(' + (i * angleStep) + 'deg) translateZ(' + radius + 'px)';
+    });
+  }
+
+  function goTo(index) {
+    currentIndex = ((index % total) + total) % total;
+    var radius = getRadius();
+    rotor.style.transform = 'translateZ(-' + radius + 'px) rotateY(' + (-currentIndex * angleStep) + 'deg)';
+
+    cards.forEach(function(card, i) {
+      var diff = Math.abs(currentIndex - i);
+      if (diff > total / 2) diff = total - diff;
+
+      card.classList.remove('active', 'neighbor', 'far', 'hidden');
+      if (diff === 0) {
+        card.classList.add('active');
+      } else if (diff === 1) {
+        card.classList.add('neighbor');
+      } else if (diff === 2) {
+        card.classList.add('far');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+
+    bgImages.forEach(function(img, i) {
+      img.classList.toggle('active', i === currentIndex);
+    });
+  }
+
+  cards.forEach(function(card) {
+    card.addEventListener('click', function() {
+      var idx = parseInt(card.getAttribute('data-index'), 10);
+      goTo(idx);
+    });
+  });
+
+  // Touch swipe
+  var touchStartX = 0;
+  var touchStartY = 0;
+  var isSwiping = false;
+
+  scene.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    isSwiping = false;
+  }, { passive: true });
+
+  scene.addEventListener('touchmove', function(e) {
+    if (!isSwiping) {
+      var dx = Math.abs(e.touches[0].clientX - touchStartX);
+      var dy = Math.abs(e.touches[0].clientY - touchStartY);
+      if (dx > dy && dx > 10) {
+        isSwiping = true;
+      }
+    }
+  }, { passive: true });
+
+  scene.addEventListener('touchend', function(e) {
+    if (!isSwiping) return;
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 40) {
+      goTo(currentIndex + (dx < 0 ? 1 : -1));
+    }
+  });
+
+  // Mouse drag
+  var mouseStartX = 0;
+  var mouseDragging = false;
+
+  scene.addEventListener('mousedown', function(e) {
+    mouseStartX = e.clientX;
+    mouseDragging = true;
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    if (!mouseDragging) return;
+  });
+
+  document.addEventListener('mouseup', function(e) {
+    if (!mouseDragging) return;
+    mouseDragging = false;
+    var dx = e.clientX - mouseStartX;
+    if (Math.abs(dx) > 40) {
+      goTo(currentIndex + (dx < 0 ? 1 : -1));
+    }
+  });
+
+  window.addEventListener('resize', function() {
+    layoutCards();
+    goTo(currentIndex);
+  });
+
+  layoutCards();
+  goTo(0);
+})();
+
 document.getElementById('heroSection').addEventListener('click', function(e) {
   const ring = document.createElement('div');
   ring.className = 'ripple-ring';
