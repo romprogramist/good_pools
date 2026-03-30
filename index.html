@@ -67,7 +67,7 @@
 
   /* Caustics */
   .hero::before {
-    content:''; position:absolute; top:0; left:0; right:0; bottom:0; z-index:0;
+    content:''; position:absolute; top:0; left:0; right:0; bottom:0; z-index:1;
     background:
       radial-gradient(ellipse 300px 200px at 15% 30%, rgba(14,165,233,0.12) 0%, transparent 70%),
       radial-gradient(ellipse 250px 350px at 75% 60%, rgba(14,165,233,0.08) 0%, transparent 70%),
@@ -75,7 +75,7 @@
     animation: caustics 10s ease-in-out infinite alternate;
   }
   .hero::after {
-    content:''; position:absolute; top:0; left:0; right:0; bottom:0; z-index:0;
+    content:''; position:absolute; top:0; left:0; right:0; bottom:0; z-index:1;
     background:
       radial-gradient(ellipse 350px 250px at 60% 70%, rgba(14,165,233,0.1) 0%, transparent 70%),
       radial-gradient(ellipse 300px 200px at 40% 40%, rgba(56,189,248,0.06) 0%, transparent 65%);
@@ -103,7 +103,7 @@
   }
   .hero-bg-layer img.active { opacity:1; }
   .hero-overlay {
-    position:absolute; top:0; left:0; right:0; bottom:0; z-index:1;
+    position:absolute; top:0; left:0; right:0; bottom:0; z-index:2;
     background:linear-gradient(
       to bottom,
       rgba(14,30,48,0.6) 0%,
@@ -178,6 +178,7 @@
 
   /* ===== CAROUSEL RESPONSIVE ===== */
   @media (max-width:768px) {
+    .hero { padding:60px 20px 100px; }
     .carousel-scene {
       width:250px; height:320px; perspective:600px;
     }
@@ -241,7 +242,7 @@
   }
 
   /* ===== BUBBLES ===== */
-  .bubbles { position:absolute; width:100%; height:100%; top:0; left:0; pointer-events:none; z-index:1; }
+  .bubbles { position:absolute; width:100%; height:100%; top:0; left:0; pointer-events:none; z-index:3; }
   .bubble {
     position:absolute; border-radius:50%;
     background:radial-gradient(circle at 30% 30%, rgba(56,189,248,0.2), rgba(14,165,233,0.05));
@@ -257,7 +258,7 @@
 
   /* ===== SMOOTH WAVES ===== */
   .waves {
-    position:absolute; bottom:-2px; left:0; right:0; height:100px; z-index:3;
+    position:absolute; bottom:-2px; left:0; right:0; height:100px; z-index:6;
   }
 
   /* ===== RIPPLE ===== */
