@@ -636,46 +636,37 @@
 (function() {
   var cards = Array.from(document.querySelectorAll('.carousel-card'));
   var bgImages = Array.from(document.getElementById('heroBg').querySelectorAll('img'));
-  var scene = document.getElementById('carouselScene');
   var total = cards.length;
   var currentIndex = 0;
+  var animating = false;
 
   function goTo(index) {
+    if (animating) return;
+    animating = true;
     currentIndex = ((index % total) + total) % total;
     var cardW = window.innerWidth <= 768 ? 200 : 280;
-    var overlap = cardW * 0.35;
+    var offset = cardW * 0.65;
 
     cards.forEach(function(card, i) {
       var diff = i - currentIndex;
       if (diff > total / 2) diff -= total;
       if (diff < -total / 2) diff += total;
 
-      // Only show cards at position 0 (active) and 1 (next)
-      // Position 0 = front card, position 1 = behind and offset right
       if (diff === 0) {
-        // Active card — front, left
         card.style.transform = 'translateY(-50%) translateX(0) scale(1) rotate(-2deg)';
         card.style.zIndex = 10;
         card.style.opacity = 1;
         card.style.filter = 'brightness(1)';
         card.style.pointerEvents = 'auto';
-      } else if (diff === 1 || (diff === -(total - 1))) {
-        // Next card — behind, slightly right and rotated
-        card.style.transform = 'translateY(-50%) translateX(' + (cardW - overlap) + 'px) scale(0.9) rotate(2deg)';
+      } else if (diff === 1 || diff === -(total - 1)) {
+        card.style.transform = 'translateY(-50%) translateX(' + offset + 'px) scale(0.88) rotate(2deg)';
         card.style.zIndex = 9;
         card.style.opacity = 1;
         card.style.filter = 'brightness(0.5)';
         card.style.pointerEvents = 'auto';
-      } else if (diff === -1 || (diff === (total - 1))) {
-        // Previous card — exiting left
-        card.style.transform = 'translateY(-50%) translateX(-' + cardW + 'px) scale(0.85) rotate(-5deg)';
-        card.style.zIndex = 8;
-        card.style.opacity = 0;
-        card.style.filter = 'brightness(0.3)';
-        card.style.pointerEvents = 'none';
       } else {
-        // Hidden
-        card.style.transform = 'translateY(-50%) translateX(' + (cardW * 2) + 'px) scale(0.7)';
+        var hideX = diff < 0 ? -cardW : cardW * 2;
+        card.style.transform = 'translateY(-50%) translateX(' + hideX + 'px) scale(0.7)';
         card.style.zIndex = 1;
         card.style.opacity = 0;
         card.style.filter = 'brightness(0)';
@@ -686,49 +677,67 @@
     bgImages.forEach(function(img, i) {
       img.classList.toggle('active', i === currentIndex);
     });
+
+    setTimeout(function() { animating = false; }, 500);
   }
 
-  // Click on next card to advance
+  function next() { goTo(currentIndex + 1); }
+  function prev() { goTo(currentIndex - 1); }
+
+  // Click cards
   cards.forEach(function(card) {
-    card.addEventListener('click', function() {
+    card.addEventListener('click', function(e) {
+      e.stopPropagation();
       var idx = parseInt(card.getAttribute('data-index'), 10);
       if (idx === currentIndex) {
-        // Click on active card = go to next
-        goTo(currentIndex + 1);
+        next();
       } else {
         goTo(idx);
       }
     });
   });
 
-  // Touch swipe on whole hero
-  var touchStartX = 0, isSwiping = false;
-  var hero = document.getElementById('heroSection');
-  hero.addEventListener('touchstart', function(e) {
-    touchStartX = e.touches[0].clientX;
-    isSwiping = false;
-  }, { passive: true });
-  hero.addEventListener('touchmove', function(e) {
-    if (Math.abs(e.touches[0].clientX - touchStartX) > 15) isSwiping = true;
-  }, { passive: true });
-  hero.addEventListener('touchend', function(e) {
-    if (!isSwiping) return;
-    var dx = e.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(dx) > 40) goTo(currentIndex + (dx < 0 ? 1 : -1));
+  // Click anywhere on hero right side = next
+  document.getElementById('heroSection').addEventListener('click', function(e) {
+    if (e.target.closest('.carousel-card') || e.target.closest('.hero-section-btn')) return;
+    if (e.clientX > window.innerWidth * 0.4) next();
   });
 
-  // Mouse drag on hero
-  var mouseStartX = 0, mouseDragging = false;
-  hero.addEventListener('mousedown', function(e) {
-    if (e.target.closest('.carousel-card')) {
-      mouseStartX = e.clientX; mouseDragging = true;
-    }
+  // Touch swipe
+  var touchStartX = 0, touchMoved = false;
+  document.getElementById('heroSection').addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX; touchMoved = false;
+  }, { passive: true });
+  document.getElementById('heroSection').addEventListener('touchmove', function(e) {
+    if (Math.abs(e.touches[0].clientX - touchStartX) > 20) touchMoved = true;
+  }, { passive: true });
+  document.getElementById('heroSection').addEventListener('touchend', function(e) {
+    if (!touchMoved) return;
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    if (dx < -40) next();
+    else if (dx > 40) prev();
+  });
+
+  // Mouse drag
+  var msx = 0, dragging = false;
+  document.getElementById('heroSection').addEventListener('mousedown', function(e) {
+    msx = e.clientX; dragging = true;
+  });
+  document.addEventListener('mousemove', function(e) {
+    if (dragging) e.preventDefault();
   });
   document.addEventListener('mouseup', function(e) {
-    if (!mouseDragging) return;
-    mouseDragging = false;
-    var dx = e.clientX - mouseStartX;
-    if (Math.abs(dx) > 40) goTo(currentIndex + (dx < 0 ? 1 : -1));
+    if (!dragging) return;
+    dragging = false;
+    var dx = e.clientX - msx;
+    if (dx < -40) next();
+    else if (dx > 40) prev();
+  });
+
+  // Keyboard
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight') next();
+    if (e.key === 'ArrowLeft') prev();
   });
 
   window.addEventListener('resize', function() { goTo(currentIndex); });
