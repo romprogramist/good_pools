@@ -1,970 +1,259 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hero v3 — Хорошие Бассейны</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;700;800;900&display=swap');
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family: 'Montserrat', 'Segoe UI', sans-serif; background:#0e1e30; overflow-x:hidden; color:#c8d6e5; }
-
-  /* ===== TOP BAR ===== */
-  .top-bar {
-    display:flex; justify-content:space-between; align-items:center;
-    padding:10px 60px; font-size:13px; color:#7a8fa3; background:#080f1a;
-  }
-  .top-bar .left { display:flex; gap:18px; align-items:center; }
-  .top-bar .right { display:flex; gap:14px; align-items:center; }
-  .top-bar .phone { font-weight:700; font-size:15px; color:#e0f2fe; }
-  .top-bar .social { display:flex; gap:6px; }
-  .top-bar .social span {
-    width:26px; height:26px; background:#0ea5e9; border-radius:7px;
-    display:flex; align-items:center; justify-content:center;
-    font-size:11px; color:#fff; font-weight:600; cursor:pointer;
-    transition:background 0.2s;
-  }
-  .top-bar .social span:hover { background:#0284c7; }
-
-  /* ===== FLOATING NAV ===== */
-  .nav-wrap { padding:10px 32px; }
-  .nav-float {
-    display:flex; justify-content:space-between; align-items:center;
-    padding:18px 36px; background:#0c1929; border-radius:20px;
-    box-shadow:0 4px 28px rgba(0,0,0,0.3), 0 1px 4px rgba(0,0,0,0.2);
-    border:1px solid rgba(14,165,233,0.1);
-  }
-  .logo-block { display:flex; align-items:center; gap:12px; }
-  .logo-icon {
-    width:48px; height:48px; background:linear-gradient(135deg,#0f2942,#132f4f);
-    border-radius:14px; display:flex; align-items:center; justify-content:center;
-    font-size:24px; color:#38bdf8;
-  }
-  .logo-text .name { font-size:20px; font-weight:800; color:#e0f2fe; letter-spacing:1px; }
-  .logo-text .sub { font-size:10px; font-weight:600; color:#0ea5e9; letter-spacing:4px; text-transform:uppercase; }
-  .nav-links { display:flex; gap:8px; font-size:14px; color:#7a8fa3; font-weight:500; }
-  .nav-links span { padding:9px 18px; border-radius:12px; cursor:pointer; transition:all 0.2s; }
-  .nav-links span:hover { background:rgba(14,165,233,0.1); color:#38bdf8; }
-  .nav-links span.active { background:rgba(14,165,233,0.1); color:#38bdf8; font-weight:600; }
-  .cta-nav {
-    background:linear-gradient(135deg,#0ea5e9,#0284c7); color:#fff;
-    padding:14px 30px; border-radius:14px; font-size:14px; font-weight:700;
-    box-shadow:0 4px 18px rgba(14,165,233,0.25); cursor:pointer;
-    transition:transform 0.2s, box-shadow 0.2s; position:relative;
-  }
-  .cta-nav:hover { transform:translateY(-2px); box-shadow:0 6px 24px rgba(14,165,233,0.35); }
-  .cta-nav .dot {
-    position:absolute; top:-5px; right:-5px; width:12px; height:12px;
-    background:#22d3ee; border-radius:50%; border:2px solid #0c1929;
-  }
-
-  /* ===== HERO SECTION ===== */
-  .hero {
-    position:relative; min-height:92vh; display:flex; align-items:center;
-    justify-content:center; padding:80px 60px 140px; overflow:hidden;
-    background:#0e1e30;
-  }
-
-  /* Caustics */
-  .hero::before {
-    content:''; position:absolute; top:0; left:0; right:0; bottom:0; z-index:1;
-    background:
-      radial-gradient(ellipse 300px 200px at 15% 30%, rgba(14,165,233,0.12) 0%, transparent 70%),
-      radial-gradient(ellipse 250px 350px at 75% 60%, rgba(14,165,233,0.08) 0%, transparent 70%),
-      radial-gradient(ellipse 400px 200px at 50% 10%, rgba(56,189,248,0.06) 0%, transparent 60%);
-    animation: caustics 10s ease-in-out infinite alternate;
-  }
-  .hero::after {
-    content:''; position:absolute; top:0; left:0; right:0; bottom:0; z-index:1;
-    background:
-      radial-gradient(ellipse 350px 250px at 60% 70%, rgba(14,165,233,0.1) 0%, transparent 70%),
-      radial-gradient(ellipse 300px 200px at 40% 40%, rgba(56,189,248,0.06) 0%, transparent 65%);
-    animation: caustics2 12s ease-in-out infinite alternate;
-  }
-  @keyframes caustics {
-    0% { opacity:0.4; transform:scale(1) translate(0,0); }
-    33% { opacity:0.8; transform:scale(1.05) translate(10px,-5px); }
-    66% { opacity:0.6; transform:scale(0.98) translate(-8px,8px); }
-    100% { opacity:1; transform:scale(1.03) translate(5px,-3px); }
-  }
-  @keyframes caustics2 {
-    0% { opacity:0.6; transform:scale(1.02) translate(-5px,5px); }
-    50% { opacity:0.3; transform:scale(0.97) translate(8px,-8px); }
-    100% { opacity:0.7; transform:scale(1.04) translate(-3px,3px); }
-  }
-
-  /* ===== HERO BACKGROUND IMAGES ===== */
-  .hero-bg-layer {
-    position:absolute; top:0; left:0; right:0; bottom:0; z-index:0;
-  }
-  .hero-bg-layer img {
-    position:absolute; top:0; left:0; width:100%; height:100%;
-    object-fit:cover; opacity:0; transition:opacity 0.8s ease;
-  }
-  .hero-bg-layer img.active { opacity:1; }
-  .hero-overlay {
-    position:absolute; top:0; left:0; right:0; bottom:0; z-index:2;
-    background:linear-gradient(
-      to bottom,
-      rgba(14,30,48,0.6) 0%,
-      rgba(14,30,48,0.3) 40%,
-      rgba(14,30,48,0.5) 70%,
-      rgba(14,30,48,0.8) 100%
-    );
-  }
-
-  /* ===== HERO CONTENT ===== */
-  .hero-inner {
-    position:relative; z-index:5; width:100%; max-width:1400px;
-    display:flex; flex-direction:column; align-items:flex-end;
-    justify-content:flex-end; min-height:60vh;
-    padding-right:60px;
-  }
-
-  /* ===== CAROUSEL ===== */
-  .carousel-scene {
-    width:100%; height:100%; position:absolute; top:0; left:0;
-    z-index:4; pointer-events:none;
-  }
-  .carousel-card {
-    position:absolute; top:50%; left:60px;
-    width:280px; height:380px;
-    border-radius:20px; overflow:hidden;
-    box-shadow:0 15px 50px rgba(0,0,0,0.5);
-    cursor:pointer; pointer-events:auto;
-    transition:transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94),
-               opacity 0.5s ease,
-               filter 0.5s ease;
-    will-change:transform, opacity, filter;
-    transform-origin:bottom left;
-  }
-  .carousel-card img {
-    width:100%; height:100%; object-fit:cover;
-    pointer-events:none;
-  }
-  .carousel-card .card-label {
-    position:absolute; bottom:0; left:0; right:0;
-    padding:50px 16px 18px;
-    background:linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
-    color:#fff; font-weight:800; letter-spacing:1px;
-    text-transform:uppercase; text-align:left; line-height:1.2;
-  }
-  .carousel-card .card-label .label-main {
-    font-size:22px; display:block;
-  }
-  .carousel-card .card-label .label-sub {
-    font-size:16px; font-weight:400; opacity:0.8;
-  }
-
-  /* ===== CTA BUTTON ===== */
-  .hero-section-btn {
-    display:inline-block; padding:20px 48px;
-    font-family:inherit; font-size:15px; font-weight:400;
-    color:#222; background:#fff;
-    border:none; border-radius:0;
-    cursor:pointer; text-decoration:none;
-    transition:all 0.3s;
-    box-shadow:0 4px 20px rgba(0,0,0,0.15);
-  }
-  .hero-section-btn strong {
-    font-weight:900;
-  }
-  .hero-section-btn:hover {
-    background:#f0f0f0;
-    box-shadow:0 8px 30px rgba(0,0,0,0.2);
-  }
-
-  /* ===== CAROUSEL RESPONSIVE ===== */
-  @media (max-width:768px) {
-    .hero { padding:60px 20px 100px; }
-    .carousel-card {
-      width:200px; height:270px; left:20px;
-    }
-    .carousel-card .card-label .label-main { font-size:16px; }
-    .carousel-card .card-label .label-sub { font-size:13px; }
-    .hero-inner { padding-right:20px; }
-    .hero-section-btn {
-      padding:14px 32px; font-size:13px;
-    }
-  }
-
-
-  /* ===== LIGHTBOX SLIDER ===== */
-  .lightbox {
-    display:none; position:fixed; top:0; left:0; right:0; bottom:0;
-    background:rgba(0,0,0,0.85); z-index:1000;
-    align-items:center; justify-content:center;
-    backdrop-filter:blur(8px);
-    animation:lbFadeIn 0.3s ease;
-  }
-  .lightbox.active { display:flex; }
-  @keyframes lbFadeIn { from { opacity:0; } to { opacity:1; } }
-
-  .lb-container {
-    position:relative; max-width:80vw; max-height:80vh;
-  }
-  .lb-container img {
-    max-width:80vw; max-height:80vh; object-fit:contain;
-    border-radius:16px; box-shadow:0 30px 80px rgba(0,0,0,0.4);
-    animation:lbSlideIn 0.3s ease;
-  }
-  @keyframes lbSlideIn { from { transform:scale(0.9); opacity:0; } to { transform:scale(1); opacity:1; } }
-
-  .lb-close {
-    position:fixed; top:30px; right:40px;
-    width:48px; height:48px; border-radius:50%;
-    background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);
-    color:#fff; font-size:24px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    transition:background 0.2s;
-    backdrop-filter:blur(4px);
-  }
-  .lb-close:hover { background:rgba(255,255,255,0.25); }
-
-  .lb-arrow {
-    position:fixed; top:50%; transform:translateY(-50%);
-    width:56px; height:56px; border-radius:50%;
-    background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);
-    color:#fff; font-size:22px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    transition:background 0.2s;
-    backdrop-filter:blur(4px);
-  }
-  .lb-arrow:hover { background:rgba(255,255,255,0.25); }
-  .lb-prev { left:30px; }
-  .lb-next { right:30px; }
-
-  .lb-counter {
-    position:fixed; bottom:30px; left:50%; transform:translateX(-50%);
-    color:rgba(255,255,255,0.6); font-size:14px; letter-spacing:2px;
-  }
-
-  /* ===== BUBBLES ===== */
-  .bubbles { position:absolute; width:100%; height:100%; top:0; left:0; pointer-events:none; z-index:3; }
-  .bubble {
-    position:absolute; border-radius:50%;
-    background:radial-gradient(circle at 30% 30%, rgba(56,189,248,0.2), rgba(14,165,233,0.05));
-    border:1px solid rgba(56,189,248,0.15);
-    animation: rise linear infinite;
-  }
-  @keyframes rise {
-    0% { transform:translateY(0) scale(1); opacity:0; }
-    10% { opacity:0.5; }
-    90% { opacity:0.15; }
-    100% { transform:translateY(-90vh) scale(0.4); opacity:0; }
-  }
-
-  /* ===== SMOOTH WAVES ===== */
-  .waves {
-    position:absolute; bottom:-2px; left:0; right:0; height:100px; z-index:6;
-  }
-
-  /* ===== RIPPLE ===== */
-  .ripple-dot {
-    position:fixed; pointer-events:none; z-index:100;
-    width:20px; height:20px; border-radius:50%;
-    background:radial-gradient(circle, rgba(14,165,233,0.25) 0%, rgba(14,165,233,0.05) 60%, transparent 100%);
-    animation: rippleFade 1s ease-out forwards;
-  }
-  @keyframes rippleFade {
-    0% { transform:scale(0.5); opacity:0.8; }
-    50% { transform:scale(2.5); opacity:0.3; }
-    100% { transform:scale(4); opacity:0; }
-  }
-  .ripple-ring {
-    position:fixed; pointer-events:none; z-index:100; border-radius:50%;
-    border:2px solid rgba(14,165,233,0.35);
-    animation: ringOut 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  }
-  @keyframes ringOut {
-    0% { width:0; height:0; opacity:0.7; }
-    100% { width:250px; height:250px; opacity:0; margin-top:-125px; margin-left:-125px; }
-  }
-
-  .catalog {
-    padding:100px 80px 100px; max-width:1440px; margin:0 auto; position:relative;
-  }
-
-  /* ===== HEADER — bold style ===== */
-  .cat-header {
-    display:flex; justify-content:space-between; align-items:flex-end;
-    margin-bottom:60px;
-  }
-  .cat-header-left {}
-  .cat-header-left .label {
-    font-size:12px; font-weight:600; letter-spacing:5px; text-transform:uppercase;
-    color:#0ea5e9; margin-bottom:12px;
-  }
-  .cat-header-left h2 {
-    font-size:64px; line-height:0.95;
-  }
-  .cat-header-left h2 .bold { font-weight:900; color:#e0f2fe; letter-spacing:2px; }
-  .cat-header-left h2 .thin { font-weight:200; color:#38bdf8; letter-spacing:4px; }
-
-  .cat-header-right {
-    max-width:360px; text-align:right;
-  }
-  .cat-header-right p {
-    font-size:14px; color:#7a8fa3; line-height:1.7; margin-bottom:16px;
-  }
-  .btn-all-top {
-    display:inline-flex; align-items:center; gap:8px;
-    font-family:inherit; font-size:13px; font-weight:700; color:#38bdf8;
-    background:none; border:none; cursor:pointer;
-    letter-spacing:1px; text-transform:uppercase;
-    transition:color 0.2s;
-  }
-  .btn-all-top:hover { color:#0ea5e9; }
-  .btn-all-top .arrow { font-size:18px; transition:transform 0.3s; }
-  .btn-all-top:hover .arrow { transform:translateX(5px); }
-
-  /* ===== GRID 2x2 ===== */
-  .cat-grid {
-    display:grid; grid-template-columns:1fr 1fr; gap:32px;
-  }
-
-  /* ===== POOL CARD v2 ===== */
-  .pcard {
-    background:#132f4f; border-radius:28px; overflow:hidden;
-    display:grid; grid-template-columns:1fr 1fr;
-    box-shadow:0 4px 24px rgba(0,0,0,0.3); border:1px solid rgba(14,165,233,0.1);
-    transition:all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
-    cursor:pointer; position:relative; min-height:360px;
-  }
-  .pcard:hover {
-    transform:translateY(-8px);
-    box-shadow:0 20px 60px rgba(0,0,0,0.4);
-  }
-
-  /* Image side */
-  .pcard-img {
-    position:relative; overflow:hidden; min-height:360px;
-  }
-  .pcard-img .pool-visual {
-    width:100%; height:100%; position:absolute; top:0; left:0;
-  }
-  .pcard:hover .pcard-img .pool-visual { transform:scale(1.03); transition:transform 0.6s; }
-
-  /* CSS pool bowl shapes */
-  .pool-shape {
-    width:100%; height:100%; display:flex; align-items:center; justify-content:center;
-    position:relative;
-  }
-  .pool-shape .water {
-    position:absolute; bottom:0; left:10%; right:10%; height:65%;
-    border-radius:0 0 50% 50% / 0 0 40% 40%;
-    overflow:hidden;
-  }
-  .pool-shape .water::after {
-    content:''; position:absolute; top:0; left:0; right:0; bottom:0;
-    background:linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 30%);
-  }
-  .pool-shape .label-3d {
-    position:absolute; top:20px; left:50%; transform:translateX(-50%);
-    font-size:48px; font-weight:900; color:rgba(255,255,255,0.12);
-    letter-spacing:6px; text-transform:uppercase;
-  }
-
-  /* Shape variants */
-  .shape-rect .water {
-    border-radius:8px 8px 16px 16px;
-    background:linear-gradient(180deg, #38bdf8 0%, #0284c7 60%, #0369a1 100%);
-  }
-  .shape-sport .water {
-    border-radius:8px 8px 40% 40%;
-    background:linear-gradient(180deg, #22d3ee 0%, #0ea5e9 50%, #0369a1 100%);
-  }
-  .shape-ergo .water {
-    border-radius:30% 8px 40% 20%;
-    background:linear-gradient(180deg, #67e8f9 0%, #06b6d4 50%, #0e7490 100%);
-  }
-  .shape-free .water {
-    border-radius:40% 30% 50% 35%;
-    background:linear-gradient(135deg, #a5f3fc 0%, #22d3ee 40%, #0284c7 100%);
-  }
-
-  /* Pool shape background */
-  .pool-bg-rect { background:linear-gradient(135deg, #0f2942, #0c1929); }
-  .pool-bg-sport { background:linear-gradient(135deg, #0e2a3f, #0a1f30); }
-  .pool-bg-ergo { background:linear-gradient(135deg, #0d2b3a, #0a1e2d); }
-  .pool-bg-free { background:linear-gradient(135deg, #0f2942, #0c1929); }
-
-  /* Badges */
-  .pcard-badge {
-    position:absolute; top:20px; left:20px; z-index:2;
-    background:linear-gradient(135deg,#0ea5e9,#06b6d4);
-    padding:8px 16px; border-radius:10px;
-    font-size:11px; font-weight:700; color:#fff; letter-spacing:0.5px;
-    box-shadow:0 4px 14px rgba(14,165,233,0.3);
-  }
-  .pcard-size {
-    position:absolute; bottom:20px; right:20px; z-index:2;
-    background:rgba(12,25,41,0.8); backdrop-filter:blur(8px);
-    padding:8px 16px; border-radius:10px;
-    font-size:13px; font-weight:700; color:#bae6fd;
-  }
-
-  /* Info side */
-  .pcard-info {
-    padding:36px 32px; display:flex; flex-direction:column; justify-content:center;
-  }
-  .pcard-name {
-    font-size:36px; font-weight:900; color:#e0f2fe; letter-spacing:2px;
-    text-transform:uppercase; margin-bottom:4px;
-  }
-  .pcard-subtitle {
-    font-size:12px; font-weight:600; letter-spacing:3px; text-transform:uppercase;
-    color:#0ea5e9; margin-bottom:16px;
-  }
-  .pcard-desc {
-    font-size:14px; color:#7a8fa3; line-height:1.7; margin-bottom:24px;
-  }
-
-  /* Specs */
-  .pcard-specs {
-    display:flex; gap:12px; margin-bottom:28px;
-  }
-  .pspec {
-    background:rgba(14,165,233,0.08); padding:12px 16px; border-radius:14px;
-    text-align:center; flex:1;
-  }
-  .pspec-val { font-size:20px; font-weight:800; color:#e0f2fe; }
-  .pspec-unit { font-size:10px; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; }
-
-  /* Price row */
-  .pcard-bottom {
-    display:flex; justify-content:space-between; align-items:center;
-    padding-top:20px; border-top:1px solid rgba(14,165,233,0.15);
-  }
-  .pcard-price { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; }
-  .pcard-price strong { display:block; font-size:26px; font-weight:800; color:#e0f2fe; letter-spacing:0; text-transform:none; }
-  .btn-card {
-    background:linear-gradient(135deg,#0ea5e9,#0284c7); color:#fff;
-    padding:14px 28px; border-radius:14px; border:none;
-    font-family:inherit; font-size:13px; font-weight:700; cursor:pointer;
-    box-shadow:0 4px 16px rgba(14,165,233,0.25);
-    transition:all 0.3s;
-  }
-  .btn-card:hover {
-    transform:translateY(-2px);
-    box-shadow:0 6px 22px rgba(14,165,233,0.35);
-  }
-
-  /* ===== FEATURED (first card spans full width) ===== */
-  .pcard.featured {
-    grid-column:1 / -1;
-    grid-template-columns:1.2fr 1fr;
-    min-height:420px;
-  }
-  .featured .pcard-name { font-size:48px; }
-  .featured .pcard-img { min-height:420px; }
-
-  /* ===== BOTTOM CTA ===== */
-  .cat-bottom {
-    margin-top:50px; padding:40px; text-align:center;
-    background:linear-gradient(135deg, rgba(14,165,233,0.08), rgba(6,182,212,0.05));
-    border-radius:24px; border:1px solid rgba(14,165,233,0.15);
-  }
-  .cat-bottom p { font-size:18px; color:#e0f2fe; font-weight:600; margin-bottom:6px; }
-  .cat-bottom .sub { font-size:14px; color:#7a8fa3; font-weight:400; margin-bottom:24px; }
-  .btn-consult {
-    background:linear-gradient(135deg,#0ea5e9,#0284c7); color:#fff;
-    padding:16px 40px; border-radius:14px; border:none;
-    font-family:inherit; font-size:15px; font-weight:700; cursor:pointer;
-    box-shadow:0 6px 20px rgba(14,165,233,0.25); transition:all 0.3s;
-  }
-  .btn-consult:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(14,165,233,0.35); }
-
-  /* Water caustic animation on pool shapes */
-  .caustic-overlay {
-    position:absolute; top:0; left:0; right:0; bottom:0; pointer-events:none;
-    background:
-      radial-gradient(ellipse 80px 60px at 30% 40%, rgba(255,255,255,0.25) 0%, transparent 70%),
-      radial-gradient(ellipse 60px 80px at 70% 60%, rgba(255,255,255,0.15) 0%, transparent 70%);
-    animation:causticPool 6s ease-in-out infinite alternate;
-  }
-  @keyframes causticPool {
-    0% { opacity:0.3; transform:translate(0,0); }
-    100% { opacity:0.8; transform:translate(5px,-3px); }
-  }
-
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Хорошие Бассейны</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<!-- TOP BAR -->
-<div class="top-bar">
-  <div class="left">
-    <span>Батайск, ул. Донецкая 18</span>
-    <span style="opacity:0.3;">|</span>
-    <span>Пн-Сб: 9:00 - 18:00</span>
-  </div>
-  <div class="right">
-    <span class="phone">+7 (961) 320-10-50</span>
-    <div class="social"><span>W</span><span>T</span></div>
-  </div>
-</div>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <button class="hamburger" aria-label="Меню">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <span class="header-title">Мы строим</span>
+    </div>
+    <div class="header-right">
+      <!-- Chat -->
+      <button class="header-icon" aria-label="Чат">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </button>
+      <!-- Telegram -->
+      <button class="header-icon" aria-label="Telegram">
+        <svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
+      </button>
+      <!-- WhatsApp -->
+      <button class="header-icon" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      </button>
+      <!-- Search -->
+      <button class="header-icon" aria-label="Поиск">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      </button>
+      <!-- Profile -->
+      <button class="header-icon" aria-label="Профиль">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </button>
+    </div>
+  </header>
 
-<!-- FLOATING NAV -->
-<div class="nav-wrap">
-  <div class="nav-float">
-    <div class="logo-block">
-      <div class="logo-icon">~</div>
-      <div class="logo-text">
-        <div class="name">Хорошие</div>
-        <div class="sub">бассейны</div>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-title-bold">Хорошие</div>
+      <div class="hero-title-thin">Бассейны</div>
+    </div>
+
+    <div class="hero-right">
+      <div class="carousel-container">
+        <div class="carousel-track">
+
+          <div class="category-card">
+            <div class="card-image">
+              <img src="images/categories/composite-pool.svg" alt="Композитные бассейны">
+            </div>
+            <div class="card-title">
+              <div class="card-title-bold">Композитные</div>
+              <div class="card-title-thin">бассейны</div>
+            </div>
+            <div class="card-dot"></div>
+          </div>
+
+          <div class="category-card">
+            <div class="card-image">
+              <img src="images/categories/custom-pool.svg" alt="Бассейны кастом">
+            </div>
+            <div class="card-title">
+              <div class="card-title-bold">Бассейны</div>
+              <div class="card-title-thin">кастом</div>
+            </div>
+            <div class="card-dot"></div>
+          </div>
+
+          <div class="category-card">
+            <div class="card-image">
+              <img src="images/categories/jacuzzi-spa.svg" alt="Гидромассажные джакузи спа">
+            </div>
+            <div class="card-title">
+              <div class="card-title-bold">Джакузи</div>
+              <div class="card-title-thin">спа</div>
+            </div>
+            <div class="card-dot"></div>
+          </div>
+
+          <div class="category-card">
+            <div class="card-image">
+              <img src="images/categories/inflatable-spa.svg" alt="Надувные спа">
+            </div>
+            <div class="card-title">
+              <div class="card-title-bold">Надувные</div>
+              <div class="card-title-thin">спа</div>
+            </div>
+            <div class="card-dot"></div>
+          </div>
+
+          <div class="category-card">
+            <div class="card-image">
+              <img src="images/categories/furako.svg" alt="Купель фурако">
+            </div>
+            <div class="card-title">
+              <div class="card-title-bold">Купель</div>
+              <div class="card-title-thin">фурако</div>
+            </div>
+            <div class="card-dot"></div>
+          </div>
+
+          <div class="category-card">
+            <div class="card-image">
+              <img src="images/categories/furniture.svg" alt="Мебель для бассейна">
+            </div>
+            <div class="card-title">
+              <div class="card-title-bold">Мебель</div>
+              <div class="card-title-thin">для бассейна</div>
+            </div>
+            <div class="card-dot"></div>
+          </div>
+
+        </div>
+
+        <button class="carousel-arrow" aria-label="Следующий">
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
       </div>
     </div>
-    <div class="nav-links">
-      <span class="active">Каталог чаш</span>
-      <span>Портфолио</span>
-      <span>Услуги</span>
-      <span>О компании</span>
-      <span>Контакты</span>
+  </section>
+
+  <!-- CATALOG -->
+  <section class="catalog">
+    <div class="cat-header">
+      <div class="cat-header-left">
+        <div class="label">Композитные чаши</div>
+        <h2>
+          <span class="bold">КАТАЛОГ</span><br>
+          <span class="thin">ЧАШ</span>
+        </h2>
+      </div>
+      <div class="cat-header-right">
+        <p>Каждая модель — проверенная геометрия, усиленный корпус и гарантия 10 лет</p>
+        <button class="btn-all-top">Все модели <span class="arrow">&rarr;</span></button>
+      </div>
     </div>
-    <div class="cta-nav">
-      Рассчитать стоимость
-      <div class="dot"></div>
-    </div>
-  </div>
-</div>
 
-<!-- HERO -->
-<div class="hero" id="heroSection">
-
-  <!-- Background images -->
-  <div class="hero-bg-layer" id="heroBg">
-    <img src="https://images.pexels.com/photos/261327/pexels-photo-261327.jpeg?auto=compress&w=1280" alt="" class="active">
-    <img src="https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&w=1280" alt="">
-    <img src="https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&w=1280" alt="">
-    <img src="https://images.pexels.com/photos/261403/pexels-photo-261403.jpeg?auto=compress&w=1280" alt="">
-    <img src="https://images.pexels.com/photos/261041/pexels-photo-261041.jpeg?auto=compress&w=1280" alt="">
-    <img src="https://images.pexels.com/photos/221457/pexels-photo-221457.jpeg?auto=compress&w=1280" alt="">
-    <img src="https://images.pexels.com/photos/261185/pexels-photo-261185.jpeg?auto=compress&w=1280" alt="">
-    <img src="https://images.pexels.com/photos/261045/pexels-photo-261045.jpeg?auto=compress&w=1280" alt="">
-    <img src="https://images.pexels.com/photos/261043/pexels-photo-261043.jpeg?auto=compress&w=1280" alt="">
-    <img src="https://images.pexels.com/photos/261039/pexels-photo-261039.jpeg?auto=compress&w=1280" alt="">
-  </div>
-  <div class="hero-overlay"></div>
-
-  <!-- Bubbles -->
-  <div class="bubbles">
-    <div class="bubble" style="left:6%;width:16px;height:16px;animation-duration:13s;animation-delay:0s;bottom:0;"></div>
-    <div class="bubble" style="left:18%;width:10px;height:10px;animation-duration:10s;animation-delay:2s;bottom:0;"></div>
-    <div class="bubble" style="left:30%;width:22px;height:22px;animation-duration:15s;animation-delay:1s;bottom:0;"></div>
-    <div class="bubble" style="left:50%;width:12px;height:12px;animation-duration:12s;animation-delay:3.5s;bottom:0;"></div>
-    <div class="bubble" style="left:65%;width:24px;height:24px;animation-duration:14s;animation-delay:0.5s;bottom:0;"></div>
-    <div class="bubble" style="left:80%;width:14px;height:14px;animation-duration:11s;animation-delay:4s;bottom:0;"></div>
-    <div class="bubble" style="left:42%;width:8px;height:8px;animation-duration:9s;animation-delay:5s;bottom:0;"></div>
-    <div class="bubble" style="left:90%;width:18px;height:18px;animation-duration:16s;animation-delay:1.5s;bottom:0;"></div>
-  </div>
-
-
-  <!-- Carousel cards -->
-  <div class="carousel-scene" id="carouselScene">
-    <div class="carousel-card" data-index="0">
-      <img src="https://images.pexels.com/photos/261327/pexels-photo-261327.jpeg?auto=compress&w=600" alt="Композитные чаши">
-      <div class="card-label"><span class="label-main">КОМПОЗИТНЫЕ</span><span class="label-sub">ЧАШИ</span></div>
-    </div>
-    <div class="carousel-card" data-index="1">
-      <img src="https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&w=600" alt="Композитные бассейны">
-      <div class="card-label"><span class="label-main">КОМПОЗИТНЫЕ</span><span class="label-sub">БАССЕЙНЫ</span></div>
-    </div>
-    <div class="carousel-card" data-index="2">
-      <img src="https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&w=600" alt="Строительство бассейнов">
-      <div class="card-label"><span class="label-main">СТРОИТЕЛЬСТВО</span><span class="label-sub">БАССЕЙНОВ</span></div>
-    </div>
-    <div class="carousel-card" data-index="3">
-      <img src="https://images.pexels.com/photos/261403/pexels-photo-261403.jpeg?auto=compress&w=600" alt="Сервисное обслуживание">
-      <div class="card-label"><span class="label-main">СЕРВИСНОЕ</span><span class="label-sub">ОБСЛУЖИВАНИЕ</span></div>
-    </div>
-    <div class="carousel-card" data-index="4">
-      <img src="https://images.pexels.com/photos/261041/pexels-photo-261041.jpeg?auto=compress&w=600" alt="Оборудование">
-      <div class="card-label"><span class="label-main">ОБОРУДОВАНИЕ</span></div>
-    </div>
-    <div class="carousel-card" data-index="5">
-      <img src="https://images.pexels.com/photos/221457/pexels-photo-221457.jpeg?auto=compress&w=600" alt="Павильоны">
-      <div class="card-label"><span class="label-main">ПАВИЛЬОНЫ</span></div>
-    </div>
-    <div class="carousel-card" data-index="6">
-      <img src="https://images.pexels.com/photos/261185/pexels-photo-261185.jpeg?auto=compress&w=600" alt="Отделка бассейнов">
-      <div class="card-label"><span class="label-main">ОТДЕЛКА</span><span class="label-sub">БАССЕЙНОВ</span></div>
-    </div>
-    <div class="carousel-card" data-index="7">
-      <img src="https://images.pexels.com/photos/261045/pexels-photo-261045.jpeg?auto=compress&w=600" alt="Химия для бассейнов">
-      <div class="card-label"><span class="label-main">ХИМИЯ</span><span class="label-sub">ДЛЯ БАССЕЙНОВ</span></div>
-    </div>
-    <div class="carousel-card" data-index="8">
-      <img src="https://images.pexels.com/photos/261043/pexels-photo-261043.jpeg?auto=compress&w=600" alt="Подогрев воды">
-      <div class="card-label"><span class="label-main">ПОДОГРЕВ</span><span class="label-sub">ВОДЫ</span></div>
-    </div>
-    <div class="carousel-card" data-index="9">
-      <img src="https://images.pexels.com/photos/261039/pexels-photo-261039.jpeg?auto=compress&w=600" alt="Освещение">
-      <div class="card-label"><span class="label-main">ОСВЕЩЕНИЕ</span></div>
-    </div>
-  </div>
-
-  <!-- Content -->
-  <div class="hero-inner">
-    <a href="#" class="hero-section-btn" id="heroBtn">узнать <strong>ПОДРОБНЕЕ</strong></a>
-  </div>
-
-  <!-- Waves -->
-  <div class="waves">
-    <svg viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
-      <path fill="rgba(12,25,41,0.4)">
-        <animate attributeName="d"
-          values="M0,60 C240,90 480,30 720,60 C960,90 1200,30 1440,60 L1440,120 L0,120 Z;M0,50 C240,20 480,80 720,50 C960,20 1200,80 1440,50 L1440,120 L0,120 Z;M0,60 C240,90 480,30 720,60 C960,90 1200,30 1440,60 L1440,120 L0,120 Z"
-          dur="7s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0.05 0.55 0.95;0.45 0.05 0.55 0.95"/>
-      </path>
-      <path fill="rgba(14,30,48,0.6)">
-        <animate attributeName="d"
-          values="M0,70 C180,40 360,90 540,65 C720,40 900,85 1080,60 C1260,35 1380,70 1440,55 L1440,120 L0,120 Z;M0,55 C180,80 360,35 540,60 C720,85 900,40 1080,65 C1260,90 1380,50 1440,70 L1440,120 L0,120 Z;M0,70 C180,40 360,90 540,65 C720,40 900,85 1080,60 C1260,35 1380,70 1440,55 L1440,120 L0,120 Z"
-          dur="5s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0.05 0.55 0.95;0.45 0.05 0.55 0.95"/>
-      </path>
-      <path fill="rgba(14,30,48,0.9)">
-        <animate attributeName="d"
-          values="M0,80 C160,65 320,95 480,78 C640,62 800,92 960,75 C1120,58 1280,88 1440,72 L1440,120 L0,120 Z;M0,72 C160,88 320,58 480,75 C640,92 800,62 960,78 C1120,95 1280,65 1440,80 L1440,120 L0,120 Z;M0,80 C160,65 320,95 480,78 C640,62 800,92 960,75 C1120,58 1280,88 1440,72 L1440,120 L0,120 Z"
-          dur="6s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0.05 0.55 0.95;0.45 0.05 0.55 0.95"/>
-      </path>
-    </svg>
-  </div>
-</div>
-
-<script src="slider-data.js"></script>
-<script>
-// ===== CAROUSEL =====
-(function() {
-  var cards = Array.from(document.querySelectorAll('.carousel-card'));
-  var bgImages = Array.from(document.getElementById('heroBg').querySelectorAll('img'));
-  var total = cards.length;
-  var currentIndex = 0;
-  var animating = false;
-
-  function goTo(index) {
-    if (animating) return;
-    animating = true;
-    currentIndex = ((index % total) + total) % total;
-    var cardW = window.innerWidth <= 768 ? 200 : 280;
-    var offset = cardW * 0.65;
-
-    cards.forEach(function(card, i) {
-      var diff = i - currentIndex;
-      if (diff > total / 2) diff -= total;
-      if (diff < -total / 2) diff += total;
-
-      if (diff === 0) {
-        card.style.transform = 'translateY(-50%) translateX(0) scale(1) rotate(-2deg)';
-        card.style.zIndex = 10;
-        card.style.opacity = 1;
-        card.style.filter = 'brightness(1)';
-        card.style.pointerEvents = 'auto';
-      } else if (diff === 1 || diff === -(total - 1)) {
-        card.style.transform = 'translateY(-50%) translateX(' + offset + 'px) scale(0.88) rotate(2deg)';
-        card.style.zIndex = 9;
-        card.style.opacity = 1;
-        card.style.filter = 'brightness(0.5)';
-        card.style.pointerEvents = 'auto';
-      } else {
-        var hideX = diff < 0 ? -cardW : cardW * 2;
-        card.style.transform = 'translateY(-50%) translateX(' + hideX + 'px) scale(0.7)';
-        card.style.zIndex = 1;
-        card.style.opacity = 0;
-        card.style.filter = 'brightness(0)';
-        card.style.pointerEvents = 'none';
-      }
-    });
-
-    bgImages.forEach(function(img, i) {
-      img.classList.toggle('active', i === currentIndex);
-    });
-
-    setTimeout(function() { animating = false; }, 500);
-  }
-
-  function next() { goTo(currentIndex + 1); }
-  function prev() { goTo(currentIndex - 1); }
-
-  // Click cards
-  cards.forEach(function(card) {
-    card.addEventListener('click', function(e) {
-      e.stopPropagation();
-      var idx = parseInt(card.getAttribute('data-index'), 10);
-      if (idx === currentIndex) {
-        next();
-      } else {
-        goTo(idx);
-      }
-    });
-  });
-
-  // Click anywhere on hero right side = next
-  document.getElementById('heroSection').addEventListener('click', function(e) {
-    if (e.target.closest('.carousel-card') || e.target.closest('.hero-section-btn')) return;
-    if (e.clientX > window.innerWidth * 0.4) next();
-  });
-
-  // Touch swipe
-  var touchStartX = 0, touchMoved = false;
-  document.getElementById('heroSection').addEventListener('touchstart', function(e) {
-    touchStartX = e.touches[0].clientX; touchMoved = false;
-  }, { passive: true });
-  document.getElementById('heroSection').addEventListener('touchmove', function(e) {
-    if (Math.abs(e.touches[0].clientX - touchStartX) > 20) touchMoved = true;
-  }, { passive: true });
-  document.getElementById('heroSection').addEventListener('touchend', function(e) {
-    if (!touchMoved) return;
-    var dx = e.changedTouches[0].clientX - touchStartX;
-    if (dx < -40) next();
-    else if (dx > 40) prev();
-  });
-
-  // Mouse drag
-  var msx = 0, dragging = false;
-  document.getElementById('heroSection').addEventListener('mousedown', function(e) {
-    msx = e.clientX; dragging = true;
-  });
-  document.addEventListener('mousemove', function(e) {
-    if (dragging) e.preventDefault();
-  });
-  document.addEventListener('mouseup', function(e) {
-    if (!dragging) return;
-    dragging = false;
-    var dx = e.clientX - msx;
-    if (dx < -40) next();
-    else if (dx > 40) prev();
-  });
-
-  // Keyboard
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'ArrowRight') next();
-    if (e.key === 'ArrowLeft') prev();
-  });
-
-  window.addEventListener('resize', function() { goTo(currentIndex); });
-  goTo(0);
-})();
-
-document.getElementById('heroSection').addEventListener('click', function(e) {
-  const ring = document.createElement('div');
-  ring.className = 'ripple-ring';
-  ring.style.left = e.clientX + 'px';
-  ring.style.top = e.clientY + 'px';
-  document.body.appendChild(ring);
-  setTimeout(() => ring.remove(), 1200);
-});
-let rightDown = false, lastTrail = 0;
-document.addEventListener('mousedown', function(e) { if (e.button === 2) rightDown = true; });
-document.addEventListener('mouseup', function(e) { if (e.button === 2) rightDown = false; });
-document.addEventListener('mousemove', function(e) {
-  if (!rightDown) return;
-  const now = Date.now();
-  if (now - lastTrail < 40) return;
-  lastTrail = now;
-  const dot = document.createElement('div');
-  dot.className = 'ripple-dot';
-  dot.style.left = (e.clientX - 10) + 'px';
-  dot.style.top = (e.clientY - 10) + 'px';
-  document.body.appendChild(dot);
-  setTimeout(() => dot.remove(), 1000);
-});
-document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
-document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
-
-let currentSlide = 0;
-
-function openSlider(index) {
-  currentSlide = index;
-  updateSlider();
-  document.getElementById('lightbox').classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeSlider() {
-  document.getElementById('lightbox').classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-function slideBy(dir) {
-  currentSlide = (currentSlide + dir + sliderImages.length) % sliderImages.length;
-  updateSlider();
-}
-
-function updateSlider() {
-  var img = document.getElementById('lb-img');
-  img.style.animation = 'none';
-  img.offsetHeight;
-  img.style.animation = 'lbSlideIn 0.3s ease';
-  img.src = sliderImages[currentSlide];
-  document.getElementById('lb-counter').textContent = (currentSlide + 1) + ' / ' + sliderImages.length;
-}
-
-document.addEventListener('keydown', function(e) {
-  if (!document.getElementById('lightbox').classList.contains('active')) return;
-  if (e.key === 'Escape') closeSlider();
-  if (e.key === 'ArrowLeft') slideBy(-1);
-  if (e.key === 'ArrowRight') slideBy(1);
-});
-
-document.getElementById('lightbox').addEventListener('click', function(e) {
-  if (e.target === this) closeSlider();
-});
-
-</script>
-
-
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox">
-  <div class="lb-close" onclick="closeSlider()">&times;</div>
-  <div class="lb-arrow lb-prev" onclick="slideBy(-1)">&#8249;</div>
-  <div class="lb-container">
-    <img id="lb-img" src="" alt="Бассейн">
-  </div>
-  <div class="lb-arrow lb-next" onclick="slideBy(1)">&#8250;</div>
-  <div class="lb-counter" id="lb-counter"></div>
-</div>
-
-
-
-
-<div style="background:#0e1e30;height:20px;"></div>
-<section class="catalog" style="background:#0e1e30;">
-
-  <div class="cat-header">
-    <div class="cat-header-left">
-      <div class="label">Композитные чаши</div>
-      <h2>
-        <span class="bold">КАТАЛОГ</span><br>
-        <span class="thin">ЧАШ</span>
-      </h2>
-    </div>
-    <div class="cat-header-right">
-      <p>Каждая модель — проверенная геометрия, усиленный корпус и гарантия 10 лет</p>
-      <button class="btn-all-top">Все модели <span class="arrow">→</span></button>
-    </div>
-  </div>
-
-  <div class="cat-grid">
-
-    <!-- HIIT — featured -->
-    <div class="pcard featured">
-      <div class="pcard-img pool-bg-sport">
-        <div class="pool-shape pool-visual">
-          <div class="label-3d">HIIT</div>
-          <div class="water shape-sport">
-            <div class="caustic-overlay"></div>
+    <div class="cat-grid">
+      <!-- HIIT — featured -->
+      <div class="pcard featured">
+        <div class="pcard-img pool-bg-sport">
+          <div class="pool-shape pool-visual">
+            <div class="label-3d">HIIT</div>
+            <div class="water shape-sport"><div class="caustic-overlay"></div></div>
+          </div>
+          <div class="pcard-badge">Хит продаж</div>
+          <div class="pcard-size">8.0 &times; 3.6 м</div>
+        </div>
+        <div class="pcard-info">
+          <div class="pcard-name">HIIT</div>
+          <div class="pcard-subtitle">Спортивная серия</div>
+          <div class="pcard-desc">Увеличенная длина для активного плавания. Обтекаемая форма, оптимальная глубина 1.6м, усиленное дно. Выбор №1 среди наших клиентов.</div>
+          <div class="pcard-specs">
+            <div class="pspec"><div class="pspec-val">8.0</div><div class="pspec-unit">длина, м</div></div>
+            <div class="pspec"><div class="pspec-val">3.6</div><div class="pspec-unit">ширина, м</div></div>
+            <div class="pspec"><div class="pspec-val">1.6</div><div class="pspec-unit">глубина, м</div></div>
+          </div>
+          <div class="pcard-bottom">
+            <div class="pcard-price">от<strong>1 250 000 &#8381;</strong></div>
+            <button class="btn-card">Подробнее</button>
           </div>
         </div>
-        <div class="pcard-badge">Хит продаж</div>
-        <div class="pcard-size">8.0 × 3.6 м</div>
       </div>
-      <div class="pcard-info">
-        <div class="pcard-name">HIIT</div>
-        <div class="pcard-subtitle">Спортивная серия</div>
-        <div class="pcard-desc">Увеличенная длина для активного плавания. Обтекаемая форма, оптимальная глубина 1.6м, усиленное дно. Выбор №1 среди наших клиентов.</div>
-        <div class="pcard-specs">
-          <div class="pspec"><div class="pspec-val">8.0</div><div class="pspec-unit">длина, м</div></div>
-          <div class="pspec"><div class="pspec-val">3.6</div><div class="pspec-unit">ширина, м</div></div>
-          <div class="pspec"><div class="pspec-val">1.6</div><div class="pspec-unit">глубина, м</div></div>
-        </div>
-        <div class="pcard-bottom">
-          <div class="pcard-price">от<strong>1 250 000 ₽</strong></div>
-          <button class="btn-card">Подробнее</button>
-        </div>
-      </div>
-    </div>
 
-    <!-- ZEN -->
-    <div class="pcard">
-      <div class="pcard-img pool-bg-rect">
-        <div class="pool-shape pool-visual">
-          <div class="label-3d">ZEN</div>
-          <div class="water shape-rect">
-            <div class="caustic-overlay"></div>
+      <!-- ZEN -->
+      <div class="pcard">
+        <div class="pcard-img pool-bg-rect">
+          <div class="pool-shape pool-visual">
+            <div class="label-3d">ZEN</div>
+            <div class="water shape-rect"><div class="caustic-overlay"></div></div>
+          </div>
+          <div class="pcard-size">6.2 &times; 3.2 м</div>
+        </div>
+        <div class="pcard-info">
+          <div class="pcard-name">ZEN</div>
+          <div class="pcard-subtitle">Классическая серия</div>
+          <div class="pcard-desc">Прямоугольная форма для ценителей чистых линий. Компактный, идеален для небольших участков.</div>
+          <div class="pcard-specs">
+            <div class="pspec"><div class="pspec-val">6.2</div><div class="pspec-unit">длина, м</div></div>
+            <div class="pspec"><div class="pspec-val">3.2</div><div class="pspec-unit">ширина, м</div></div>
+            <div class="pspec"><div class="pspec-val">1.5</div><div class="pspec-unit">глубина, м</div></div>
+          </div>
+          <div class="pcard-bottom">
+            <div class="pcard-price">от<strong>890 000 &#8381;</strong></div>
+            <button class="btn-card">Подробнее</button>
           </div>
         </div>
-        <div class="pcard-size">6.2 × 3.2 м</div>
       </div>
-      <div class="pcard-info">
-        <div class="pcard-name">ZEN</div>
-        <div class="pcard-subtitle">Классическая серия</div>
-        <div class="pcard-desc">Прямоугольная форма для ценителей чистых линий. Компактный, идеален для небольших участков.</div>
-        <div class="pcard-specs">
-          <div class="pspec"><div class="pspec-val">6.2</div><div class="pspec-unit">длина, м</div></div>
-          <div class="pspec"><div class="pspec-val">3.2</div><div class="pspec-unit">ширина, м</div></div>
-          <div class="pspec"><div class="pspec-val">1.5</div><div class="pspec-unit">глубина, м</div></div>
-        </div>
-        <div class="pcard-bottom">
-          <div class="pcard-price">от<strong>890 000 ₽</strong></div>
-          <button class="btn-card">Подробнее</button>
-        </div>
-      </div>
-    </div>
 
-    <!-- TETTA -->
-    <div class="pcard">
-      <div class="pcard-img pool-bg-ergo">
-        <div class="pool-shape pool-visual">
-          <div class="label-3d">TETTA</div>
-          <div class="water shape-ergo">
-            <div class="caustic-overlay"></div>
+      <!-- TETTA -->
+      <div class="pcard">
+        <div class="pcard-img pool-bg-ergo">
+          <div class="pool-shape pool-visual">
+            <div class="label-3d">TETTA</div>
+            <div class="water shape-ergo"><div class="caustic-overlay"></div></div>
+          </div>
+          <div class="pcard-size">7.0 &times; 3.4 м</div>
+        </div>
+        <div class="pcard-info">
+          <div class="pcard-name">TETTA</div>
+          <div class="pcard-subtitle">Семейная серия</div>
+          <div class="pcard-desc">Эргономичная форма со встроенными ступенями и зоной отдыха. Удобный вход, безопасно для детей.</div>
+          <div class="pcard-specs">
+            <div class="pspec"><div class="pspec-val">7.0</div><div class="pspec-unit">длина, м</div></div>
+            <div class="pspec"><div class="pspec-val">3.4</div><div class="pspec-unit">ширина, м</div></div>
+            <div class="pspec"><div class="pspec-val">1.5</div><div class="pspec-unit">глубина, м</div></div>
+          </div>
+          <div class="pcard-bottom">
+            <div class="pcard-price">от<strong>1 100 000 &#8381;</strong></div>
+            <button class="btn-card">Подробнее</button>
           </div>
         </div>
-        <div class="pcard-size">7.0 × 3.4 м</div>
       </div>
-      <div class="pcard-info">
-        <div class="pcard-name">TETTA</div>
-        <div class="pcard-subtitle">Семейная серия</div>
-        <div class="pcard-desc">Эргономичная форма со встроенными ступенями и зоной отдыха. Удобный вход, безопасно для детей.</div>
-        <div class="pcard-specs">
-          <div class="pspec"><div class="pspec-val">7.0</div><div class="pspec-unit">длина, м</div></div>
-          <div class="pspec"><div class="pspec-val">3.4</div><div class="pspec-unit">ширина, м</div></div>
-          <div class="pspec"><div class="pspec-val">1.5</div><div class="pspec-unit">глубина, м</div></div>
-        </div>
-        <div class="pcard-bottom">
-          <div class="pcard-price">от<strong>1 100 000 ₽</strong></div>
-          <button class="btn-card">Подробнее</button>
-        </div>
-      </div>
-    </div>
 
-    <!-- CUSTOM -->
-    <div class="pcard" style="grid-column:1/-1;">
-      <div class="pcard-img pool-bg-free" style="min-height:300px;">
-        <div class="pool-shape pool-visual">
-          <div class="label-3d">YOUR</div>
-          <div class="water shape-free">
-            <div class="caustic-overlay"></div>
+      <!-- CUSTOM -->
+      <div class="pcard" style="grid-column:1/-1;">
+        <div class="pcard-img pool-bg-free" style="min-height:300px;">
+          <div class="pool-shape pool-visual">
+            <div class="label-3d">YOUR</div>
+            <div class="water shape-free"><div class="caustic-overlay"></div></div>
+          </div>
+          <div class="pcard-size">Любой размер</div>
+        </div>
+        <div class="pcard-info">
+          <div class="pcard-name">CUSTOM</div>
+          <div class="pcard-subtitle">Индивидуальный проект</div>
+          <div class="pcard-desc">Любая форма, размер и глубина. Спроектируем и изготовим чашу под ваш участок. Вы рисуете мечту — мы воплощаем.</div>
+          <div class="pcard-specs">
+            <div class="pspec"><div class="pspec-val">&infin;</div><div class="pspec-unit">длина</div></div>
+            <div class="pspec"><div class="pspec-val">&infin;</div><div class="pspec-unit">ширина</div></div>
+            <div class="pspec"><div class="pspec-val">&infin;</div><div class="pspec-unit">глубина</div></div>
+          </div>
+          <div class="pcard-bottom">
+            <div class="pcard-price">Цена<strong>По проекту</strong></div>
+            <button class="btn-card">Обсудить проект</button>
           </div>
         </div>
-        <div class="pcard-size">Любой размер</div>
-      </div>
-      <div class="pcard-info">
-        <div class="pcard-name">CUSTOM</div>
-        <div class="pcard-subtitle">Индивидуальный проект</div>
-        <div class="pcard-desc">Любая форма, размер и глубина. Спроектируем и изготовим чашу под ваш участок. Вы рисуете мечту — мы воплощаем.</div>
-        <div class="pcard-specs">
-          <div class="pspec"><div class="pspec-val">∞</div><div class="pspec-unit">длина</div></div>
-          <div class="pspec"><div class="pspec-val">∞</div><div class="pspec-unit">ширина</div></div>
-          <div class="pspec"><div class="pspec-val">∞</div><div class="pspec-unit">глубина</div></div>
-        </div>
-        <div class="pcard-bottom">
-          <div class="pcard-price">Цена<strong>По проекту</strong></div>
-          <button class="btn-card">Обсудить проект</button>
-        </div>
       </div>
     </div>
 
-  </div>
+    <div class="cat-bottom">
+      <p>Не уверены в выборе?</p>
+      <p class="sub">Расскажите, что вы хотите — подберём идеальную чашу за 15 минут</p>
+      <button class="btn-consult">Бесплатная консультация</button>
+    </div>
+  </section>
 
-  <div class="cat-bottom">
-    <p>Не уверены в выборе?</p>
-    <p class="sub">Расскажите, что вы хотите — подберём идеальную чашу за 15 минут</p>
-    <button class="btn-consult">Бесплатная консультация</button>
-  </div>
-
-</section>
-
-
+  <script src="js/main.js"></script>
 </body>
 </html>

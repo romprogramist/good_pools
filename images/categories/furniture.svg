@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <!-- Pool furniture - lounger/chaise -->
+  <g transform="translate(30, 80)">
+    <!-- Lounger frame -->
+    <path d="M40 200 L40 250 Q40 260 50 260 L300 260 Q310 260 310 250 L310 200" stroke="#A0714A" stroke-width="4" fill="none"/>
+    <!-- Legs -->
+    <line x1="60" y1="260" x2="60" y2="290" stroke="#A0714A" stroke-width="4" stroke-linecap="round"/>
+    <line x1="290" y1="260" x2="290" y2="290" stroke="#A0714A" stroke-width="4" stroke-linecap="round"/>
+    <line x1="170" y1="260" x2="170" y2="290" stroke="#A0714A" stroke-width="4" stroke-linecap="round"/>
+    <!-- Wheels -->
+    <circle cx="290" cy="295" r="8" fill="none" stroke="#8B8682" stroke-width="2.5"/>
+    <!-- Seat surface -->
+    <rect x="50" y="180" width="250" height="25" rx="6" fill="url(#cushionGrad)"/>
+    <!-- Backrest (angled) -->
+    <path d="M50 180 L50 120 Q50 100 70 95 L140 80 Q150 78 150 88 L150 180" fill="url(#cushionGrad2)" stroke="#CBD5E1" stroke-width="1"/>
+    <!-- Cushion lines -->
+    <line x1="70" y1="185" x2="280" y2="185" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <line x1="70" y1="195" x2="280" y2="195" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <!-- Side table -->
+    <g transform="translate(230, 80)">
+      <rect x="0" y="60" width="80" height="6" rx="3" fill="#C68B59"/>
+      <line x1="15" y1="66" x2="15" y2="120" stroke="#A0714A" stroke-width="3"/>
+      <line x1="65" y1="66" x2="65" y2="120" stroke="#A0714A" stroke-width="3"/>
+      <!-- Drink on table -->
+      <rect x="30" y="45" width="20" height="18" rx="4" fill="#38BDF8" opacity="0.7"/>
+      <rect x="28" y="42" width="24" height="6" rx="3" fill="#E2E8F0"/>
+    </g>
+  </g>
+  <defs>
+    <linearGradient id="cushionGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E2E8F0"/>
+      <stop offset="100%" stop-color="#CBD5E1"/>
+    </linearGradient>
+    <linearGradient id="cushionGrad2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F1F5F9"/>
+      <stop offset="100%" stop-color="#E2E8F0"/>
+    </linearGradient>
+  </defs>
+</svg>
