@@ -397,34 +397,34 @@ body.menu-open {
 /* ===== CAROUSEL ARROW ===== */
 .carousel-arrow {
   position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  background: linear-gradient(90deg, rgba(17, 17, 17, 0) 0%, #111 55%);
+  border: none;
+  padding: 0 20px 0 0;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   cursor: pointer;
-  transition: all 0.3s;
   z-index: 10;
-  backdrop-filter: blur(4px);
+  transition: width 0.3s;
 }
 
-.carousel-arrow:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.4);
+.carousel-arrow:hover svg {
+  transform: translateX(4px);
 }
 
 .carousel-arrow svg {
-  width: 20px;
-  height: 20px;
+  width: 32px;
+  height: 32px;
   stroke: #fff;
-  stroke-width: 2;
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
   fill: none;
+  transition: transform 0.3s;
 }
 
 /* ===== CATALOG SECTION ===== */
