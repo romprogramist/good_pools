@@ -110,6 +110,26 @@
     resultsEl.innerHTML = html;
   }
 
+  function navigateToCategory(key) {
+    window.location.href = 'models.html?category=' + encodeURIComponent(key);
+  }
+
+  function navigateToModel(id) {
+    window.location.href = 'models.html?model=' + encodeURIComponent(id);
+  }
+
+  function onResultsClick(e) {
+    const chip = e.target.closest('.search-panel-chip');
+    if (chip) {
+      navigateToCategory(chip.dataset.category);
+      return;
+    }
+    const modelBtn = e.target.closest('.search-panel-model');
+    if (modelBtn) {
+      navigateToModel(modelBtn.dataset.model);
+    }
+  }
+
   function updateResults() {
     if (!categories || !models) return;
     const q = normalise(inputEl.value).trim();
@@ -175,6 +195,24 @@
     });
     inputEl.addEventListener('input', function () {
       updateResults();
+    });
+    resultsEl.addEventListener('click', onResultsClick);
+
+    inputEl.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter') return;
+      e.preventDefault();
+      if (!categories || !models) return;
+      const q = normalise(inputEl.value).trim();
+      if (q === '') return;
+      const modelHits = filterModels(q);
+      if (modelHits.length > 0) {
+        navigateToModel(modelHits[0].id);
+        return;
+      }
+      const catHits = filterCategories(q);
+      if (catHits.length > 0) {
+        navigateToCategory(catHits[0].key);
+      }
     });
     document.addEventListener('click', onDocumentClick);
     document.addEventListener('keydown', onKeydown);
