@@ -12,7 +12,7 @@ Turn the existing (non-functional) search button in the header into a live searc
 `good_pools` is a static, vanilla-JS site (no bundler, no framework). Today:
 
 - `js/models.js` contains two hardcoded constants, `CATEGORIES` (6 entries) and `MODELS` (18 entries), and renders the `models.html` catalog with a category chip filter.
-- `index.html`, `models.html`, `catalog.html`, `portfolio.html` all share a header that includes a search button (`<button class="header-icon" aria-label="Поиск">`) which currently has no behaviour.
+- `index.html`, `models.html`, and `portfolio.html` share a header that includes a search button (`<button class="header-icon" aria-label="Поиск">`) which currently has no behaviour. `catalog.html` is a standalone demo page with no shared header and is out of scope.
 - A minimal admin panel backed by PostgreSQL is planned for a separate future task. It is out of scope here, but every decision in this spec must leave a clear, low-effort path for that future work.
 
 The core constraint: **data must be defined in exactly one place**. The catalog page, the search, and any future feature must read from the same source.
@@ -116,7 +116,7 @@ After `renderGrid` finishes, `models.js` parses `window.location.search` using `
 
 ## Page wiring
 
-`index.html`, `models.html`, `catalog.html`, `portfolio.html` include `<script src="js/data-source.js"></script>` and `<script src="js/search.js"></script>` before the existing `js/main.js` script tag. `models.html` additionally keeps its `js/models.js`. Load order: `data-source.js` first (defines the global), then the consumers. No page includes raw data files directly.
+`index.html`, `models.html`, and `portfolio.html` include `<script src="js/data-source.js"></script>` and `<script src="js/search.js"></script>` before the existing `js/main.js` script tag. `models.html` additionally keeps its `js/models.js`. Load order: `data-source.js` first (defines the global), then the consumers. No page includes raw data files directly.
 
 ## Data flow
 
