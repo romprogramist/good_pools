@@ -2367,3 +2367,113 @@ body.models-dark .work-meta { color: #22d3ee; }
     outline-offset: 4px;
   }
 }
+
+/* ===== Header search panel ===== */
+.search-panel {
+  position: fixed;
+  top: 72px;
+  right: 24px;
+  width: min(480px, calc(100vw - 48px));
+  max-height: calc(100vh - 100px);
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(3, 105, 161, 0.18), 0 4px 16px rgba(3, 105, 161, 0.08);
+  z-index: 1000;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
+}
+.search-panel.open {
+  display: flex;
+}
+.search-panel-input-wrap {
+  padding: 20px 20px 12px;
+  border-bottom: 1px solid #e0f2fe;
+}
+.search-panel-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  color: #0c4a6e;
+  background: #f0f9ff;
+  padding: 14px 16px;
+  border-radius: 12px;
+}
+.search-panel-input::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+.search-panel-results {
+  padding: 16px 20px 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+.search-panel-group-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin: 8px 0 10px;
+}
+.search-panel-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.search-panel-chip {
+  background: #e0f2fe;
+  color: #0c4a6e;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.search-panel-chip:hover {
+  background: #bae6fd;
+}
+.search-panel-model {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+.search-panel-model:hover {
+  background: #f0f9ff;
+}
+.search-panel-model-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0c4a6e;
+  letter-spacing: 0.5px;
+}
+.search-panel-model-meta {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 2px;
+}
+.search-panel-empty,
+.search-panel-error {
+  padding: 24px 8px;
+  text-align: center;
+  font-size: 13px;
+  color: #94a3b8;
+}
+.search-panel-error {
+  color: #dc2626;
+}
