@@ -57,6 +57,31 @@
     gridEl.innerHTML = '<div class="models-error">Не удалось загрузить каталог</div>';
   }
 
+  function applyDeepLink(filterEl, gridEl, categories, models) {
+    const params = new URLSearchParams(window.location.search);
+    const categoryParam = params.get('category');
+    const modelParam = params.get('model');
+
+    if (categoryParam) {
+      const known = categories.some(function (c) { return c.key === categoryParam; });
+      if (known) {
+        applyCategoryFilter(gridEl, filterEl, categoryParam);
+      }
+    }
+
+    if (modelParam) {
+      const target = gridEl.querySelector('.mcard[data-id="' + modelParam + '"]');
+      if (target && !target.classList.contains('hidden')) {
+        // Defer so smooth scroll starts after layout settles.
+        setTimeout(function () {
+          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          target.classList.add('highlight');
+          setTimeout(function () { target.classList.remove('highlight'); }, 2000);
+        }, 50);
+      }
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     const filterEl = document.querySelector('.models-filter');
     const gridEl = document.querySelector('.models-grid');
@@ -71,6 +96,8 @@
         renderFilter(filterEl, categories);
         renderGrid(gridEl, models, categoryImage);
         attachFilter(filterEl, gridEl);
+
+        applyDeepLink(filterEl, gridEl, categories, models);
       })
       .catch(function (err) {
         console.error(err);
