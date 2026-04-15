@@ -1,0 +1,8 @@
+[
+  { "key": "composite",  "label": "Композитные",  "image": "images/categories/composite-pool.svg" },
+  { "key": "custom",     "label": "Кастом",       "image": "images/categories/custom-pool.svg" },
+  { "key": "jacuzzi",    "label": "Джакузи-спа",  "image": "images/categories/jacuzzi-spa.svg" },
+  { "key": "inflatable", "label": "Надувные спа", "image": "images/categories/inflatable-spa.svg" },
+  { "key": "furako",     "label": "Фурако",       "image": "images/categories/furako.svg" },
+  { "key": "furniture",  "label": "Мебель",       "image": "images/categories/furniture.svg" }
+]
