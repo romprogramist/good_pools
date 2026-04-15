@@ -57,6 +57,69 @@
       '<div class="search-panel-chips">' + chips + '</div>';
   }
 
+  function normalise(s) {
+    return (s || '').toString().toLowerCase();
+  }
+
+  function filterCategories(query) {
+    if (!categories) return [];
+    return categories.filter(function (c) {
+      return normalise(c.label).indexOf(query) !== -1;
+    }).slice(0, 5);
+  }
+
+  function filterModels(query) {
+    if (!models) return [];
+    return models.filter(function (m) {
+      const hay = normalise(m.name) + ' ' + normalise(m.series) + ' ' + normalise(m.desc) + ' ' + normalise(m.specs);
+      return hay.indexOf(query) !== -1;
+    }).slice(0, 5);
+  }
+
+  function renderResults(catResults, modelResults) {
+    if (catResults.length === 0 && modelResults.length === 0) {
+      resultsEl.innerHTML = '<div class="search-panel-empty">Ничего не найдено</div>';
+      return;
+    }
+
+    let html = '';
+
+    if (catResults.length > 0) {
+      const chips = catResults.map(function (c) {
+        return '<button class="search-panel-chip" data-category="' + c.key + '">' + c.label + '</button>';
+      }).join('');
+      html +=
+        '<div class="search-panel-group-title">Категории</div>' +
+        '<div class="search-panel-chips">' + chips + '</div>';
+    }
+
+    if (modelResults.length > 0) {
+      const rows = modelResults.map(function (m) {
+        return (
+          '<button class="search-panel-model" data-model="' + m.id + '">' +
+            '<div class="search-panel-model-name">' + m.name + '</div>' +
+            '<div class="search-panel-model-meta">' + m.series + ' · ' + m.specs + '</div>' +
+          '</button>'
+        );
+      }).join('');
+      html +=
+        '<div class="search-panel-group-title">Модели</div>' +
+        rows;
+    }
+
+    resultsEl.innerHTML = html;
+  }
+
+  function updateResults() {
+    if (!categories || !models) return;
+    const q = normalise(inputEl.value).trim();
+    if (q === '') {
+      renderEmptyState();
+      return;
+    }
+    renderResults(filterCategories(q), filterModels(q));
+  }
+
   function open() {
     if (isOpen) return;
     panel.classList.add('open');
@@ -64,7 +127,7 @@
     inputEl.focus();
 
     ensureData()
-      .then(function () { renderEmptyState(); })
+      .then(function () { updateResults(); })
       .catch(function () { renderError(); });
   }
 
@@ -109,6 +172,9 @@
     button.addEventListener('click', function (e) {
       e.preventDefault();
       toggle();
+    });
+    inputEl.addEventListener('input', function () {
+      updateResults();
     });
     document.addEventListener('click', onDocumentClick);
     document.addEventListener('keydown', onKeydown);
