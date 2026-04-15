@@ -8,6 +8,9 @@
   let inputEl = null;
   let resultsEl = null;
   let isOpen = false;
+  let categories = null;
+  let models = null;
+  let loadPromise = null;
 
   function buildPanel() {
     const el = document.createElement('div');
@@ -21,11 +24,48 @@
     return el;
   }
 
+  function ensureData() {
+    if (categories && models) return Promise.resolve();
+    if (loadPromise) return loadPromise;
+    loadPromise = Promise.all([DataSource.getCategories(), DataSource.getModels()])
+      .then(function (results) {
+        categories = results[0];
+        models = results[1];
+      })
+      .catch(function (err) {
+        console.error(err);
+        loadPromise = null;
+        throw err;
+      });
+    return loadPromise;
+  }
+
+  function renderError() {
+    resultsEl.innerHTML = '<div class="search-panel-error">Не удалось загрузить данные</div>';
+  }
+
+  function renderEmptyState() {
+    if (!categories) {
+      resultsEl.innerHTML = '';
+      return;
+    }
+    const chips = categories.map(function (c) {
+      return '<button class="search-panel-chip" data-category="' + c.key + '">' + c.label + '</button>';
+    }).join('');
+    resultsEl.innerHTML =
+      '<div class="search-panel-group-title">Категории</div>' +
+      '<div class="search-panel-chips">' + chips + '</div>';
+  }
+
   function open() {
     if (isOpen) return;
     panel.classList.add('open');
     isOpen = true;
     inputEl.focus();
+
+    ensureData()
+      .then(function () { renderEmptyState(); })
+      .catch(function () { renderError(); });
   }
 
   function close() {
