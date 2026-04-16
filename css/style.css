@@ -1256,6 +1256,22 @@ body.menu-open {
   .why-stat-val {
     font-size: 28px;
   }
+
+  .service {
+    padding: 80px 40px;
+  }
+
+  .service-inner {
+    gap: 50px;
+  }
+
+  .service-left h2 {
+    font-size: 48px;
+  }
+
+  .service-stat-val {
+    font-size: 36px;
+  }
 }
 
 /* Tablets (768px) */
@@ -1444,6 +1460,31 @@ body.menu-open {
   .btn-consult {
     width: 100%;
     padding: 16px 24px;
+  }
+
+  .service {
+    padding: 60px 20px;
+  }
+
+  .service-inner {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .service-left h2 {
+    font-size: 40px;
+  }
+
+  .service-desc {
+    margin-bottom: 28px;
+  }
+
+  .service-form {
+    padding: 24px;
+  }
+
+  .service-stats {
+    gap: 24px;
   }
 }
 
@@ -1678,6 +1719,37 @@ body.menu-open {
     padding: 14px 20px;
     font-size: 14px;
     border-radius: 12px;
+  }
+
+  .service {
+    padding: 48px 16px;
+  }
+
+  .service-left h2 {
+    font-size: 32px;
+  }
+
+  .service-stat-val {
+    font-size: 28px;
+  }
+
+  .service-stat-label {
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+
+  .service-form {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .service-radio-row {
+    gap: 8px;
+  }
+
+  .service-radio span {
+    padding: 10px 8px;
+    font-size: 12px;
   }
 }
 
