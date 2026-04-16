@@ -18,7 +18,7 @@
   function renderGrid(container, models, categoryImage) {
     container.innerHTML = models.map(function (m) {
       return (
-        '<article class="mcard" data-id="' + m.id + '" data-category="' + m.category + '">' +
+        '<article class="mcard" data-id="' + m.id + '" data-category="' + m.category + '" tabindex="0" role="button" aria-label="Открыть галерею: ' + m.name + '">' +
           '<div class="mcard-img">' +
             '<img src="' + categoryImage[m.category] + '" alt="' + m.name + '">' +
             (m.badge ? '<div class="mcard-badge">' + m.badge + '</div>' : '') +
@@ -33,6 +33,49 @@
         '</article>'
       );
     }).join('');
+  }
+
+  function stubGallery(index) {
+    const offsets = [0, 4, 7, 2];
+    return offsets.map(function (o) {
+      const n = ((index + o) % 12) + 1;
+      return 'images/portfolio/work-' + (n < 10 ? '0' + n : '' + n) + '.jpg';
+    });
+  }
+
+  function openModelInGallery(model, index, cardEl) {
+    GalleryModal.open({
+      title: model.name,
+      infoLines: [
+        model.series,
+        model.desc,
+        model.specs + ' · ' + model.price
+      ],
+      gallery: stubGallery(index),
+      triggerEl: cardEl
+    });
+  }
+
+  function attachModelGallery(gridEl, models) {
+    const tryOpen = function (card) {
+      const id = card.dataset.id;
+      const index = models.findIndex(function (m) { return m.id === id; });
+      if (index === -1) return;
+      openModelInGallery(models[index], index, card);
+    };
+
+    gridEl.addEventListener('click', function (e) {
+      const card = e.target.closest('.mcard');
+      if (card) tryOpen(card);
+    });
+
+    gridEl.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      const card = e.target.closest('.mcard');
+      if (!card) return;
+      e.preventDefault();
+      tryOpen(card);
+    });
   }
 
   function applyCategoryFilter(gridEl, filterEl, key) {
@@ -96,6 +139,7 @@
         renderFilter(filterEl, categories);
         renderGrid(gridEl, models, categoryImage);
         attachFilter(filterEl, gridEl);
+        attachModelGallery(gridEl, models);
 
         applyDeepLink(filterEl, gridEl, categories, models);
       })

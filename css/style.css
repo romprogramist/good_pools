@@ -3034,11 +3034,16 @@ body.models-dark .work-meta { color: #22d3ee; }
   font-weight: 600;
   margin: 0;
 }
-.pgal-location {
+.pgal-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.pgal-line--primary {
   font-size: 14px;
   color: #bbb;
 }
-.pgal-meta {
+.pgal-line--secondary {
   font-size: 13px;
   color: #888;
   letter-spacing: 0.02em;
