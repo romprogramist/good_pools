@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Хорошие Бассейны</title>
-  <link rel="stylesheet" href="css/style.css?v=20260416c">
+  <link rel="stylesheet" href="css/style.css?v=20260416f">
 </head>
 <body>
 
@@ -30,6 +30,10 @@
       <!-- WhatsApp -->
       <button class="header-icon" aria-label="WhatsApp">
         <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      </button>
+      <!-- MAX -->
+      <button class="header-icon" aria-label="MAX">
+        <svg viewBox="0 0 24 24"><path d="M3 20V4l9 9 9-9v16"/></svg>
       </button>
       <!-- Search -->
       <button class="header-icon" aria-label="Поиск">
@@ -75,6 +79,7 @@
       <div class="menu-socials">
         <a href="#" aria-label="Telegram">Telegram</a>
         <a href="#" aria-label="WhatsApp">WhatsApp</a>
+        <a href="#" aria-label="MAX">MAX</a>
         <a href="#" aria-label="VK">VK</a>
       </div>
     </div>
@@ -310,6 +315,77 @@
     <div class="port-featured"></div>
   </section>
 
+  <!-- RENDER VS REALITY -->
+  <section class="rr" id="render-reality">
+    <div class="rr-inner">
+      <div class="rr-head">
+        <div class="rr-eyebrow">Визуализация · реализация</div>
+        <h2 class="rr-title">
+          <span class="bold">ОТ РЕНДЕРА</span><br>
+          <span class="thin">ДО РЕАЛЬНОСТИ</span>
+        </h2>
+        <p class="rr-sub">Каждый проект сначала живёт в 3D. Сравните, что обещали — и что построили.</p>
+      </div>
+
+      <div class="rr-toggle" role="tablist" aria-label="Режим просмотра">
+        <button class="rr-tab is-active" data-mode="render" role="tab" aria-selected="true">Рендер</button>
+        <button class="rr-tab" data-mode="real" role="tab" aria-selected="false">Реальность</button>
+        <span class="rr-toggle-pill" aria-hidden="true"></span>
+      </div>
+
+      <div class="rr-stage" data-mode="render">
+        <button class="rr-arrow rr-prev" aria-label="Предыдущий проект" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="rr-viewport">
+          <div class="rr-track">
+            <div class="rr-slide is-active" data-index="0">
+              <div class="rr-frame">
+                <img class="rr-img rr-img-render" src="images/render-vs-reality/pair1-render.jpg" alt="3D-визуализация бассейна с водопадом">
+                <img class="rr-img rr-img-real" src="images/render-vs-reality/pair1-real.jpg" alt="Реальная фотография бассейна с водопадом" loading="lazy">
+                <span class="rr-badge rr-badge-render">Рендер</span>
+                <span class="rr-badge rr-badge-real">Реальность</span>
+              </div>
+              <div class="rr-caption">
+                <div class="rr-caption-title">Бассейн с водопадом</div>
+                <div class="rr-caption-meta">Композитная чаша · бетонная скамья-фонтан</div>
+              </div>
+            </div>
+            <div class="rr-slide" data-index="1">
+              <div class="rr-frame">
+                <img class="rr-img rr-img-render" src="images/render-vs-reality/pair2-render.jpg" alt="3D-визуализация длинного бассейна" loading="lazy">
+                <img class="rr-img rr-img-real" src="images/render-vs-reality/pair2-real.jpg" alt="Реальная фотография длинного бассейна" loading="lazy">
+                <span class="rr-badge rr-badge-render">Рендер</span>
+                <span class="rr-badge rr-badge-real">Реальность</span>
+              </div>
+              <div class="rr-caption">
+                <div class="rr-caption-title">Длинный лап-пул</div>
+                <div class="rr-caption-meta">Переливная система · подкатное укрытие</div>
+              </div>
+            </div>
+            <div class="rr-slide" data-index="2">
+              <div class="rr-frame">
+                <img class="rr-img rr-img-render" src="images/render-vs-reality/pair3-render.jpg" alt="3D-визуализация зоны отдыха у воды" loading="lazy">
+                <img class="rr-img rr-img-real" src="images/render-vs-reality/pair3-real.jpg" alt="Реальная фотография зоны отдыха у воды" loading="lazy">
+                <span class="rr-badge rr-badge-render">Рендер</span>
+                <span class="rr-badge rr-badge-real">Реальность</span>
+              </div>
+              <div class="rr-caption">
+                <div class="rr-caption-title">Зона отдыха у воды</div>
+                <div class="rr-caption-meta">Натуральный камень · бирюзовая отделка чаши</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="rr-arrow rr-next" aria-label="Следующий проект" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+      <div class="rr-dots" role="tablist" aria-label="Навигация по проектам"></div>
+    </div>
+  </section>
+
   <!-- WHY US -->
   <section class="why-us">
     <div class="why-us-inner">
@@ -486,6 +562,7 @@
               <div class="contact-messengers">
                 <a href="https://wa.me/79613201050" target="_blank" class="messenger-link">WhatsApp</a>
                 <a href="https://t.me/+79613201050" target="_blank" class="messenger-link">Telegram</a>
+                <a href="https://max.ru/" target="_blank" class="messenger-link">MAX</a>
               </div>
             </div>
           </div>
@@ -513,6 +590,9 @@
           </a>
           <a href="https://t.me/+79613201050" target="_blank" aria-label="Telegram">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
+          </a>
+          <a href="https://max.ru/" target="_blank" aria-label="MAX">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20V4l9 9 9-9v16"/></svg>
           </a>
         </div>
       </div>
@@ -554,5 +634,6 @@
   <script src="js/main.js?v=20260416f"></script>
   <script src="js/service.js"></script>
   <script src="js/portfolio.js"></script>
+  <script src="js/render-vs-reality.js?v=20260416a"></script>
 </body>
 </html>
