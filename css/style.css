@@ -1483,8 +1483,24 @@ body.menu-open {
     padding: 24px;
   }
 
+  .service-form-title {
+    font-size: 18px;
+  }
+
+  .service-field input[type="text"],
+  .service-field input[type="tel"],
+  .service-field input[type="number"],
+  .service-field textarea {
+    font-size: 16px;
+  }
+
+  .service-submit {
+    width: 100%;
+  }
+
   .service-stats {
     gap: 24px;
+    flex-wrap: wrap;
   }
 }
 
@@ -1725,8 +1741,21 @@ body.menu-open {
     padding: 48px 16px;
   }
 
+  .service-inner {
+    gap: 32px;
+  }
+
   .service-left h2 {
     font-size: 32px;
+  }
+
+  .service-desc {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .service-stats {
+    gap: 20px;
   }
 
   .service-stat-val {
@@ -1736,20 +1765,31 @@ body.menu-open {
   .service-stat-label {
     font-size: 10px;
     letter-spacing: 1px;
+    max-width: none;
   }
 
   .service-form {
     padding: 20px;
     border-radius: 16px;
+    gap: 14px;
   }
 
   .service-radio-row {
     gap: 8px;
   }
 
+  .service-radio {
+    min-width: 70px;
+  }
+
   .service-radio span {
     padding: 10px 8px;
     font-size: 12px;
+  }
+
+  .service-submit {
+    padding: 14px 20px;
+    font-size: 14px;
   }
 }
 
@@ -1911,6 +1951,62 @@ body.menu-open {
 
   .pcard-price strong {
     font-size: 20px;
+  }
+
+  .service {
+    padding: 40px 12px;
+  }
+
+  .service-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+  }
+
+  .service-left h2 {
+    font-size: 28px;
+  }
+
+  .service-desc {
+    font-size: 13px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .service-stats {
+    gap: 16px;
+  }
+
+  .service-stat-val {
+    font-size: 24px;
+  }
+
+  .service-form {
+    padding: 16px;
+    border-radius: 14px;
+    gap: 12px;
+  }
+
+  .service-form-title {
+    font-size: 16px;
+  }
+
+  .service-submit {
+    padding: 12px 18px;
+    font-size: 13px;
+  }
+
+  .service-radio-row {
+    gap: 6px;
+  }
+
+  .service-radio {
+    min-width: 60px;
+  }
+
+  .service-radio span {
+    padding: 9px 6px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
   }
 }
 
