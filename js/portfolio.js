@@ -119,6 +119,8 @@ const PortfolioGallery = (() => {
   let metaEl = null;
   let counterEl = null;
   let closeBtn = null;
+  let prevBtn = null;
+  let nextBtn = null;
   let currentWork = null;
   let currentIndex = 0;
   let triggerCard = null;
@@ -139,7 +141,9 @@ const PortfolioGallery = (() => {
       <button class="pgal-btn pgal-close" aria-label="Закрыть">×</button>
       <div class="pgal-stage">
         <div class="pgal-image-wrap">
+          <button class="pgal-btn pgal-nav pgal-nav--prev" aria-label="Предыдущее фото">‹</button>
           <img class="pgal-image" alt="" />
+          <button class="pgal-btn pgal-nav pgal-nav--next" aria-label="Следующее фото">›</button>
         </div>
         <div class="pgal-info">
           <h2 class="pgal-title" id="pgal-title"></h2>
@@ -157,13 +161,16 @@ const PortfolioGallery = (() => {
     if (!currentWork) return;
     const gallery = getGallery(currentWork);
     const src = gallery[currentIndex];
+    const multi = gallery.length > 1;
 
     imgEl.src = src;
     imgEl.alt = `${currentWork.title} — фото ${currentIndex + 1}`;
     titleEl.textContent = currentWork.title;
     locationEl.textContent = currentWork.location;
     metaEl.textContent = `${CATEGORY_LABEL[currentWork.category]} · ${currentWork.size} · ${currentWork.year}`;
-    counterEl.textContent = gallery.length > 1 ? `${currentIndex + 1} / ${gallery.length}` : '';
+    counterEl.textContent = multi ? `${currentIndex + 1} / ${gallery.length}` : '';
+    prevBtn.hidden = !multi;
+    nextBtn.hidden = !multi;
   }
 
   function open(work, cardEl) {
@@ -175,8 +182,12 @@ const PortfolioGallery = (() => {
       metaEl = modalEl.querySelector('.pgal-meta');
       counterEl = modalEl.querySelector('.pgal-counter');
       closeBtn = modalEl.querySelector('.pgal-close');
+      prevBtn = modalEl.querySelector('.pgal-nav--prev');
+      nextBtn = modalEl.querySelector('.pgal-nav--next');
 
       closeBtn.addEventListener('click', close);
+      prevBtn.addEventListener('click', () => go(-1));
+      nextBtn.addEventListener('click', () => go(1));
       modalEl.addEventListener('click', (e) => {
         if (e.target === modalEl) close();
       });
@@ -205,11 +216,25 @@ const PortfolioGallery = (() => {
     triggerCard = null;
   }
 
+  function go(delta) {
+    if (!currentWork) return;
+    const gallery = getGallery(currentWork);
+    if (gallery.length < 2) return;
+    currentIndex = (currentIndex + delta + gallery.length) % gallery.length;
+    render();
+  }
+
   function onKey(e) {
     if (!modalEl || modalEl.hidden) return;
     if (e.key === 'Escape') {
       e.preventDefault();
       close();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      go(-1);
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      go(1);
     }
   }
 
