@@ -396,7 +396,61 @@
         </div>
       </div>
       <div class="service-right">
-        <!-- форма вставится в Task 3 -->
+        <form class="service-form" id="serviceForm" novalidate>
+          <div class="service-form-title">Запись на сервис</div>
+
+          <div class="service-field">
+            <label for="sfName">Ваше имя</label>
+            <input type="text" id="sfName" name="name" required minlength="2" autocomplete="name">
+            <div class="service-error" id="sfNameError"></div>
+          </div>
+
+          <div class="service-field">
+            <label for="sfPhone">Телефон</label>
+            <input type="tel" id="sfPhone" name="phone" required pattern="[0-9+\-\s()]{10,}" placeholder="+7 (___) ___-__-__" autocomplete="tel">
+            <div class="service-error" id="sfPhoneError"></div>
+          </div>
+
+          <div class="service-field">
+            <label for="sfSize">Размер бассейна</label>
+            <input type="text" id="sfSize" name="size" required placeholder="например, 6×3×1.5 м">
+            <div class="service-error" id="sfSizeError"></div>
+          </div>
+
+          <div class="service-field">
+            <label for="sfYear">Год постройки</label>
+            <input type="number" id="sfYear" name="year" required min="1990" max="2026" placeholder="2020">
+            <div class="service-error" id="sfYearError"></div>
+          </div>
+
+          <fieldset class="service-field service-radio-group">
+            <legend>Автоматика дозирования химии</legend>
+            <div class="service-radio-row">
+              <label class="service-radio">
+                <input type="radio" name="automation" value="Да" required>
+                <span>Да</span>
+              </label>
+              <label class="service-radio">
+                <input type="radio" name="automation" value="Нет">
+                <span>Нет</span>
+              </label>
+              <label class="service-radio">
+                <input type="radio" name="automation" value="Не знаю">
+                <span>Не знаю</span>
+              </label>
+            </div>
+            <div class="service-error" id="sfAutomationError"></div>
+          </fieldset>
+
+          <div class="service-field">
+            <label for="sfComment">Комментарий</label>
+            <textarea id="sfComment" name="comment" rows="3" placeholder="Дополнительная информация (необязательно)"></textarea>
+          </div>
+
+          <button type="submit" class="service-submit">Отправить заявку в WhatsApp</button>
+          <a href="https://t.me/+79613201050" target="_blank" rel="noopener" class="service-tg-link" id="serviceTgLink">Или напишите нам в Telegram →</a>
+          <div class="service-toast" id="serviceToast" role="status" aria-live="polite"></div>
+        </form>
       </div>
     </div>
   </section>
