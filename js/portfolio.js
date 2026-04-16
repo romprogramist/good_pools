@@ -179,6 +179,18 @@ const PortfolioGallery = (() => {
     return root;
   }
 
+  function preloadNeighbors() {
+    if (!currentWork) return;
+    const gallery = getGallery(currentWork);
+    if (gallery.length < 2) return;
+    const nextIdx = (currentIndex + 1) % gallery.length;
+    const prevIdx = (currentIndex - 1 + gallery.length) % gallery.length;
+    [nextIdx, prevIdx].forEach(i => {
+      const img = new Image();
+      img.src = gallery[i];
+    });
+  }
+
   function render() {
     if (!currentWork) return;
     const gallery = getGallery(currentWork);
@@ -187,12 +199,18 @@ const PortfolioGallery = (() => {
 
     imgEl.src = src;
     imgEl.alt = `${currentWork.title} — фото ${currentIndex + 1}`;
+    imgEl.style.display = '';
     titleEl.textContent = currentWork.title;
     locationEl.textContent = currentWork.location;
     metaEl.textContent = `${CATEGORY_LABEL[currentWork.category]} · ${currentWork.size} · ${currentWork.year}`;
     counterEl.textContent = multi ? `${currentIndex + 1} / ${gallery.length}` : '';
     prevBtn.hidden = !multi;
     nextBtn.hidden = !multi;
+
+    const leftover = modalEl.querySelector('.pgal-image-placeholder');
+    if (leftover) leftover.remove();
+
+    preloadNeighbors();
   }
 
   function open(work, cardEl) {
@@ -214,6 +232,17 @@ const PortfolioGallery = (() => {
         if (e.target === modalEl) close();
       });
       document.addEventListener('keydown', onKey);
+
+      imgEl.addEventListener('error', () => {
+        imgEl.style.display = 'none';
+        const wrap = modalEl.querySelector('.pgal-image-wrap');
+        if (!wrap.querySelector('.pgal-image-placeholder')) {
+          const ph = document.createElement('div');
+          ph.className = 'pgal-image-placeholder';
+          ph.textContent = 'Фото недоступно';
+          wrap.insertBefore(ph, nextBtn);
+        }
+      });
     }
 
     currentWork = work;
