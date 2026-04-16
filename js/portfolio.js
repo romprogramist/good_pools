@@ -31,7 +31,7 @@ const WORKS = [
 function cardHtml(work, modifier = '') {
   const cls = `work-card${modifier ? ' ' + modifier : ''}`;
   return `
-    <article class="${cls}" data-category="${work.category}" data-work-id="${work.id}">
+    <article class="${cls}" data-category="${work.category}" data-work-id="${work.id}" tabindex="0" role="button" aria-label="Открыть галерею проекта: ${work.title}">
       <div class="work-card-img">
         <img src="${work.image}" alt="${work.title}" loading="lazy">
         <span class="work-tag">${CATEGORY_LABEL[work.category]}</span>
@@ -246,6 +246,13 @@ const PortfolioGallery = (() => {
     render();
   }
 
+  function getFocusables() {
+    const list = [closeBtn];
+    if (prevBtn && !prevBtn.hidden) list.push(prevBtn);
+    if (nextBtn && !nextBtn.hidden) list.push(nextBtn);
+    return list;
+  }
+
   function onKey(e) {
     if (!modalEl || modalEl.hidden) return;
     if (e.key === 'Escape') {
@@ -257,19 +264,43 @@ const PortfolioGallery = (() => {
     } else if (e.key === 'ArrowRight') {
       e.preventDefault();
       go(1);
+    } else if (e.key === 'Tab') {
+      const focusables = getFocusables();
+      if (focusables.length === 0) return;
+      const active = document.activeElement;
+      const idx = focusables.indexOf(active);
+      e.preventDefault();
+      let nextIdx;
+      if (e.shiftKey) {
+        nextIdx = idx <= 0 ? focusables.length - 1 : idx - 1;
+      } else {
+        nextIdx = idx === -1 || idx === focusables.length - 1 ? 0 : idx + 1;
+      }
+      focusables[nextIdx].focus();
     }
   }
 
   function attach() {
     const grid = document.querySelector('.works-grid');
     if (!grid) return;
-    grid.addEventListener('click', (e) => {
-      const card = e.target.closest('.work-card');
-      if (!card) return;
+
+    const tryOpen = (card) => {
       const id = Number(card.dataset.workId);
       const work = WORKS.find(w => w.id === id);
-      if (!work) return;
-      open(work, card);
+      if (work) open(work, card);
+    };
+
+    grid.addEventListener('click', (e) => {
+      const card = e.target.closest('.work-card');
+      if (card) tryOpen(card);
+    });
+
+    grid.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      const card = e.target.closest('.work-card');
+      if (!card) return;
+      e.preventDefault();
+      tryOpen(card);
     });
   }
 
