@@ -106,5 +106,125 @@ document.addEventListener('DOMContentLoaded', () => {
     renderPortfolioFilter();
     renderPortfolioGrid();
     attachPortfolioFilter();
+    PortfolioGallery.attach();
   }
 });
+
+// ===== Portfolio gallery modal =====
+const PortfolioGallery = (() => {
+  let modalEl = null;
+  let imgEl = null;
+  let titleEl = null;
+  let locationEl = null;
+  let metaEl = null;
+  let counterEl = null;
+  let closeBtn = null;
+  let currentWork = null;
+  let currentIndex = 0;
+  let triggerCard = null;
+  let prevBodyOverflow = '';
+
+  function getGallery(work) {
+    return (work && work.gallery && work.gallery.length) ? work.gallery : [work.image];
+  }
+
+  function buildModal() {
+    const root = document.createElement('div');
+    root.className = 'pgal-modal';
+    root.setAttribute('role', 'dialog');
+    root.setAttribute('aria-modal', 'true');
+    root.setAttribute('aria-labelledby', 'pgal-title');
+    root.hidden = true;
+    root.innerHTML = `
+      <button class="pgal-btn pgal-close" aria-label="Закрыть">×</button>
+      <div class="pgal-stage">
+        <div class="pgal-image-wrap">
+          <img class="pgal-image" alt="" />
+        </div>
+        <div class="pgal-info">
+          <h2 class="pgal-title" id="pgal-title"></h2>
+          <div class="pgal-location"></div>
+          <div class="pgal-meta"></div>
+          <div class="pgal-counter" aria-live="polite"></div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(root);
+    return root;
+  }
+
+  function render() {
+    if (!currentWork) return;
+    const gallery = getGallery(currentWork);
+    const src = gallery[currentIndex];
+
+    imgEl.src = src;
+    imgEl.alt = `${currentWork.title} — фото ${currentIndex + 1}`;
+    titleEl.textContent = currentWork.title;
+    locationEl.textContent = currentWork.location;
+    metaEl.textContent = `${CATEGORY_LABEL[currentWork.category]} · ${currentWork.size} · ${currentWork.year}`;
+    counterEl.textContent = gallery.length > 1 ? `${currentIndex + 1} / ${gallery.length}` : '';
+  }
+
+  function open(work, cardEl) {
+    if (!modalEl) {
+      modalEl = buildModal();
+      imgEl = modalEl.querySelector('.pgal-image');
+      titleEl = modalEl.querySelector('.pgal-title');
+      locationEl = modalEl.querySelector('.pgal-location');
+      metaEl = modalEl.querySelector('.pgal-meta');
+      counterEl = modalEl.querySelector('.pgal-counter');
+      closeBtn = modalEl.querySelector('.pgal-close');
+
+      closeBtn.addEventListener('click', close);
+      modalEl.addEventListener('click', (e) => {
+        if (e.target === modalEl) close();
+      });
+      document.addEventListener('keydown', onKey);
+    }
+
+    currentWork = work;
+    currentIndex = 0;
+    triggerCard = cardEl;
+    prevBodyOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    render();
+    modalEl.hidden = false;
+    closeBtn.focus();
+  }
+
+  function close() {
+    if (!modalEl || modalEl.hidden) return;
+    modalEl.hidden = true;
+    document.body.style.overflow = prevBodyOverflow;
+    if (triggerCard && typeof triggerCard.focus === 'function') {
+      triggerCard.focus();
+    }
+    currentWork = null;
+    triggerCard = null;
+  }
+
+  function onKey(e) {
+    if (!modalEl || modalEl.hidden) return;
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      close();
+    }
+  }
+
+  function attach() {
+    const grid = document.querySelector('.works-grid');
+    if (!grid) return;
+    grid.addEventListener('click', (e) => {
+      const card = e.target.closest('.work-card');
+      if (!card) return;
+      const id = Number(card.dataset.workId);
+      const work = WORKS.find(w => w.id === id);
+      if (!work) return;
+      open(work, card);
+    });
+  }
+
+  return { attach };
+})();

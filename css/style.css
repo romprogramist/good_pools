@@ -2921,3 +2921,120 @@ body.models-dark .work-meta { color: #22d3ee; }
   color: #dc2626;
 }
 
+/* ===== Portfolio gallery modal ===== */
+.pgal-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+.pgal-modal[hidden] { display: none; }
+
+.pgal-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  max-width: min(1100px, 92vw);
+  width: 100%;
+}
+
+.pgal-image-wrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.pgal-image {
+  display: block;
+  max-width: 100%;
+  max-height: 70vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #111;
+}
+.pgal-image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 50vh;
+  background: #1a1a1a;
+  color: #888;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  border-radius: 12px;
+}
+
+.pgal-btn {
+  background: rgba(20, 20, 20, 0.7);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  padding: 0;
+}
+.pgal-btn:hover { background: rgba(40, 40, 40, 0.95); }
+.pgal-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.pgal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 42px;
+  height: 42px;
+  font-size: 26px;
+  line-height: 1;
+}
+
+.pgal-info {
+  color: #fff;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 100%;
+}
+.pgal-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+.pgal-location {
+  font-size: 14px;
+  color: #bbb;
+}
+.pgal-meta {
+  font-size: 13px;
+  color: #888;
+  letter-spacing: 0.02em;
+}
+.pgal-counter {
+  font-size: 13px;
+  color: #999;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 720px) {
+  .pgal-modal { padding: 20px 12px; }
+  .pgal-image { max-height: 60vh; }
+  .pgal-close { top: 12px; right: 12px; width: 38px; height: 38px; font-size: 22px; }
+  .pgal-title { font-size: 17px; }
+}
