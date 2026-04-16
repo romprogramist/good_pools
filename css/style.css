@@ -1459,20 +1459,21 @@ body.menu-open {
   }
 
   .service {
-    padding: 60px 20px;
+    padding: 48px 20px;
   }
 
   .service-inner {
     flex-direction: column;
-    gap: 40px;
+    gap: 28px;
   }
 
   .service-desc {
-    margin-bottom: 28px;
+    margin-bottom: 20px;
   }
 
   .service-form {
-    padding: 24px;
+    padding: 22px;
+    gap: 14px;
   }
 
   .service-form-title {
@@ -1491,8 +1492,9 @@ body.menu-open {
   }
 
   .service-stats {
-    gap: 24px;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
   }
 }
 
@@ -1730,20 +1732,20 @@ body.menu-open {
   }
 
   .service {
-    padding: 48px 16px;
+    padding: 36px 16px;
   }
 
   .service-inner {
-    gap: 32px;
+    gap: 20px;
   }
 
   .service-desc {
     font-size: 14px;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
   }
 
   .service-stats {
-    gap: 20px;
+    gap: 12px;
   }
 
   .service-stat-val {
@@ -1753,13 +1755,12 @@ body.menu-open {
   .service-stat-label {
     font-size: 10px;
     letter-spacing: 1px;
-    max-width: none;
   }
 
   .service-form {
-    padding: 20px;
+    padding: 18px;
     border-radius: 16px;
-    gap: 14px;
+    gap: 12px;
   }
 
   .service-radio-row {
@@ -1942,7 +1943,7 @@ body.menu-open {
   }
 
   .service {
-    padding: 40px 12px;
+    padding: 28px 12px;
   }
 
   .service-label {
@@ -1952,12 +1953,12 @@ body.menu-open {
 
   .service-desc {
     font-size: 13px;
-    line-height: 1.7;
-    margin-bottom: 20px;
+    line-height: 1.6;
+    margin-bottom: 14px;
   }
 
   .service-stats {
-    gap: 16px;
+    gap: 10px;
   }
 
   .service-stat-val {
@@ -1965,9 +1966,9 @@ body.menu-open {
   }
 
   .service-form {
-    padding: 16px;
+    padding: 14px;
     border-radius: 14px;
-    gap: 12px;
+    gap: 10px;
   }
 
   .service-form-title {
