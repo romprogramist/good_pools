@@ -2660,10 +2660,12 @@ body.models-dark .work-meta { color: #22d3ee; }
 }
 
 .service-left h2 {
-  font-size: clamp(28px, 4.5vw, 64px);
-  line-height: 0.95;
+  font-size: clamp(24px, 3.8vw, 56px);
+  line-height: 1;
   margin-bottom: 24px;
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .service-left h2 .bold {
@@ -2676,6 +2678,11 @@ body.models-dark .work-meta { color: #22d3ee; }
   font-weight: 200;
   color: #7dd3fc;
   letter-spacing: 4px;
+}
+
+@media (max-width: 900px) {
+  .service-left h2 .bold { letter-spacing: 1px; }
+  .service-left h2 .thin { letter-spacing: 1px; }
 }
 
 .service-desc {
