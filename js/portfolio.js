@@ -154,6 +154,28 @@ const PortfolioGallery = (() => {
       </div>
     `;
     document.body.appendChild(root);
+
+    let touchStartX = null;
+    let touchStartY = null;
+    const SWIPE_THRESHOLD = 50;
+
+    root.addEventListener('touchstart', (e) => {
+      if (e.touches.length !== 1) { touchStartX = null; return; }
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    root.addEventListener('touchend', (e) => {
+      if (touchStartX === null) return;
+      const touch = e.changedTouches[0];
+      const dx = touch.clientX - touchStartX;
+      const dy = touch.clientY - touchStartY;
+      touchStartX = null;
+      if (Math.abs(dx) < SWIPE_THRESHOLD) return;
+      if (Math.abs(dy) > Math.abs(dx)) return;
+      go(dx < 0 ? 1 : -1);
+    });
+
     return root;
   }
 
