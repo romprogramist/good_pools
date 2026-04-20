@@ -107,12 +107,14 @@
     if (modelParam) {
       const target = gridEl.querySelector('.mcard[data-id="' + modelParam + '"]');
       if (target && !target.classList.contains('hidden')) {
-        // Defer so smooth scroll starts after layout settles.
         setTimeout(function () {
           target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          target.classList.add('highlight');
-          setTimeout(function () { target.classList.remove('highlight'); }, 2000);
-        }, 50);
+          // Open gallery for this model
+          var model = models.find(function (m) { return m.id === modelParam; });
+          if (model) {
+            openModelInGallery(model, models.indexOf(model), target);
+          }
+        }, 100);
       }
     }
   }

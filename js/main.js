@@ -169,8 +169,10 @@ document.addEventListener('DOMContentLoaded', () => {
       priceLabel = 'Цена<strong>По проекту</strong>';
     }
 
+    var link = 'models.html?category=' + m.category + '&model=' + m.id;
+
     return (
-      '<div class="pcard' + (isFeatured ? ' featured' : '') + '"' + (isFullWidth ? ' style="grid-column:1/-1;"' : '') + '>' +
+      '<a href="' + link + '" class="pcard' + (isFeatured ? ' featured' : '') + '"' + (isFullWidth ? ' style="grid-column:1/-1;"' : '') + '>' +
         '<div class="pcard-img" style="' + imgStyle + '">' +
           (m.badge ? '<div class="pcard-badge">' + m.badge + '</div>' : '') +
           '<div class="pcard-size">' + sizeLabel + '</div>' +
@@ -182,10 +184,10 @@ document.addEventListener('DOMContentLoaded', () => {
           '<div class="pcard-specs">' + specsHtml + '</div>' +
           '<div class="pcard-bottom">' +
             '<div class="pcard-price">' + priceLabel + '</div>' +
-            '<a href="models.html?model=' + m.id + '" class="btn-card">Подробнее</a>' +
+            '<span class="btn-card">Подробнее</span>' +
           '</div>' +
         '</div>' +
-      '</div>'
+      '</a>'
     );
   }
 });

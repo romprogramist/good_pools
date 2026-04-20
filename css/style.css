@@ -520,6 +520,11 @@ body.menu-open {
 }
 
 /* Pool card */
+a.pcard {
+  text-decoration: none;
+  color: inherit;
+}
+
 .pcard {
   background: #1e2328;
   border-radius: 28px;
