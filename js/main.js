@@ -93,32 +93,35 @@ document.addEventListener('DOMContentLoaded', () => {
       const thinW = measureText(heroThin);
       if (boldW === 0 || thinW === 0) return;
 
-      // Don't push past the container — bail if either word already
-      // fills (or overflows) the available width.
+      // Find available width of container
       const parent = heroBold.parentElement;
       const parentStyle = getComputedStyle(parent);
       const available = parent.clientWidth
         - parseFloat(parentStyle.paddingLeft)
         - parseFloat(parentStyle.paddingRight);
-      const targetW = Math.max(boldW, thinW);
-      if (targetW >= available - 1) return;
+
+      // Target width: the wider word, but capped to container
+      let targetW = Math.max(boldW, thinW);
+      if (targetW > available - 1) targetW = available - 1;
 
       const delta = boldW - thinW;
-      if (Math.abs(delta) < 0.5) return;
+      if (Math.abs(delta) < 0.5 && targetW >= Math.max(boldW, thinW) - 1) return;
 
-      const narrower = delta > 0 ? heroThin : heroBold;
-      const baseLS = delta > 0 ? baseThinLS : baseBoldLS;
-      const len = narrower.textContent.length;
-      if (len <= 1) return;
-
-      // Iteratively converge on equal width
-      let extra = Math.abs(delta) / len;
-      for (let i = 0; i < 5; i++) {
-        narrower.style.letterSpacing = (baseLS + extra) + 'px';
-        const remaining = targetW - measureText(narrower);
-        if (Math.abs(remaining) < 0.5) break;
-        extra += remaining / len;
-      }
+      // Adjust both words to match targetW
+      [{ el: heroBold, baseLS: baseBoldLS, w: boldW },
+       { el: heroThin, baseLS: baseThinLS, w: thinW }].forEach(function (item) {
+        const diff = targetW - item.w;
+        if (Math.abs(diff) < 0.5) return;
+        const len = item.el.textContent.length;
+        if (len <= 1) return;
+        let extra = diff / len;
+        for (let i = 0; i < 5; i++) {
+          item.el.style.letterSpacing = (item.baseLS + extra) + 'px';
+          const remaining = targetW - measureText(item.el);
+          if (Math.abs(remaining) < 0.5) break;
+          extra += remaining / len;
+        }
+      });
     };
 
     equalizeHeroTitle();
