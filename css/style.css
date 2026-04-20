@@ -317,6 +317,9 @@ body.menu-open {
   letter-spacing: 3px;
   color: rgba(255,255,255,0.6);
   text-transform: uppercase;
+  flex-wrap: wrap;
+  gap: 6px 0;
+  max-width: var(--hero-title-width, 100%);
 }
 
 .hero-cta {
@@ -1642,8 +1645,6 @@ a.pcard {
     margin-top: 16px;
     font-size: 11px;
     letter-spacing: 2px;
-    flex-wrap: wrap;
-    gap: 8px 24px;
   }
 
   .hero-cta {
@@ -1925,8 +1926,6 @@ a.pcard {
     margin-top: 12px;
     font-size: 10px;
     letter-spacing: 1.5px;
-    flex-wrap: wrap;
-    gap: 6px 16px;
   }
 
   .hero-cta {

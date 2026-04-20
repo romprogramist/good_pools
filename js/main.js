@@ -122,6 +122,10 @@ document.addEventListener('DOMContentLoaded', () => {
           extra += remaining / len;
         }
       });
+
+      // Set CSS variable so .hero-tags matches title width
+      var finalW = measureText(heroBold);
+      parent.style.setProperty('--hero-title-width', finalW + 'px');
     };
 
     equalizeHeroTitle();
