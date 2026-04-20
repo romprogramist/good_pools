@@ -41,26 +41,38 @@ function processUpload(subfolder) {
 }
 
 async function resizeMiddleware(req, res, next) {
-  try {
-    const files = req.files || (req.file ? [req.file] : []);
-    for (const file of files) {
-      if (file.mimetype === 'image/svg+xml') continue;
-      const tmpPath = file.path + '.tmp';
-      await sharp(file.path)
-        .resize({ width: 1920, height: 1920, fit: 'inside', withoutEnlargement: true })
-        .jpeg({ quality: 80 })
-        .toFile(tmpPath);
+  var files = req.files || (req.file ? [req.file] : []);
+  for (var i = 0; i < files.length; i++) {
+    var file = files[i];
+    if (file.mimetype === 'image/svg+xml') continue;
+    try {
+      var tmpPath = file.path + '.tmp';
+      var pipeline = sharp(file.path)
+        .resize({ width: 1920, height: 1920, fit: 'inside', withoutEnlargement: true });
+
+      // Preserve original format
+      if (file.mimetype === 'image/png') {
+        pipeline = pipeline.png({ quality: 80 });
+      } else if (file.mimetype === 'image/webp') {
+        pipeline = pipeline.webp({ quality: 80 });
+      } else {
+        pipeline = pipeline.jpeg({ quality: 80 });
+      }
+
+      await pipeline.toFile(tmpPath);
       fs.renameSync(tmpPath, file.path);
+    } catch (err) {
+      // If sharp fails, keep the original file as-is
+      console.error('Sharp resize failed for ' + file.originalname + ':', err.message);
+      try { fs.unlinkSync(file.path + '.tmp'); } catch (e) {}
     }
-    next();
-  } catch (err) {
-    next(err);
   }
+  next();
 }
 
 function deleteFile(relativePath) {
   if (!relativePath) return;
-  const abs = path.join(__dirname, '..', relativePath);
+  var abs = path.join(__dirname, '..', relativePath);
   fs.unlink(abs, function () {});
 }
 
