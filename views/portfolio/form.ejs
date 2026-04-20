@@ -1,0 +1,75 @@
+<h1><%= item ? 'Редактировать' : 'Новая' %> работа</h1>
+
+<form method="POST" action="<%= item ? '/admin/portfolio/' + item.id : '/admin/portfolio' %>" style="max-width:600px;">
+  <div class="form-group">
+    <label for="title">Название проекта</label>
+    <input type="text" id="title" name="title" required value="<%= item ? item.title : '' %>" placeholder="Вилла в Подмосковье">
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label for="category_id">Категория</label>
+      <select id="category_id" name="category_id" required>
+        <option value="">— выбрать —</option>
+        <% categories.forEach(function(cat) { %>
+          <option value="<%= cat.id %>" <%= item && item.category_id === cat.id ? 'selected' : '' %>><%= cat.label %></option>
+        <% }); %>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="location">Регион / город</label>
+      <input type="text" id="location" name="location" value="<%= item ? item.location || '' : '' %>" placeholder="Московская область">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label for="size">Размер</label>
+      <input type="text" id="size" name="size" value="<%= item ? item.size || '' : '' %>" placeholder="8.0 × 4.0 м">
+    </div>
+    <div class="form-group">
+      <label for="year">Год</label>
+      <input type="number" id="year" name="year" value="<%= item ? item.year || '' : '' %>" placeholder="2024">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="sort_order">Порядок</label>
+    <input type="number" id="sort_order" name="sort_order" value="<%= item ? item.sort_order : 0 %>">
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a href="/admin/portfolio" class="btn btn-outline">Отмена</a>
+  </div>
+</form>
+
+<% if (item) { %>
+<hr style="border-color:#27272a; margin: 32px 0;">
+<h2 style="font-size:18px; margin-bottom:16px;">Фотографии</h2>
+
+<form method="POST" action="/admin/portfolio/<%= item.id %>/images" enctype="multipart/form-data" style="margin-bottom:16px;">
+  <div class="form-group">
+    <input type="file" name="images" accept=".jpg,.jpeg,.png,.webp" multiple>
+  </div>
+  <button type="submit" class="btn btn-primary btn-sm">Загрузить</button>
+</form>
+
+<div class="img-grid">
+  <% images.forEach(function(img) { %>
+    <div class="img-item <%= img.is_cover ? 'is-cover' : '' %>">
+      <img src="/<%= img.image_path %>" alt="">
+      <div class="img-actions">
+        <% if (!img.is_cover) { %>
+          <form method="POST" action="/admin/portfolio/<%= item.id %>/images/<%= img.id %>/cover" style="display:inline;">
+            <button type="submit" class="img-btn img-btn-cover" title="Сделать обложкой">★</button>
+          </form>
+        <% } %>
+        <form method="POST" action="/admin/portfolio/<%= item.id %>/images/<%= img.id %>/delete" style="display:inline;" onsubmit="return confirm('Удалить фото?')">
+          <button type="submit" class="img-btn img-btn-del" title="Удалить">✕</button>
+        </form>
+      </div>
+    </div>
+  <% }); %>
+</div>
+<% } %>

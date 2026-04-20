@@ -1,0 +1,43 @@
+<div class="top-bar">
+  <h1>Портфолио</h1>
+  <a href="/admin/portfolio/new" class="btn btn-primary">+ Добавить</a>
+</div>
+
+<div style="margin-bottom:16px;">
+  <a href="/admin/portfolio" class="btn btn-sm <%= !currentCategory ? 'btn-primary' : 'btn-outline' %>">Все</a>
+  <% categories.forEach(function(cat) { %>
+    <a href="/admin/portfolio?category=<%= cat.id %>" class="btn btn-sm <%= currentCategory == cat.id ? 'btn-primary' : 'btn-outline' %>"><%= cat.label %></a>
+  <% }); %>
+</div>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>Фото</th>
+      <th>Название</th>
+      <th>Город</th>
+      <th>Категория</th>
+      <th>Год</th>
+      <th>Порядок</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% works.forEach(function(w) { %>
+    <tr>
+      <td><% if (w.cover_image) { %><img src="/<%= w.cover_image %>" alt="" style="height:40px; border-radius:4px;"><% } else { %><span style="color:#71717a;">—</span><% } %></td>
+      <td><strong><%= w.title %></strong></td>
+      <td><%= w.location || '—' %></td>
+      <td><%= w.category_label %></td>
+      <td><%= w.year || '—' %></td>
+      <td><%= w.sort_order %></td>
+      <td>
+        <a href="/admin/portfolio/<%= w.id %>/edit" class="btn btn-sm btn-outline">Редактировать</a>
+        <form method="POST" action="/admin/portfolio/<%= w.id %>/delete" style="display:inline;" onsubmit="return confirm('Удалить работу?')">
+          <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+        </form>
+      </td>
+    </tr>
+    <% }); %>
+  </tbody>
+</table>

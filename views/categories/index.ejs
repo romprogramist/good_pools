@@ -1,0 +1,36 @@
+<div class="top-bar">
+  <h1>Категории</h1>
+  <a href="/admin/categories/new" class="btn btn-primary">+ Добавить</a>
+</div>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>Иконка</th>
+      <th>Название</th>
+      <th>Ключ</th>
+      <th>Порядок</th>
+      <th>Моделей</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% categories.forEach(function(cat) { %>
+    <tr>
+      <td><% if (cat.image) { %><img src="/<%= cat.image %>" alt="" style="height:32px;"><% } %></td>
+      <td><%= cat.label %></td>
+      <td><code><%= cat.key %></code></td>
+      <td><%= cat.sort_order %></td>
+      <td><%= cat.model_count %></td>
+      <td>
+        <a href="/admin/categories/<%= cat.id %>/edit" class="btn btn-sm btn-outline">Редактировать</a>
+        <% if (parseInt(cat.model_count) === 0 && parseInt(cat.portfolio_count) === 0) { %>
+          <form method="POST" action="/admin/categories/<%= cat.id %>/delete" style="display:inline;" onsubmit="return confirm('Удалить категорию?')">
+            <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+          </form>
+        <% } %>
+      </td>
+    </tr>
+    <% }); %>
+  </tbody>
+</table>

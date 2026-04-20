@@ -1,0 +1,43 @@
+<div class="top-bar">
+  <h1>Модели</h1>
+  <a href="/admin/models/new" class="btn btn-primary">+ Добавить</a>
+</div>
+
+<div style="margin-bottom:16px;">
+  <a href="/admin/models" class="btn btn-sm <%= !currentCategory ? 'btn-primary' : 'btn-outline' %>">Все</a>
+  <% categories.forEach(function(cat) { %>
+    <a href="/admin/models?category=<%= cat.id %>" class="btn btn-sm <%= currentCategory == cat.id ? 'btn-primary' : 'btn-outline' %>"><%= cat.label %></a>
+  <% }); %>
+</div>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>Фото</th>
+      <th>Название</th>
+      <th>Серия</th>
+      <th>Категория</th>
+      <th>Цена</th>
+      <th>Порядок</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% models.forEach(function(m) { %>
+    <tr>
+      <td><% if (m.cover_image) { %><img src="/<%= m.cover_image %>" alt="" style="height:40px; border-radius:4px;"><% } else { %><span style="color:#71717a;">—</span><% } %></td>
+      <td><strong><%= m.name %></strong><% if (m.badge) { %> <span style="color:#3b82f6; font-size:12px;"><%= m.badge %></span><% } %></td>
+      <td><%= m.series || '—' %></td>
+      <td><%= m.category_label %></td>
+      <td><%= m.price || '—' %></td>
+      <td><%= m.sort_order %></td>
+      <td>
+        <a href="/admin/models/<%= m.id %>/edit" class="btn btn-sm btn-outline">Редактировать</a>
+        <form method="POST" action="/admin/models/<%= m.id %>/delete" style="display:inline;" onsubmit="return confirm('Удалить модель?')">
+          <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+        </form>
+      </td>
+    </tr>
+    <% }); %>
+  </tbody>
+</table>

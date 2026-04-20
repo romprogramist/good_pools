@@ -1,0 +1,106 @@
+<h1><%= item ? 'Редактировать' : 'Новая' %> модель</h1>
+
+<form method="POST" action="<%= item ? '/admin/models/' + item.id : '/admin/models' %>" style="max-width:600px;">
+  <div class="form-row">
+    <div class="form-group">
+      <label for="name">Название</label>
+      <input type="text" id="name" name="name" required value="<%= item ? item.name : '' %>">
+    </div>
+    <div class="form-group">
+      <label for="slug">Slug (URL)</label>
+      <input type="text" id="slug" name="slug" required pattern="[a-z0-9\-]+" value="<%= item ? item.slug : '' %>">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label for="category_id">Категория</label>
+      <select id="category_id" name="category_id" required>
+        <option value="">— выбрать —</option>
+        <% categories.forEach(function(cat) { %>
+          <option value="<%= cat.id %>" <%= item && item.category_id === cat.id ? 'selected' : '' %>><%= cat.label %></option>
+        <% }); %>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="series">Серия</label>
+      <input type="text" id="series" name="series" value="<%= item ? item.series || '' : '' %>">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Описание</label>
+    <textarea id="description" name="description" rows="3"><%= item ? item.description || '' : '' %></textarea>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label for="length_m">Длина (м)</label>
+      <input type="number" id="length_m" name="length_m" step="0.1" value="<%= item && item.length_m ? item.length_m : '' %>">
+    </div>
+    <div class="form-group">
+      <label for="width_m">Ширина (м)</label>
+      <input type="number" id="width_m" name="width_m" step="0.1" value="<%= item && item.width_m ? item.width_m : '' %>">
+    </div>
+    <div class="form-group">
+      <label for="depth_m">Глубина (м)</label>
+      <input type="number" id="depth_m" name="depth_m" step="0.1" value="<%= item && item.depth_m ? item.depth_m : '' %>">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="specs_label">Размер (текст, если не стандартный)</label>
+    <input type="text" id="specs_label" name="specs_label" value="<%= item ? item.specs_label || '' : '' %>" placeholder="Ø 1.9 м · 85 см">
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label for="price">Цена</label>
+      <input type="text" id="price" name="price" value="<%= item ? item.price || '' : '' %>" placeholder="от 890 000 ₽">
+    </div>
+    <div class="form-group">
+      <label for="badge">Бейдж</label>
+      <input type="text" id="badge" name="badge" value="<%= item ? item.badge || '' : '' %>" placeholder="Хит продаж">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="sort_order">Порядок</label>
+    <input type="number" id="sort_order" name="sort_order" value="<%= item ? item.sort_order : 0 %>">
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a href="/admin/models" class="btn btn-outline">Отмена</a>
+  </div>
+</form>
+
+<% if (item) { %>
+<hr style="border-color:#27272a; margin: 32px 0;">
+<h2 style="font-size:18px; margin-bottom:16px;">Фотографии</h2>
+
+<form method="POST" action="/admin/models/<%= item.id %>/images" enctype="multipart/form-data" style="margin-bottom:16px;">
+  <div class="form-group">
+    <input type="file" name="images" accept=".jpg,.jpeg,.png,.webp" multiple>
+  </div>
+  <button type="submit" class="btn btn-primary btn-sm">Загрузить</button>
+</form>
+
+<div class="img-grid">
+  <% images.forEach(function(img) { %>
+    <div class="img-item <%= img.is_cover ? 'is-cover' : '' %>">
+      <img src="/<%= img.image_path %>" alt="">
+      <div class="img-actions">
+        <% if (!img.is_cover) { %>
+          <form method="POST" action="/admin/models/<%= item.id %>/images/<%= img.id %>/cover" style="display:inline;">
+            <button type="submit" class="img-btn img-btn-cover" title="Сделать обложкой">★</button>
+          </form>
+        <% } %>
+        <form method="POST" action="/admin/models/<%= item.id %>/images/<%= img.id %>/delete" style="display:inline;" onsubmit="return confirm('Удалить фото?')">
+          <button type="submit" class="img-btn img-btn-del" title="Удалить">✕</button>
+        </form>
+      </div>
+    </div>
+  <% }); %>
+</div>
+<% } %>
