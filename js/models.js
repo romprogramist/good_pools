@@ -20,7 +20,7 @@
       return (
         '<article class="mcard" data-id="' + m.id + '" data-category="' + m.category + '" tabindex="0" role="button" aria-label="Открыть галерею: ' + m.name + '">' +
           '<div class="mcard-img">' +
-            '<img src="' + categoryImage[m.category] + '" alt="' + m.name + '">' +
+            '<img src="' + (m.gallery && m.gallery.length ? m.gallery[0] : categoryImage[m.category]) + '" alt="' + m.name + '">' +
             (m.badge ? '<div class="mcard-badge">' + m.badge + '</div>' : '') +
             '<div class="mcard-size">' + m.specs + '</div>' +
           '</div>' +
