@@ -8,7 +8,9 @@ const { processUpload, deleteFile } = require('../middleware/upload');
 
 // Helper: render an EJS view inside the admin layout
 function renderAdmin(res, view, locals) {
-  res.app.render(view, locals, function (err, body) {
+  // Merge res.locals (user, success, error) into the locals for the inner template
+  var merged = Object.assign({}, res.locals, locals);
+  res.app.render(view, merged, function (err, body) {
     if (err) { console.error(err); return res.status(500).send('Render error: ' + err.message); }
     locals.body = body;
     res.render('layout', locals);
