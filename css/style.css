@@ -321,8 +321,9 @@ body.menu-open {
 
 .hero-cta {
   display: flex;
-  align-items: center;
-  gap: 24px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
   margin-top: auto;
   padding-bottom: 40px;
 }
