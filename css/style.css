@@ -276,6 +276,7 @@ body.menu-open {
   align-items: center;
   padding-top: 60px;
   padding-bottom: 40px;
+  position: relative;
 }
 
 .hero-left {
@@ -284,9 +285,6 @@ body.menu-open {
   padding-top: 40px;
   flex-shrink: 0;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-self: stretch;
 }
 
 .hero-title-bold {
@@ -327,8 +325,10 @@ body.menu-open {
   flex-direction: column;
   align-items: flex-start;
   gap: 16px;
-  margin-top: auto;
-  padding-bottom: 40px;
+  position: absolute;
+  bottom: 40px;
+  left: 60px;
+  max-width: 38%;
 }
 
 .hero-cta-btn {
@@ -1544,6 +1544,10 @@ a.pcard {
     padding-left: 40px;
   }
 
+  .hero-cta {
+    left: 40px;
+  }
+
   .category-card {
     flex: 0 0 220px;
   }
@@ -1648,8 +1652,9 @@ a.pcard {
   }
 
   .hero-cta {
-    margin-top: 28px;
-    padding-bottom: 0;
+    position: static;
+    max-width: 100%;
+    padding: 0 24px 32px;
   }
 
   .hero-cta-btn {
@@ -1659,6 +1664,7 @@ a.pcard {
 
   .hero-cta-text {
     font-size: 13px;
+    max-width: 100%;
   }
 
   .hero-right {
@@ -1929,7 +1935,7 @@ a.pcard {
   }
 
   .hero-cta {
-    margin-top: 20px;
+    padding: 0 16px 24px;
     gap: 12px;
   }
 
@@ -1940,7 +1946,6 @@ a.pcard {
 
   .hero-cta-text {
     font-size: 12px;
-    max-width: 100%;
   }
 
   .carousel-track {
@@ -2233,8 +2238,8 @@ a.pcard {
   }
 
   .hero-cta {
-    margin-top: 20px;
-    gap: 12px;
+    padding: 0 12px 20px;
+    gap: 10px;
   }
 
   .hero-cta-btn {
