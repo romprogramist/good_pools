@@ -305,6 +305,57 @@ body.menu-open {
   letter-spacing: 4px;
 }
 
+/* Hero tags & CTA */
+.hero-tags {
+  display: flex;
+  gap: 32px;
+  margin-top: 24px;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 3px;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+}
+
+.hero-cta {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.hero-cta-btn {
+  display: inline-block;
+  padding: 20px 36px;
+  background: #fff;
+  color: #0f1117;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+  text-transform: uppercase;
+  border-radius: 4px;
+  white-space: nowrap;
+  transition: background 0.3s, transform 0.3s;
+  flex-shrink: 0;
+}
+
+.hero-cta-btn:hover {
+  background: #e4e4e7;
+  transform: translateY(-2px);
+}
+
+.hero-cta-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.6);
+  max-width: 300px;
+}
+
+.hero-cta-text strong {
+  color: rgba(255,255,255,0.85);
+}
+
 /* ===== CAROUSEL ===== */
 .hero-right {
   width: 60%;
