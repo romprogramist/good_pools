@@ -222,4 +222,47 @@ document.addEventListener('DOMContentLoaded', () => {
       '</a>'
     );
   }
+
+  // Showroom section on home page
+  var showroomEl = document.getElementById('showroomSection');
+  if (showroomEl) {
+    fetch('/api/showroom').then(function (r) { return r.json(); }).then(function (data) {
+      if (!data) return;
+      var galleryHtml = '';
+      if (data.gallery && data.gallery.length) {
+        galleryHtml = '<div class="showroom-gallery">' +
+          data.gallery.map(function (src, i) {
+            return '<div class="showroom-photo" data-index="' + i + '"><img src="' + src + '" alt="" loading="lazy"></div>';
+          }).join('') +
+          '</div>';
+      }
+
+      showroomEl.innerHTML =
+        '<div class="showroom-head">' +
+          '<div class="showroom-head-left">' +
+            '<div class="label">Выставочная площадка</div>' +
+            '<h2><span class="bold">' + (data.title || 'ПРИЕЗЖАЙТЕ').toUpperCase() + '</span></h2>' +
+          '</div>' +
+          '<div class="showroom-head-right">' +
+            '<p>' + (data.description || '') + '</p>' +
+            (data.address ? '<div class="showroom-address"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;flex-shrink:0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>' + data.address + '</span></div>' : '') +
+          '</div>' +
+        '</div>' +
+        galleryHtml;
+
+      // Click on photo → open gallery
+      if (data.gallery && data.gallery.length && typeof GalleryModal !== 'undefined') {
+        showroomEl.addEventListener('click', function (e) {
+          var photo = e.target.closest('.showroom-photo');
+          if (!photo) return;
+          GalleryModal.open({
+            title: data.title || 'Выставочная площадка',
+            infoLines: [data.address || ''],
+            gallery: data.gallery,
+            triggerEl: photo
+          });
+        });
+      }
+    });
+  }
 });

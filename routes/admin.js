@@ -464,4 +464,87 @@ router.post('/portfolio/:id/images/:imgId/delete', async function (req, res) {
   }
 });
 
+// ---------- Showroom ----------
+
+router.get('/showroom', async function (req, res) {
+  try {
+    var result = await pool.query('SELECT * FROM showroom LIMIT 1');
+    var item = result.rows[0] || null;
+    var images = [];
+    if (item) {
+      var imgResult = await pool.query('SELECT * FROM showroom_images WHERE showroom_id = $1 ORDER BY sort_order, id', [item.id]);
+      images = imgResult.rows;
+    }
+    renderAdmin(res, 'showroom/form', { pageTitle: 'Выставочная площадка', active: 'showroom', item: item, images: images });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
+
+router.post('/showroom', async function (req, res) {
+  var { title, description, address } = req.body;
+  try {
+    var existing = await pool.query('SELECT id FROM showroom LIMIT 1');
+    if (existing.rows.length) {
+      await pool.query('UPDATE showroom SET title=$1, description=$2, address=$3 WHERE id=$4',
+        [title, description || null, address || null, existing.rows[0].id]);
+    } else {
+      await pool.query('INSERT INTO showroom (title, description, address) VALUES ($1,$2,$3)',
+        [title, description || null, address || null]);
+    }
+    req.session.success = 'Сохранено';
+    res.redirect('/admin/showroom');
+  } catch (err) {
+    console.error(err);
+    req.session.error = 'Ошибка: ' + err.message;
+    res.redirect('/admin/showroom');
+  }
+});
+
+router.post('/showroom/images', ...processUpload('showroom').array('images', 10), async function (req, res) {
+  try {
+    var sr = await pool.query('SELECT id FROM showroom LIMIT 1');
+    if (!sr.rows.length) { res.redirect('/admin/showroom'); return; }
+    var sid = sr.rows[0].id;
+    for (var file of (req.files || [])) {
+      await pool.query(
+        'INSERT INTO showroom_images (showroom_id, image_path, sort_order) VALUES ($1, $2, (SELECT COALESCE(MAX(sort_order),0)+1 FROM showroom_images WHERE showroom_id=$1))',
+        [sid, 'uploads/showroom/' + file.filename]
+      );
+    }
+    req.session.success = 'Фото загружены';
+    res.redirect('/admin/showroom');
+  } catch (err) {
+    console.error(err);
+    req.session.error = 'Ошибка загрузки';
+    res.redirect('/admin/showroom');
+  }
+});
+
+router.post('/showroom/images/:imgId/cover', async function (req, res) {
+  try {
+    var sr = await pool.query('SELECT id FROM showroom LIMIT 1');
+    if (sr.rows.length) {
+      await pool.query('UPDATE showroom_images SET is_cover = false WHERE showroom_id = $1', [sr.rows[0].id]);
+      await pool.query('UPDATE showroom_images SET is_cover = true WHERE id = $1', [req.params.imgId]);
+    }
+    res.redirect('/admin/showroom');
+  } catch (err) {
+    console.error(err);
+    res.redirect('/admin/showroom');
+  }
+});
+
+router.post('/showroom/images/:imgId/delete', async function (req, res) {
+  try {
+    var result = await pool.query('DELETE FROM showroom_images WHERE id = $1 RETURNING image_path', [req.params.imgId]);
+    if (result.rows.length) deleteFile(result.rows[0].image_path);
+    res.redirect('/admin/showroom');
+  } catch (err) {
+    console.error(err);
+    res.redirect('/admin/showroom');
+  }
+});
+
 module.exports = router;

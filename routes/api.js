@@ -121,4 +121,31 @@ router.get('/portfolio', async function (req, res) {
   }
 });
 
+// GET /api/showroom
+router.get('/showroom', async function (req, res) {
+  try {
+    var result = await pool.query('SELECT * FROM showroom LIMIT 1');
+    if (!result.rows.length) return res.json(null);
+    var sr = result.rows[0];
+
+    var imgs = await pool.query(
+      'SELECT image_path, is_cover FROM showroom_images WHERE showroom_id = $1 ORDER BY sort_order, id',
+      [sr.id]
+    );
+    var gallery = imgs.rows.map(function (i) { return '/' + i.image_path; });
+    var cover = imgs.rows.find(function (i) { return i.is_cover; }) || imgs.rows[0];
+
+    res.json({
+      title: sr.title,
+      description: sr.description,
+      address: sr.address,
+      image: cover ? '/' + cover.image_path : null,
+      gallery: gallery
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;

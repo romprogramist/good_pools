@@ -1,0 +1,52 @@
+<h1>Выставочная площадка</h1>
+
+<form method="POST" action="/admin/showroom" style="max-width:600px;">
+  <div class="form-group">
+    <label for="title">Заголовок</label>
+    <input type="text" id="title" name="title" required value="<%= item ? item.title : 'Наша выставочная площадка' %>">
+  </div>
+
+  <div class="form-group">
+    <label for="description">Описание</label>
+    <textarea id="description" name="description" rows="4"><%= item ? item.description || '' : '' %></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="address">Адрес</label>
+    <input type="text" id="address" name="address" value="<%= item ? item.address || '' : '' %>" placeholder="г. Батайск, ул. Донецкая 18">
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+  </div>
+</form>
+
+<% if (item) { %>
+<hr style="border-color:#27272a; margin: 32px 0;">
+<h2 style="font-size:18px; margin-bottom:16px;">Фотографии площадки</h2>
+
+<form method="POST" action="/admin/showroom/images" enctype="multipart/form-data" style="margin-bottom:16px;">
+  <div class="form-group">
+    <input type="file" name="images" accept=".jpg,.jpeg,.png,.webp" multiple>
+  </div>
+  <button type="submit" class="btn btn-primary btn-sm">Загрузить</button>
+</form>
+
+<div class="img-grid">
+  <% images.forEach(function(img) { %>
+    <div class="img-item <%= img.is_cover ? 'is-cover' : '' %>">
+      <img src="/<%= img.image_path %>" alt="">
+      <div class="img-actions">
+        <% if (!img.is_cover) { %>
+          <form method="POST" action="/admin/showroom/images/<%= img.id %>/cover" style="display:inline;">
+            <button type="submit" class="img-btn img-btn-cover" title="Сделать обложкой">★</button>
+          </form>
+        <% } %>
+        <form method="POST" action="/admin/showroom/images/<%= img.id %>/delete" style="display:inline;" onsubmit="return confirm('Удалить фото?')">
+          <button type="submit" class="img-btn img-btn-del" title="Удалить">✕</button>
+        </form>
+      </div>
+    </div>
+  <% }); %>
+</div>
+<% } %>
