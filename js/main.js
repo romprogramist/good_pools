@@ -109,30 +109,83 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Catalog cards on home page: show real photos from API if available
-  const catGrid = document.querySelector('.cat-grid');
+  // Catalog cards on home page: render from API
+  var catGrid = document.getElementById('catGrid');
   if (catGrid && typeof DataSource !== 'undefined') {
     DataSource.getModels().then(function (models) {
-      catGrid.querySelectorAll('.pcard').forEach(function (card) {
-        const nameEl = card.querySelector('.pcard-name');
-        if (!nameEl) return;
-        const cardName = nameEl.textContent.trim().toUpperCase();
-        const model = models.find(function (m) {
-          return m.name.toUpperCase() === cardName;
-        });
-        if (!model || !model.gallery || !model.gallery.length) return;
+      // Show first 3 composite models as featured cards + first custom model
+      var composite = models.filter(function (m) { return m.category === 'composite'; });
+      var featured = composite[0];
+      var others = composite.slice(1, 3);
+      var custom = models.find(function (m) { return m.category === 'custom'; });
 
-        const imgArea = card.querySelector('.pcard-img');
-        if (!imgArea) return;
+      var html = '';
 
-        // Replace CSS pool shape with real photo
-        const poolVisual = imgArea.querySelector('.pool-visual');
-        if (poolVisual) poolVisual.style.display = 'none';
+      // Featured card (first composite)
+      if (featured) html += catalogCardHtml(featured, true);
 
-        imgArea.style.backgroundImage = 'url(' + model.gallery[0] + ')';
-        imgArea.style.backgroundSize = 'cover';
-        imgArea.style.backgroundPosition = 'center';
-      });
+      // Other composite cards
+      others.forEach(function (m) { html += catalogCardHtml(m, false); });
+
+      // Custom card (full width)
+      if (custom) html += catalogCardHtml(custom, false, true);
+
+      catGrid.innerHTML = html;
     });
+  }
+
+  function catalogCardHtml(m, isFeatured, isFullWidth) {
+    var hasPhoto = m.gallery && m.gallery.length;
+    var imgStyle = hasPhoto
+      ? 'background-image:url(' + m.gallery[0] + ');background-size:cover;background-position:center;'
+      : '';
+    if (isFullWidth) imgStyle += 'min-height:300px;';
+
+    var specsHtml = '';
+    if (m.length_m && m.width_m && m.depth_m) {
+      specsHtml =
+        '<div class="pspec"><div class="pspec-val">' + m.length_m + '</div><div class="pspec-unit">длина, м</div></div>' +
+        '<div class="pspec"><div class="pspec-val">' + m.width_m + '</div><div class="pspec-unit">ширина, м</div></div>' +
+        '<div class="pspec"><div class="pspec-val">' + m.depth_m + '</div><div class="pspec-unit">глубина, м</div></div>';
+    } else {
+      specsHtml =
+        '<div class="pspec"><div class="pspec-val">&infin;</div><div class="pspec-unit">длина</div></div>' +
+        '<div class="pspec"><div class="pspec-val">&infin;</div><div class="pspec-unit">ширина</div></div>' +
+        '<div class="pspec"><div class="pspec-val">&infin;</div><div class="pspec-unit">глубина</div></div>';
+    }
+
+    var sizeLabel = m.length_m && m.width_m
+      ? m.length_m + ' &times; ' + m.width_m + ' м'
+      : (m.specs || 'Любой размер');
+
+    var priceLabel = m.price && m.price !== 'По проекту'
+      ? m.price.replace(/^от\s*/, 'от<strong>') + ' &#8381;</strong>'
+      : 'Цена<strong>По проекту</strong>';
+
+    // Fix price — if it already contains ₽, don't add again
+    if (m.price && m.price.indexOf('₽') !== -1) {
+      priceLabel = m.price.replace(/^от\s*/, 'от<strong>') + '</strong>';
+    } else if (m.price === 'По проекту') {
+      priceLabel = 'Цена<strong>По проекту</strong>';
+    }
+
+    return (
+      '<div class="pcard' + (isFeatured ? ' featured' : '') + '"' + (isFullWidth ? ' style="grid-column:1/-1;"' : '') + '>' +
+        '<div class="pcard-img" style="' + imgStyle + '">' +
+          (m.badge ? '<div class="pcard-badge">' + m.badge + '</div>' : '') +
+          '<div class="pcard-size">' + sizeLabel + '</div>' +
+        '</div>' +
+        '<div class="pcard-info">' +
+          '<div class="pcard-name">' + m.name + '</div>' +
+          '<div class="pcard-subtitle">' + (m.series || '') + '</div>' +
+          '<div class="pcard-desc">' + (m.desc || '') + '</div>' +
+          '<div class="pcard-specs">' + specsHtml + '</div>' +
+          '<div class="pcard-bottom">' +
+            '<div class="pcard-price">' + priceLabel + '</div>' +
+            '<a href="models.html?model=' + m.id + '" class="btn-card">Подробнее</a>' +
+          '</div>' +
+        '</div>' +
+      '</div>'
+    );
   }
 });
