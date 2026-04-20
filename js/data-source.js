@@ -1,13 +1,14 @@
 // The single source of truth for catalog data.
-// When the PostgreSQL backend ships, replace the URL constants with
-// the real API endpoints — no UI module changes are needed.
+// Data is loaded from the PostgreSQL-backed API.
 
 (function () {
-  const CATEGORIES_URL = 'data/categories.json';
-  const MODELS_URL = 'data/models.json';
+  var CATEGORIES_URL = '/api/categories';
+  var MODELS_URL = '/api/models';
+  var PORTFOLIO_URL = '/api/portfolio';
 
-  let categoriesPromise = null;
-  let modelsPromise = null;
+  var categoriesPromise = null;
+  var modelsPromise = null;
+  var portfolioPromise = null;
 
   function loadJson(url, label) {
     return fetch(url).then(function (res) {
@@ -38,8 +39,19 @@
     return modelsPromise;
   }
 
+  function getPortfolio() {
+    if (!portfolioPromise) {
+      portfolioPromise = loadJson(PORTFOLIO_URL, 'portfolio').catch(function (err) {
+        portfolioPromise = null;
+        throw err;
+      });
+    }
+    return portfolioPromise;
+  }
+
   window.DataSource = {
     getCategories: getCategories,
-    getModels: getModels
+    getModels: getModels,
+    getPortfolio: getPortfolio
   };
 })();

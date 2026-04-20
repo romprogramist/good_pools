@@ -35,14 +35,6 @@
     }).join('');
   }
 
-  function stubGallery(index) {
-    const offsets = [0, 4, 7, 2];
-    return offsets.map(function (o) {
-      const n = ((index + o) % 12) + 1;
-      return 'images/portfolio/work-' + (n < 10 ? '0' + n : '' + n) + '.jpg';
-    });
-  }
-
   function openModelInGallery(model, index, cardEl) {
     GalleryModal.open({
       title: model.name,
@@ -51,7 +43,7 @@
         model.desc,
         model.specs + ' · ' + model.price
       ],
-      gallery: stubGallery(index),
+      gallery: model.gallery && model.gallery.length ? model.gallery : [],
       triggerEl: cardEl
     });
   }
