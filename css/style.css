@@ -335,6 +335,11 @@ body.menu-open {
 }
 
 /* ===== CATEGORY CARD ===== */
+a.category-card {
+  text-decoration: none;
+  color: inherit;
+}
+
 .category-card {
   flex: 0 0 280px;
   scroll-snap-align: start;

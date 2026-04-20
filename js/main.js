@@ -1,18 +1,43 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Carousel
-  const track = document.querySelector('.carousel-track');
-  const arrow = document.querySelector('.carousel-arrow');
+  // Carousel — render categories from API, then attach arrow
+  var categoryTrack = document.getElementById('categoryTrack');
+  var arrow = document.querySelector('.carousel-arrow');
 
-  if (track && arrow) {
-    const scrollAmount = 310;
-    arrow.addEventListener('click', () => {
-      const maxScroll = track.scrollWidth - track.clientWidth;
-      if (track.scrollLeft >= maxScroll - 10) {
-        track.scrollTo({ left: 0, behavior: 'smooth' });
-      } else {
-        track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-      }
+  if (categoryTrack && typeof DataSource !== 'undefined') {
+    DataSource.getCategories().then(function (categories) {
+      categoryTrack.innerHTML = categories.map(function (cat) {
+        var parts = cat.label.split(' ');
+        var boldPart = parts[0] || '';
+        var thinPart = parts.slice(1).join(' ') || '';
+        return (
+          '<a href="models.html?category=' + cat.key + '" class="category-card">' +
+            '<div class="card-image">' +
+              '<img src="' + cat.image + '" alt="' + cat.label + '">' +
+            '</div>' +
+            '<div class="card-title">' +
+              '<div class="card-title-bold">' + boldPart + '</div>' +
+              '<div class="card-title-thin">' + thinPart + '</div>' +
+            '</div>' +
+            '<div class="card-dot"></div>' +
+          '</a>'
+        );
+      }).join('');
     });
+  }
+
+  if (arrow) {
+    var track = document.querySelector('.carousel-track');
+    if (track) {
+      var scrollAmount = 310;
+      arrow.addEventListener('click', function () {
+        var maxScroll = track.scrollWidth - track.clientWidth;
+        if (track.scrollLeft >= maxScroll - 10) {
+          track.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
+      });
+    }
   }
 
   // Hamburger menu
