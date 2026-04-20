@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вход — Админ-панель</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f1117; color: #e4e4e7; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    .login-card { background: #1a1b23; border-radius: 16px; padding: 40px; width: 100%; max-width: 400px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+    .login-card h1 { font-size: 24px; margin-bottom: 8px; }
+    .login-card p { color: #71717a; margin-bottom: 24px; font-size: 14px; }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 13px; color: #a1a1aa; margin-bottom: 6px; }
+    .field input { width: 100%; padding: 10px 14px; background: #27272a; border: 1px solid #3f3f46; border-radius: 8px; color: #e4e4e7; font-size: 15px; outline: none; }
+    .field input:focus { border-color: #3b82f6; }
+    .btn { width: 100%; padding: 12px; background: #3b82f6; color: #fff; border: none; border-radius: 8px; font-size: 15px; cursor: pointer; margin-top: 8px; }
+    .btn:hover { background: #2563eb; }
+    .error-msg { background: #7f1d1d; color: #fca5a5; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <h1>Хорошие Бассейны</h1>
+    <p>Панель управления сайтом</p>
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="error-msg"><%= error %></div>
+    <% } %>
+    <form method="POST" action="/admin/login">
+      <div class="field">
+        <label for="username">Логин</label>
+        <input type="text" id="username" name="username" required autofocus>
+      </div>
+      <div class="field">
+        <label for="password">Пароль</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <button type="submit" class="btn">Войти</button>
+    </form>
+  </div>
+</body>
+</html>
