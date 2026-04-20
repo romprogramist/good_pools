@@ -108,4 +108,31 @@ document.addEventListener('DOMContentLoaded', () => {
       resizeTimer = setTimeout(equalizeHeroTitle, 100);
     });
   }
+
+  // Catalog cards on home page: show real photos from API if available
+  const catGrid = document.querySelector('.cat-grid');
+  if (catGrid && typeof DataSource !== 'undefined') {
+    DataSource.getModels().then(function (models) {
+      catGrid.querySelectorAll('.pcard').forEach(function (card) {
+        const nameEl = card.querySelector('.pcard-name');
+        if (!nameEl) return;
+        const cardName = nameEl.textContent.trim().toUpperCase();
+        const model = models.find(function (m) {
+          return m.name.toUpperCase() === cardName;
+        });
+        if (!model || !model.gallery || !model.gallery.length) return;
+
+        const imgArea = card.querySelector('.pcard-img');
+        if (!imgArea) return;
+
+        // Replace CSS pool shape with real photo
+        const poolVisual = imgArea.querySelector('.pool-visual');
+        if (poolVisual) poolVisual.style.display = 'none';
+
+        imgArea.style.backgroundImage = 'url(' + model.gallery[0] + ')';
+        imgArea.style.backgroundSize = 'cover';
+        imgArea.style.backgroundPosition = 'center';
+      });
+    });
+  }
 });
