@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS models (
   description TEXT,
   length_m    DECIMAL(4,1),
   width_m     DECIMAL(4,1),
-  depth_m     DECIMAL(4,1),
+  depth_m     VARCHAR(20),
   specs_label VARCHAR(100),
   price       VARCHAR(100),
   badge       VARCHAR(50),

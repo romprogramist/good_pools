@@ -1,0 +1,55 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Trust server host key
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy backend to /var/www/good-pools/
+        run: |
+          rsync -az --delete-after \
+            package.json \
+            $( [ -f package-lock.json ] && echo package-lock.json ) \
+            server.js \
+            create-admin.js \
+            routes middleware views db \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/good-pools/
+
+      - name: Deploy frontend to /var/www/good-pools/public/
+        run: |
+          rsync -az --delete-after \
+            --exclude='models.html.bak' \
+            index.html catalog.html models.html portfolio.html \
+            slider-data.js \
+            css js images data \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/good-pools/public/
+
+      - name: Install deps, migrate DB, restart PM2
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} bash -s <<'EOF'
+            set -e
+            cd /var/www/good-pools
+            npm install --omit=dev
+            node db/migrate.js
+            pm2 restart good-pools
+          EOF

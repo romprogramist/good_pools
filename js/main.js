@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Carousel — render categories from API, then attach arrow
   var categoryTrack = document.getElementById('categoryTrack');
-  var arrow = document.querySelector('.carousel-arrow');
+  var arrow = document.querySelector('.carousel-arrow--next');
+  var arrowPrev = document.querySelector('.carousel-arrow--prev');
 
   if (categoryTrack && typeof DataSource !== 'undefined') {
     DataSource.getCategories().then(function (categories) {
@@ -25,16 +26,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  if (arrow) {
-    var track = document.querySelector('.carousel-track');
-    if (track) {
-      var scrollAmount = 310;
+  var track = document.querySelector('.carousel-track');
+  if (track) {
+    var scrollAmount = 310;
+    if (arrow) {
       arrow.addEventListener('click', function () {
         var maxScroll = track.scrollWidth - track.clientWidth;
         if (track.scrollLeft >= maxScroll - 10) {
           track.scrollTo({ left: 0, behavior: 'smooth' });
         } else {
           track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
+      });
+    }
+    if (arrowPrev) {
+      arrowPrev.addEventListener('click', function () {
+        if (track.scrollLeft <= 10) {
+          track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' });
+        } else {
+          track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
         }
       });
     }
@@ -173,18 +183,18 @@ document.addEventListener('DOMContentLoaded', () => {
       : '';
     if (isFullWidth) imgStyle += 'min-height:300px;';
 
-    var specsHtml = '';
-    if (m.length_m && m.width_m && m.depth_m) {
-      specsHtml =
-        '<div class="pspec"><div class="pspec-val">' + m.length_m + '</div><div class="pspec-unit">длина, м</div></div>' +
-        '<div class="pspec"><div class="pspec-val">' + m.width_m + '</div><div class="pspec-unit">ширина, м</div></div>' +
-        '<div class="pspec"><div class="pspec-val">' + m.depth_m + '</div><div class="pspec-unit">глубина, м</div></div>';
-    } else {
-      specsHtml =
-        '<div class="pspec"><div class="pspec-val">&infin;</div><div class="pspec-unit">длина</div></div>' +
-        '<div class="pspec"><div class="pspec-val">&infin;</div><div class="pspec-unit">ширина</div></div>' +
-        '<div class="pspec"><div class="pspec-val">&infin;</div><div class="pspec-unit">глубина</div></div>';
+    function specVal(v) {
+      if (v == null) return '&infin;';
+      var s = String(v).trim();
+      if (!s) return '&infin;';
+      var n = Number(s);
+      if (!isNaN(n) && n <= 0) return '&infin;';
+      return s;
     }
+    var specsHtml =
+      '<div class="pspec"><div class="pspec-val">' + specVal(m.length_m) + '</div><div class="pspec-unit">длина, м</div></div>' +
+      '<div class="pspec"><div class="pspec-val">' + specVal(m.width_m) + '</div><div class="pspec-unit">ширина, м</div></div>' +
+      '<div class="pspec"><div class="pspec-val">' + specVal(m.depth_m) + '</div><div class="pspec-unit">глубина, м</div></div>';
 
     var sizeLabel = m.length_m && m.width_m
       ? m.length_m + ' &times; ' + m.width_m + ' м'

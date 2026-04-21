@@ -60,7 +60,7 @@ router.get('/models', async function (req, res) {
         specs: specs,
         length_m: m.length_m ? parseFloat(m.length_m) : null,
         width_m: m.width_m ? parseFloat(m.width_m) : null,
-        depth_m: m.depth_m ? parseFloat(m.depth_m) : null,
+        depth_m: m.depth_m || null,
         price: m.price,
         gallery: gallery
       };

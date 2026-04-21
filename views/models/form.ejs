@@ -36,15 +36,15 @@
   <div class="form-row">
     <div class="form-group">
       <label for="length_m">Длина (м)</label>
-      <input type="number" id="length_m" name="length_m" step="0.1" value="<%= item && item.length_m ? item.length_m : '' %>">
+      <input type="number" id="length_m" name="length_m" step="0.1" value="<%= item && item.length_m != null ? item.length_m : '' %>">
     </div>
     <div class="form-group">
       <label for="width_m">Ширина (м)</label>
-      <input type="number" id="width_m" name="width_m" step="0.1" value="<%= item && item.width_m ? item.width_m : '' %>">
+      <input type="number" id="width_m" name="width_m" step="0.1" value="<%= item && item.width_m != null ? item.width_m : '' %>">
     </div>
     <div class="form-group">
       <label for="depth_m">Глубина (м)</label>
-      <input type="number" id="depth_m" name="depth_m" step="0.1" value="<%= item && item.depth_m ? item.depth_m : '' %>">
+      <input type="text" id="depth_m" name="depth_m" pattern="^\s*\d+([.,]\d+)?\s*(-\s*\d+([.,]\d+)?\s*)?$" placeholder="1.6 или 1.4 - 1.6" title="Число или диапазон, например 1.6 или 1.4 - 1.6" value="<%= item && item.depth_m != null ? item.depth_m : '' %>">
     </div>
   </div>
 

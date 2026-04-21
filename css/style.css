@@ -470,23 +470,37 @@ a.category-card {
 /* ===== CAROUSEL ARROW ===== */
 .carousel-arrow {
   position: absolute;
-  right: 0;
   top: 0;
   bottom: 0;
   width: 80px;
-  background: linear-gradient(90deg, rgba(17, 17, 17, 0) 0%, #111 55%);
   border: none;
-  padding: 0 20px 0 0;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   cursor: pointer;
   z-index: 10;
   transition: width 0.3s;
 }
 
-.carousel-arrow:hover svg {
+.carousel-arrow--next {
+  right: 0;
+  background: linear-gradient(90deg, rgba(17, 17, 17, 0) 0%, #111 55%);
+  padding: 0 20px 0 0;
+  justify-content: flex-end;
+}
+
+.carousel-arrow--prev {
+  left: 0;
+  background: linear-gradient(270deg, rgba(17, 17, 17, 0) 0%, #111 55%);
+  padding: 0 0 0 20px;
+  justify-content: flex-start;
+}
+
+.carousel-arrow--next:hover svg {
   transform: translateX(4px);
+}
+
+.carousel-arrow--prev:hover svg {
+  transform: translateX(-4px);
 }
 
 .carousel-arrow svg {
@@ -1837,7 +1851,14 @@ a.pcard {
   .carousel-arrow {
     width: 40px;
     height: 40px;
+  }
+
+  .carousel-arrow--next {
     right: 10px;
+  }
+
+  .carousel-arrow--prev {
+    left: 10px;
   }
 
   .catalog {
