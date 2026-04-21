@@ -25,9 +25,12 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo "$SSH_PRIVATE_KEY_B64" | base64 -d > ~/.ssh/deploy_key
+          echo "secret length: ${#SSH_PRIVATE_KEY_B64}"
+          printf '%s' "$SSH_PRIVATE_KEY_B64" | tr -d '[:space:]' | base64 -d > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keygen -y -f ~/.ssh/deploy_key > /dev/null
+          echo "key file size: $(wc -c < ~/.ssh/deploy_key) bytes"
+          echo "key first line: $(head -1 ~/.ssh/deploy_key)"
+          ssh-keygen -y -f ~/.ssh/deploy_key | head -1
 
       - name: Verify SSH to server
         run: ssh $SSH_OPTS "$SSH_USER@$SSH_HOST" "whoami && hostname"
