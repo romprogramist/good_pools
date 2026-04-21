@@ -372,6 +372,7 @@ body.menu-open {
 .hero-right {
   width: 60%;
   position: relative;
+  overflow: hidden;
   display: flex;
   align-items: center;
 }
@@ -379,7 +380,6 @@ body.menu-open {
 .carousel-container {
   position: relative;
   width: 100%;
-  margin-left: -40px;
 }
 
 .carousel-track {
@@ -482,16 +482,16 @@ a.category-card {
 }
 
 .carousel-arrow--next {
-  right: -40px;
+  right: 0;
   background: linear-gradient(90deg, rgba(17, 17, 17, 0) 0%, #111 55%);
-  padding: 0 6px 0 0;
+  padding: 0 20px 0 0;
   justify-content: flex-end;
 }
 
 .carousel-arrow--prev {
-  left: -40px;
+  left: 0;
   background: linear-gradient(270deg, rgba(17, 17, 17, 0) 0%, #111 55%);
-  padding: 0 0 0 6px;
+  padding: 0 0 0 20px;
   justify-content: flex-start;
 }
 
@@ -1882,6 +1882,14 @@ a.pcard {
     font-size: 14px;
   }
 
+  .hero-right {
+    overflow: visible;
+  }
+
+  .carousel-container {
+    margin-left: -40px;
+  }
+
   .carousel-arrow {
     width: 40px;
     height: 40px;
@@ -1889,10 +1897,12 @@ a.pcard {
 
   .carousel-arrow--next {
     right: -38px;
+    padding: 0 6px 0 0;
   }
 
   .carousel-arrow--prev {
     left: -38px;
+    padding: 0 0 0 6px;
   }
 
   .catalog {
