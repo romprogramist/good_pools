@@ -483,14 +483,14 @@ a.category-card {
 
 .carousel-arrow--next {
   right: 0;
-  background: linear-gradient(90deg, rgba(17, 17, 17, 0) 0%, #111 55%);
+  background: linear-gradient(90deg, rgba(17, 17, 17, 0) 50%, #111 100%);
   padding: 0 20px 0 0;
   justify-content: flex-end;
 }
 
 .carousel-arrow--prev {
   left: 0;
-  background: linear-gradient(270deg, rgba(17, 17, 17, 0) 0%, #111 55%);
+  background: linear-gradient(270deg, rgba(17, 17, 17, 0) 50%, #111 100%);
   padding: 0 0 0 20px;
   justify-content: flex-start;
 }
