@@ -12,41 +12,47 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USER: ${{ secrets.SSH_USER }}
+      SSH_OPTS: -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Trust server host key
+      - name: Write deploy key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keygen -y -f ~/.ssh/deploy_key > /dev/null
+
+      - name: Verify SSH to server
+        run: ssh $SSH_OPTS "$SSH_USER@$SSH_HOST" "whoami && hostname"
 
       - name: Deploy backend to /var/www/good-pools/
         run: |
-          rsync -az --delete-after \
-            package.json \
-            $( [ -f package-lock.json ] && echo package-lock.json ) \
-            server.js \
-            create-admin.js \
+          EXTRA=""
+          [ -f package-lock.json ] && EXTRA="package-lock.json"
+          rsync -az --delete-after -e "ssh $SSH_OPTS" \
+            package.json $EXTRA server.js create-admin.js \
             routes middleware views db \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/good-pools/
+            "$SSH_USER@$SSH_HOST:/var/www/good-pools/"
 
       - name: Deploy frontend to /var/www/good-pools/public/
         run: |
-          rsync -az --delete-after \
+          rsync -az --delete-after -e "ssh $SSH_OPTS" \
             --exclude='models.html.bak' \
             index.html catalog.html models.html portfolio.html \
             slider-data.js \
             css js images data \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/good-pools/public/
+            "$SSH_USER@$SSH_HOST:/var/www/good-pools/public/"
 
       - name: Install deps, migrate DB, restart PM2
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} bash -s <<'EOF'
+          ssh $SSH_OPTS "$SSH_USER@$SSH_HOST" bash -s <<'EOF'
             set -e
             cd /var/www/good-pools
             npm install --omit=dev
