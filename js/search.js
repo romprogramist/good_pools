@@ -17,7 +17,7 @@
     el.className = 'search-panel';
     el.innerHTML =
       '<div class="search-panel-input-wrap">' +
-        '<input type="search" class="search-panel-input" placeholder="Поиск по каталогу" aria-label="Поиск по каталогу">' +
+        '<input type="search" class="search-panel-input" placeholder="Поиск по сайту" aria-label="Поиск по сайту">' +
       '</div>' +
       '<div class="search-panel-results"></div>';
     document.body.appendChild(el);
