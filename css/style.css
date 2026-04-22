@@ -387,7 +387,7 @@ body.menu-open {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
-  padding: 40px 40px 40px 20px;
+  padding: 40px;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
