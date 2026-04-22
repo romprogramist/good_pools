@@ -2,22 +2,39 @@ var WORKS = [];
 var WORK_CATEGORIES = [{ key: 'all', label: 'Все' }];
 var CATEGORY_LABEL = {};
 
+function cardInnerHtml(work) {
+  return (
+    '<div class="work-card-img">' +
+      '<img src="' + (work.image || '') + '" alt="' + work.title + '" loading="lazy">' +
+      '<span class="work-tag">' + (CATEGORY_LABEL[work.category] || work.category) + '</span>' +
+      '<span class="work-year">' + (work.year || '') + '</span>' +
+    '</div>' +
+    '<div class="work-card-info">' +
+      '<div class="work-title">' + work.title + '</div>' +
+      '<div class="work-location">' + (work.location || '') + '</div>' +
+      '<div class="work-meta">' + (CATEGORY_LABEL[work.category] || work.category) + ' &middot; ' + (work.size || '') + '</div>' +
+    '</div>'
+  );
+}
+
 function cardHtml(work, modifier) {
   modifier = modifier || '';
   var cls = 'work-card' + (modifier ? ' ' + modifier : '');
   return (
     '<article class="' + cls + '" data-category="' + work.category + '" data-work-id="' + work.id + '" tabindex="0" role="button" aria-label="Открыть галерею проекта: ' + work.title + '">' +
-      '<div class="work-card-img">' +
-        '<img src="' + (work.image || '') + '" alt="' + work.title + '" loading="lazy">' +
-        '<span class="work-tag">' + (CATEGORY_LABEL[work.category] || work.category) + '</span>' +
-        '<span class="work-year">' + (work.year || '') + '</span>' +
-      '</div>' +
-      '<div class="work-card-info">' +
-        '<div class="work-title">' + work.title + '</div>' +
-        '<div class="work-location">' + (work.location || '') + '</div>' +
-        '<div class="work-meta">' + (CATEGORY_LABEL[work.category] || work.category) + ' &middot; ' + (work.size || '') + '</div>' +
-      '</div>' +
+      cardInnerHtml(work) +
     '</article>'
+  );
+}
+
+function homeCardHtml(work, modifier) {
+  modifier = modifier || '';
+  var cls = 'work-card' + (modifier ? ' ' + modifier : '');
+  var href = 'portfolio.html?category=' + encodeURIComponent(work.category) + '&work=' + encodeURIComponent(work.id);
+  return (
+    '<a class="' + cls + '" href="' + href + '" data-category="' + work.category + '" data-work-id="' + work.id + '" aria-label="Открыть проект: ' + work.title + '">' +
+      cardInnerHtml(work) +
+    '</a>'
   );
 }
 
@@ -31,10 +48,10 @@ function renderHomeFeatured() {
   var small2 = WORKS.length > 4 ? WORKS[4] : WORKS[2];
 
   container.innerHTML =
-    cardHtml(big, 'work-card--big') +
+    homeCardHtml(big, 'work-card--big') +
     '<div class="port-featured-col">' +
-      cardHtml(small1) +
-      cardHtml(small2) +
+      homeCardHtml(small1) +
+      homeCardHtml(small2) +
     '</div>';
 }
 
@@ -108,6 +125,33 @@ function attachPortfolioGallery() {
   });
 }
 
+function applyPortfolioDeepLink() {
+  var gridEl = document.querySelector('.works-grid');
+  var filterEl = document.querySelector('.models-filter');
+  if (!gridEl || !filterEl) return;
+
+  var params = new URLSearchParams(window.location.search);
+  var categoryParam = params.get('category');
+  var workParam = params.get('work');
+
+  if (categoryParam && categoryParam !== 'all') {
+    var chip = filterEl.querySelector('.mchip[data-category="' + categoryParam + '"]');
+    if (chip) chip.click();
+  }
+
+  if (workParam) {
+    var workId = Number(workParam);
+    var work = WORKS.find(function (w) { return w.id === workId; });
+    if (!work) return;
+    var card = gridEl.querySelector('.work-card[data-work-id="' + workId + '"]');
+    if (!card || card.classList.contains('hidden')) return;
+    setTimeout(function () {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      openWorkInGallery(work, card);
+    }, 100);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   Promise.all([DataSource.getCategories(), DataSource.getPortfolio()])
     .then(function (results) {
@@ -130,6 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
         renderPortfolioGrid();
         attachPortfolioFilter();
         attachPortfolioGallery();
+        applyPortfolioDeepLink();
       }
     })
     .catch(function (err) {
