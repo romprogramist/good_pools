@@ -2902,12 +2902,12 @@ body.models-dark .btn-consult:hover {
 }
 .port-header-left h2 .bold {
   font-weight: 900;
-  color: #0c4a6e;
+  color: #fff;
   letter-spacing: 2px;
 }
 .port-header-left h2 .thin {
   font-weight: 200;
-  color: #0284c7;
+  color: #22d3ee;
   letter-spacing: 4px;
 }
 .port-header-right {
