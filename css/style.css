@@ -8,7 +8,7 @@
 
 body {
   font-family: 'Montserrat', 'Segoe UI', sans-serif;
-  background: #111;
+  background: linear-gradient(180deg, #0a1014 0%, #0f1419 60%, #0a1014 100%) fixed;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -271,7 +271,6 @@ body.menu-open {
 .hero {
   min-height: 100vh;
   min-height: 100svh;
-  background: #111;
   display: flex;
   align-items: center;
   padding-top: 60px;
@@ -518,7 +517,6 @@ a.category-card {
 .catalog {
   padding: 100px 80px;
   max-width: 100%;
-  background: #181c20;
   color: #fff;
 }
 
@@ -871,7 +869,6 @@ a.pcard {
 /* Contacts */
 .contacts {
   padding: 100px 80px;
-  background: #181c20;
   color: #fff;
 }
 
@@ -999,7 +996,6 @@ a.pcard {
 
 /* Footer */
 .footer {
-  background: #111417;
   color: #94a3b8;
   padding: 80px 80px 0;
 }
@@ -1128,7 +1124,6 @@ a.pcard {
 
 /* ===== WHY US SECTION ===== */
 .why-us {
-  background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 50%, #0284c7 100%);
   padding: 120px 80px;
   position: relative;
   overflow: hidden;
@@ -1299,7 +1294,6 @@ a.pcard {
 /* Showroom */
 .showroom {
   padding: 100px 80px;
-  background: #111;
 }
 
 .showroom-inner {
@@ -1432,7 +1426,6 @@ a.pcard {
 /* Service */
 .service {
   padding: 100px 80px;
-  background: #0f1419;
   color: #fff;
 }
 
@@ -2638,29 +2631,8 @@ a.pcard {
    ========================================================= */
 
 body.models-dark {
-  background: linear-gradient(180deg, #05080f 0%, #0a0f1a 60%, #05080f 100%);
   color: #f1f5f9;
   min-height: 100vh;
-}
-
-body.models-dark .header {
-  background: rgba(5, 8, 15, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(14, 165, 233, 0.12);
-}
-body.models-dark .header-title { color: #f1f5f9; }
-body.models-dark .hamburger span { background: #f1f5f9; }
-body.models-dark .header-icon svg {
-  stroke: #f1f5f9;
-  fill: none;
-}
-body.models-dark .header-icon svg.max-icon {
-  fill: #f1f5f9;
-  stroke: none;
-}
-body.models-dark .header-icon:hover {
-  background: rgba(14, 165, 233, 0.15);
 }
 
 body.models-dark .menu-overlay .menu-bg { background: rgba(5, 8, 15, 0.96); }
@@ -3415,7 +3387,6 @@ body.models-dark .work-meta { color: #22d3ee; }
 
 /* ===== RENDER VS REALITY ===== */
 .rr {
-  background: linear-gradient(180deg, #0a1014 0%, #0f1419 60%, #0a1014 100%);
   padding: 120px 80px;
   position: relative;
   overflow: hidden;
