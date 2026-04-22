@@ -1,12 +1,10 @@
 (function () {
   const CONTACT_PHONE = '79613201050';
-  const TG_URL = 'https://t.me/+79613201050';
 
   document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('serviceForm');
     if (!form) return;
 
-    const tgLink = document.getElementById('serviceTgLink');
     const toast = document.getElementById('serviceToast');
 
     form.addEventListener('submit', (e) => {
@@ -19,22 +17,7 @@
       const text = buildMessage(result.data);
       const url = `https://wa.me/${CONTACT_PHONE}?text=${encodeURIComponent(text)}`;
       window.open(url, '_blank', 'noopener');
-      showToast(toast, 'Открываем WhatsApp…');
-    });
-
-    tgLink.addEventListener('click', async (e) => {
-      e.preventDefault();
-      const result = readAndValidate(form, { silent: true });
-      if (result.ok) {
-        const text = buildMessage(result.data);
-        try {
-          await navigator.clipboard.writeText(text);
-          showToast(toast, 'Текст заявки скопирован — вставьте в Telegram');
-        } catch {
-          showToast(toast, 'Откройте Telegram и напишите нам');
-        }
-      }
-      window.open(TG_URL, '_blank', 'noopener');
+      showToast(toast, 'Отправляем заявку…');
     });
 
     form.querySelectorAll('input, textarea').forEach((el) => {
