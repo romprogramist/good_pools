@@ -121,6 +121,34 @@ router.get('/portfolio', async function (req, res) {
   }
 });
 
+// GET /api/render-reality
+router.get('/render-reality', async function (req, res) {
+  try {
+    var section = await pool.query('SELECT title, subtitle FROM rr_section LIMIT 1');
+    if (!section.rows.length) return res.json(null);
+
+    var slides = await pool.query(
+      'SELECT caption_title, caption_meta, render_image, real_image FROM rr_slides ORDER BY sort_order, id'
+    );
+
+    res.json({
+      title: section.rows[0].title,
+      subtitle: section.rows[0].subtitle,
+      slides: slides.rows.map(function (s) {
+        return {
+          title: s.caption_title,
+          meta: s.caption_meta,
+          render: '/' + s.render_image,
+          real: '/' + s.real_image
+        };
+      })
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // GET /api/showroom
 router.get('/showroom', async function (req, res) {
   try {
