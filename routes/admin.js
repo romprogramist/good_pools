@@ -547,4 +547,125 @@ router.post('/showroom/images/:imgId/delete', async function (req, res) {
   }
 });
 
+// ---------- Render vs Reality ----------
+
+router.get('/render-reality', async function (req, res) {
+  try {
+    var section = await pool.query('SELECT * FROM rr_section LIMIT 1');
+    var slides = await pool.query('SELECT * FROM rr_slides ORDER BY sort_order, id');
+    renderAdmin(res, 'render-reality/form', {
+      pageTitle: 'От рендера до реальности',
+      active: 'render-reality',
+      item: section.rows[0] || null,
+      slides: slides.rows
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
+
+router.post('/render-reality', async function (req, res) {
+  var { title, subtitle } = req.body;
+  try {
+    var existing = await pool.query('SELECT id FROM rr_section LIMIT 1');
+    if (existing.rows.length) {
+      await pool.query('UPDATE rr_section SET title=$1, subtitle=$2 WHERE id=$3',
+        [title, subtitle || null, existing.rows[0].id]);
+    } else {
+      await pool.query('INSERT INTO rr_section (title, subtitle) VALUES ($1,$2)',
+        [title, subtitle || null]);
+    }
+    req.session.success = 'Сохранено';
+    res.redirect('/admin/render-reality');
+  } catch (err) {
+    console.error(err);
+    req.session.error = 'Ошибка: ' + err.message;
+    res.redirect('/admin/render-reality');
+  }
+});
+
+// Создать слайд — оба файла обязательны
+router.post('/render-reality/slides', ...processUpload('rr').fields([
+  { name: 'render_image', maxCount: 1 },
+  { name: 'real_image',   maxCount: 1 }
+]), async function (req, res) {
+  try {
+    var { caption_title, caption_meta, sort_order } = req.body;
+    var render = req.files && req.files.render_image && req.files.render_image[0];
+    var real   = req.files && req.files.real_image   && req.files.real_image[0];
+    if (!render || !real) {
+      req.session.error = 'Нужны обе картинки: render и real';
+      return res.redirect('/admin/render-reality');
+    }
+    await pool.query(
+      'INSERT INTO rr_slides (caption_title, caption_meta, render_image, real_image, sort_order) VALUES ($1,$2,$3,$4,$5)',
+      [caption_title, caption_meta || null, 'uploads/rr/' + render.filename, 'uploads/rr/' + real.filename, parseInt(sort_order) || 0]
+    );
+    req.session.success = 'Слайд добавлен';
+    res.redirect('/admin/render-reality');
+  } catch (err) {
+    console.error(err);
+    req.session.error = 'Ошибка: ' + err.message;
+    res.redirect('/admin/render-reality');
+  }
+});
+
+// Обновить слайд — картинки опциональны
+router.post('/render-reality/slides/:id', ...processUpload('rr').fields([
+  { name: 'render_image', maxCount: 1 },
+  { name: 'real_image',   maxCount: 1 }
+]), async function (req, res) {
+  try {
+    var { caption_title, caption_meta, sort_order } = req.body;
+    var existing = await pool.query('SELECT render_image, real_image FROM rr_slides WHERE id=$1', [req.params.id]);
+    if (!existing.rows.length) {
+      req.session.error = 'Слайд не найден';
+      return res.redirect('/admin/render-reality');
+    }
+    var old = existing.rows[0];
+    var newRender = req.files && req.files.render_image && req.files.render_image[0];
+    var newReal   = req.files && req.files.real_image   && req.files.real_image[0];
+
+    var renderPath = old.render_image;
+    var realPath   = old.real_image;
+
+    if (newRender) {
+      deleteFile(old.render_image);
+      renderPath = 'uploads/rr/' + newRender.filename;
+    }
+    if (newReal) {
+      deleteFile(old.real_image);
+      realPath = 'uploads/rr/' + newReal.filename;
+    }
+
+    await pool.query(
+      'UPDATE rr_slides SET caption_title=$1, caption_meta=$2, render_image=$3, real_image=$4, sort_order=$5 WHERE id=$6',
+      [caption_title, caption_meta || null, renderPath, realPath, parseInt(sort_order) || 0, req.params.id]
+    );
+    req.session.success = 'Слайд обновлён';
+    res.redirect('/admin/render-reality');
+  } catch (err) {
+    console.error(err);
+    req.session.error = 'Ошибка: ' + err.message;
+    res.redirect('/admin/render-reality');
+  }
+});
+
+router.post('/render-reality/slides/:id/delete', async function (req, res) {
+  try {
+    var result = await pool.query('DELETE FROM rr_slides WHERE id=$1 RETURNING render_image, real_image', [req.params.id]);
+    if (result.rows.length) {
+      deleteFile(result.rows[0].render_image);
+      deleteFile(result.rows[0].real_image);
+    }
+    req.session.success = 'Слайд удалён';
+    res.redirect('/admin/render-reality');
+  } catch (err) {
+    console.error(err);
+    req.session.error = 'Ошибка удаления';
+    res.redirect('/admin/render-reality');
+  }
+});
+
 module.exports = router;

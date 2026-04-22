@@ -36,12 +36,29 @@ function processUpload(subfolder) {
     },
     array: function (fieldName, maxCount) {
       return [upload.array(fieldName, maxCount), resizeMiddleware];
+    },
+    fields: function (fieldsArr) {
+      return [upload.fields(fieldsArr), resizeMiddleware];
     }
   };
 }
 
+function collectFiles(req) {
+  if (req.file) return [req.file];
+  if (Array.isArray(req.files)) return req.files;
+  if (req.files && typeof req.files === 'object') {
+    // multer .fields() returns { fieldName: [file, ...], ... }
+    var out = [];
+    Object.keys(req.files).forEach(function (k) {
+      (req.files[k] || []).forEach(function (f) { out.push(f); });
+    });
+    return out;
+  }
+  return [];
+}
+
 async function resizeMiddleware(req, res, next) {
-  var files = req.files || (req.file ? [req.file] : []);
+  var files = collectFiles(req);
   for (var i = 0; i < files.length; i++) {
     var file = files[i];
     if (file.mimetype === 'image/svg+xml') continue;
