@@ -489,7 +489,7 @@ a.category-card {
 
 .carousel-arrow--prev {
   left: 0;
-  background: linear-gradient(270deg, rgba(17, 17, 17, 0) 50%, #111 100%);
+  background: transparent;
   padding: 0 0 0 20px;
   justify-content: flex-start;
 }
