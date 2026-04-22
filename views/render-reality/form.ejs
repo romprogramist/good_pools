@@ -1,0 +1,95 @@
+<h1>От рендера до реальности</h1>
+
+<form method="POST" action="/admin/render-reality" style="max-width:600px;">
+  <div class="form-group">
+    <label for="title">Заголовок</label>
+    <textarea id="title" name="title" rows="2" required style="resize:vertical;"><%= item ? item.title : '' %></textarea>
+    <small style="color:#71717a; font-size:12px;">Перенос строки (Enter) делит заголовок на bold/thin на сайте.</small>
+  </div>
+
+  <div class="form-group">
+    <label for="subtitle">Подзаголовок</label>
+    <textarea id="subtitle" name="subtitle" rows="3"><%= item ? item.subtitle || '' : '' %></textarea>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+  </div>
+</form>
+
+<hr style="border-color:#27272a; margin: 32px 0;">
+<h2 style="font-size:18px; margin-bottom:16px;">Слайды</h2>
+
+<% slides.forEach(function(s) { %>
+  <div style="background:#1a1b23; border:1px solid #27272a; border-radius:12px; padding:16px; margin-bottom:16px;">
+    <form method="POST" action="/admin/render-reality/slides/<%= s.id %>" enctype="multipart/form-data">
+      <div style="display:flex; gap:16px; margin-bottom:12px;">
+        <div style="flex:0 0 auto;">
+          <div style="font-size:12px; color:#a1a1aa; margin-bottom:4px;">Рендер</div>
+          <img src="/<%= s.render_image %>" alt="" style="width:160px; height:100px; object-fit:cover; border-radius:8px; display:block; margin-bottom:6px;">
+          <input type="file" name="render_image" accept=".jpg,.jpeg,.png,.webp" style="font-size:12px;">
+        </div>
+        <div style="flex:0 0 auto;">
+          <div style="font-size:12px; color:#a1a1aa; margin-bottom:4px;">Реальность</div>
+          <img src="/<%= s.real_image %>" alt="" style="width:160px; height:100px; object-fit:cover; border-radius:8px; display:block; margin-bottom:6px;">
+          <input type="file" name="real_image" accept=".jpg,.jpeg,.png,.webp" style="font-size:12px;">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Название</label>
+          <input type="text" name="caption_title" required value="<%= s.caption_title %>">
+        </div>
+        <div class="form-group">
+          <label>Подпись</label>
+          <input type="text" name="caption_meta" value="<%= s.caption_meta || '' %>">
+        </div>
+        <div class="form-group" style="flex:0 0 100px;">
+          <label>Порядок</label>
+          <input type="number" name="sort_order" value="<%= s.sort_order %>">
+        </div>
+      </div>
+
+      <div style="display:flex; gap:8px;">
+        <button type="submit" class="btn btn-primary btn-sm">Сохранить</button>
+      </div>
+    </form>
+    <form method="POST" action="/admin/render-reality/slides/<%= s.id %>/delete" onsubmit="return confirm('Удалить слайд?')" style="display:inline; margin-top:8px;">
+      <button type="submit" class="btn btn-danger btn-sm">Удалить слайд</button>
+    </form>
+  </div>
+<% }); %>
+
+<div style="background:#1a1b23; border:1px dashed #3f3f46; border-radius:12px; padding:16px; margin-top:24px;">
+  <div style="font-size:16px; margin-bottom:12px;">Добавить новый слайд</div>
+  <form method="POST" action="/admin/render-reality/slides" enctype="multipart/form-data">
+    <div style="display:flex; gap:16px; margin-bottom:12px;">
+      <div>
+        <div style="font-size:12px; color:#a1a1aa; margin-bottom:4px;">Рендер *</div>
+        <input type="file" name="render_image" accept=".jpg,.jpeg,.png,.webp" required>
+      </div>
+      <div>
+        <div style="font-size:12px; color:#a1a1aa; margin-bottom:4px;">Реальность *</div>
+        <input type="file" name="real_image" accept=".jpg,.jpeg,.png,.webp" required>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Название</label>
+        <input type="text" name="caption_title" required placeholder="Бассейн с водопадом">
+      </div>
+      <div class="form-group">
+        <label>Подпись</label>
+        <input type="text" name="caption_meta" placeholder="Переливная система · подкатное укрытие">
+      </div>
+      <div class="form-group" style="flex:0 0 100px;">
+        <label>Порядок</label>
+        <input type="number" name="sort_order" value="0">
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-sm">Добавить слайд</button>
+  </form>
+</div>
