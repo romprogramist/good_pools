@@ -1365,6 +1365,30 @@ a.pcard {
   object-fit: cover;
 }
 
+/* Single photo — fill the row with a large hero-style image */
+.showroom-gallery:has(> .showroom-photo:only-child) {
+  overflow: visible;
+}
+.showroom-photo:only-child {
+  flex: 1 1 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  max-height: 540px;
+}
+
+@media (max-width: 1024px) {
+  .showroom {
+    padding: 80px 40px;
+  }
+  .showroom-head-left h2 {
+    font-size: 44px;
+  }
+  .showroom-photo {
+    flex: 0 0 320px;
+    height: 230px;
+  }
+}
+
 @media (max-width: 768px) {
   .showroom {
     padding: 60px 24px;
@@ -1384,6 +1408,10 @@ a.pcard {
     flex: 0 0 280px;
     height: 200px;
   }
+  .showroom-photo:only-child {
+    aspect-ratio: 4 / 3;
+    max-height: 360px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1396,6 +1424,10 @@ a.pcard {
   .showroom-photo {
     flex: 0 0 240px;
     height: 170px;
+  }
+  .showroom-photo:only-child {
+    aspect-ratio: 4 / 3;
+    max-height: 280px;
   }
 }
 
