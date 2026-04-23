@@ -61,21 +61,23 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.classList.toggle('menu-open');
     });
 
-    // Close menu on link click
+    const closeMenu = () => {
+      hamburger.classList.remove('active');
+      menuOverlay.classList.remove('open');
+      document.body.classList.remove('menu-open');
+    };
+
+    // Close menu on link click — body.menu-open locks overflow, must drop it before browser scrolls to hash
     menuOverlay.querySelectorAll('.menu-link').forEach(link => {
       link.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        menuOverlay.classList.remove('open');
-        document.body.classList.remove('menu-open');
+        closeMenu();
       });
     });
 
     // Close on Escape
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && menuOverlay.classList.contains('open')) {
-        hamburger.classList.remove('active');
-        menuOverlay.classList.remove('open');
-        document.body.classList.remove('menu-open');
+        closeMenu();
       }
     });
   }
