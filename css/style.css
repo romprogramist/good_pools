@@ -2024,6 +2024,7 @@ a.pcard {
     white-space: normal;
     flex-direction: column;
     gap: 0;
+    font-size: 11vw;
   }
   .hero-tags {
     justify-content: flex-start;
