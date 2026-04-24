@@ -1665,10 +1665,6 @@ a.pcard {
     padding: 0 30px;
   }
 
-  .hero-left {
-    padding-left: 40px;
-  }
-
   .category-card {
     flex: 0 0 220px;
   }
@@ -1727,40 +1723,6 @@ a.pcard {
   }
 }
 
-/* Narrow laptops / large tablets (769–1024px): hero switches to column,
-   because 40% hero-left is too narrow for the CTA button */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .hero {
-    flex-direction: column;
-    min-height: auto;
-    padding-top: 60px;
-    padding-bottom: 0;
-  }
-
-  .hero-left {
-    width: 100%;
-    padding: 40px 40px 24px;
-    display: block;
-  }
-
-  .hero-left .hero-cta {
-    display: none;
-  }
-
-  .hero-cta--mobile {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-    width: 100%;
-    padding: 0 40px 32px;
-  }
-
-  .hero-right {
-    width: 100%;
-  }
-}
-
 /* Tablets (768px) */
 @media (max-width: 768px) {
   .header {
@@ -1783,54 +1745,31 @@ a.pcard {
   }
 
   .hero {
-    flex-direction: column;
-    min-height: auto;
-    padding-top: 56px;
-    padding-bottom: 0;
+    padding: 56px 24px 24px;
+    gap: 16px;
+    min-height: 100vh;
+    min-height: 100svh;
   }
 
-  .hero-left {
-    width: 100%;
-    padding: 40px 24px 24px;
-    display: block;
-  }
-
-  .hero-title-bold,
-  .hero-title-thin {
+  .hero-title {
     font-size: clamp(48px, 10vw, 70px);
   }
 
   .hero-tags {
-    margin-top: 16px;
     font-size: 11px;
     letter-spacing: 2px;
-  }
-
-  .hero-left .hero-cta {
-    display: none;
-  }
-
-  .hero-cta--mobile {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-    width: 100%;
-    padding: 0 24px 32px;
   }
 
   .hero-cta-btn {
     padding: 16px 28px;
     font-size: 13px;
+    width: 100%;
+    text-align: center;
   }
 
   .hero-cta-text {
     font-size: 13px;
     max-width: 100%;
-  }
-
-  .hero-right {
-    width: 100%;
   }
 
   .carousel-track {
@@ -1853,14 +1792,6 @@ a.pcard {
 
   .card-title-thin {
     font-size: 14px;
-  }
-
-  .hero-right {
-    overflow: visible;
-  }
-
-  .carousel-container {
-    margin-left: -40px;
   }
 
   .carousel-arrow {
@@ -2064,6 +1995,19 @@ a.pcard {
   }
 }
 
+/* Very narrow (≤600px): let the title wrap onto two lines */
+@media (max-width: 600px) {
+  .hero-title {
+    white-space: normal;
+    flex-direction: column;
+    gap: 0;
+  }
+  .hero-tags {
+    justify-content: flex-start;
+    gap: 8px 16px;
+  }
+}
+
 /* Large phones (480px) */
 @media (max-width: 480px) {
   .header {
@@ -2091,31 +2035,21 @@ a.pcard {
   }
 
   .hero {
-    padding-top: 52px;
+    padding: 52px 16px 16px;
+    gap: 12px;
   }
 
-  .hero-left {
-    padding: 30px 16px 10px;
-  }
-
-  .hero-title-bold {
+  .hero-title {
     font-size: clamp(38px, 11vw, 56px);
   }
 
-  .hero-title-thin {
-    font-size: clamp(38px, 11vw, 56px);
+  .hero-title .thin {
     letter-spacing: 2px;
   }
 
   .hero-tags {
-    margin-top: 12px;
     font-size: 10px;
     letter-spacing: 1.5px;
-  }
-
-  .hero-cta--mobile {
-    padding: 0 16px 24px;
-    gap: 12px;
   }
 
   .hero-cta-btn {
@@ -2394,31 +2328,21 @@ a.pcard {
   }
 
   .hero {
-    padding-top: 48px;
+    padding: 48px 12px 12px;
+    gap: 10px;
   }
 
-  .hero-left {
-    padding: 24px 12px 8px;
-  }
-
-  .hero-title-bold {
+  .hero-title {
     font-size: 36px;
   }
 
-  .hero-title-thin {
-    font-size: 36px;
+  .hero-title .thin {
     letter-spacing: 1px;
   }
 
   .hero-tags {
     font-size: 9px;
     letter-spacing: 1px;
-    margin-top: 10px;
-  }
-
-  .hero-cta--mobile {
-    padding: 0 12px 20px;
-    gap: 10px;
   }
 
   .hero-cta-btn {
