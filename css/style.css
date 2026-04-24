@@ -294,7 +294,7 @@ body.menu-open {
 }
 
 .hero-title {
-  font-size: clamp(56px, 7.5vw, 140px);
+  font-size: 7vw;
   line-height: 0.95;
   letter-spacing: 2px;
   color: #fff;
@@ -1773,10 +1773,6 @@ a.pcard {
     gap: 16px;
     min-height: 100vh;
     min-height: 100svh;
-  }
-
-  .hero-title {
-    font-size: clamp(48px, 10vw, 70px);
   }
 
   .hero-tags {
