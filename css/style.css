@@ -32,6 +32,8 @@ body {
   display: flex;
   align-items: center;
   gap: 16px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .hamburger {
@@ -58,12 +60,16 @@ body {
   color: #333;
   letter-spacing: 2px;
   text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .header-right {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-shrink: 0;
 }
 
 .header-icon {
@@ -2026,6 +2032,13 @@ a.pcard {
   .hero-tags {
     justify-content: flex-start;
     gap: 8px 16px;
+  }
+}
+
+/* Narrow screens — hide decorative title so 5 icons + hamburger fit cleanly */
+@media (max-width: 600px) {
+  .header-title {
+    display: none;
   }
 }
 
