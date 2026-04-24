@@ -284,6 +284,7 @@ body.menu-open {
   gap: 24px;
   width: max-content;
   max-width: 100%;
+  align-self: center;
 }
 
 .hero-title {
