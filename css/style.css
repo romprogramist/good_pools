@@ -2054,23 +2054,11 @@ a.pcard {
   }
 }
 
-/* Narrow screens — hide decorative title so 5 icons + hamburger fit cleanly */
-@media (max-width: 600px) {
-  .header-title {
-    display: none;
-  }
-}
-
 /* Large phones (480px) */
 @media (max-width: 480px) {
   .header {
     padding: 0 12px;
     height: 52px;
-  }
-
-  .header-title {
-    font-size: 12px;
-    letter-spacing: 1px;
   }
 
   .header-right {
@@ -2364,10 +2352,6 @@ a.pcard {
 
   .hamburger {
     padding: 6px;
-  }
-
-  .header-title {
-    font-size: 11px;
   }
 
   .header-icon {
