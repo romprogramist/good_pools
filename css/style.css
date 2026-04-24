@@ -278,6 +278,14 @@ body.menu-open {
   position: relative;
 }
 
+.hero-head {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: max-content;
+  max-width: 100%;
+}
+
 .hero-title {
   font-size: clamp(56px, 10vw, 160px);
   line-height: 0.95;
@@ -1997,6 +2005,9 @@ a.pcard {
 
 /* Very narrow (≤600px): let the title wrap onto two lines */
 @media (max-width: 600px) {
+  .hero-head {
+    width: auto;
+  }
   .hero-title {
     white-space: normal;
     flex-direction: column;
