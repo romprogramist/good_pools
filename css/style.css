@@ -294,7 +294,7 @@ body.menu-open {
 }
 
 .hero-title {
-  font-size: 7vw;
+  font-size: calc((100vw - 160px) / 14);
   line-height: 0.95;
   letter-spacing: 2px;
   color: #fff;
