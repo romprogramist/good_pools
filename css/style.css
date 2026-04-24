@@ -25,7 +25,10 @@ body {
   align-items: center;
   padding: 0 40px;
   height: 60px;
-  background: #f5f5f5;
+  background: rgba(15, 20, 25, 0.85);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .header-left {
@@ -50,25 +53,14 @@ body {
   display: block;
   width: 22px;
   height: 2px;
-  background: #333;
+  background: #fff;
   transition: all 0.3s;
-}
-
-.header-title {
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   flex-shrink: 0;
 }
 
@@ -80,28 +72,55 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.2s;
-  background: none;
-  border: none;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background 0.2s, box-shadow 0.2s;
 }
 
 .header-icon:hover {
-  background: rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.10);
 }
 
 .header-icon svg {
   width: 20px;
   height: 20px;
   fill: none;
-  stroke: #333;
+  stroke: #e4e4e7;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 .header-icon svg.max-icon {
-  fill: #333;
+  fill: #e4e4e7;
   stroke: none;
+}
+
+.header-icon.is-search {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.18);
+}
+
+.header-icon.is-search svg {
+  stroke: #fff;
+}
+
+.header-icon.is-search:hover {
+  background: #2563eb;
+}
+
+.header-icon.is-phone {
+  background: #22c55e;
+  border-color: #22c55e;
+}
+
+.header-icon.is-phone svg {
+  stroke: #fff;
+}
+
+.header-icon.is-phone:hover {
+  background: #16a34a;
 }
 
 /* ===== HAMBURGER ANIMATION ===== */
