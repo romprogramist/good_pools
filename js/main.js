@@ -48,6 +48,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }
+
+    var container = track.parentElement;
+    var updateOverflow = function () {
+      if (!container) return;
+      container.classList.toggle('has-overflow', track.scrollWidth > track.clientWidth + 1);
+    };
+    updateOverflow();
+    if (categoryTrack && typeof DataSource !== 'undefined') {
+      DataSource.getCategories().then(function () {
+        requestAnimationFrame(updateOverflow);
+      });
+    }
+    window.addEventListener('load', updateOverflow);
+    var overflowTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(overflowTimer);
+      overflowTimer = setTimeout(updateOverflow, 100);
+    });
   }
 
   // Hamburger menu

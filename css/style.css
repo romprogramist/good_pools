@@ -470,11 +470,19 @@ a.category-card {
   background: transparent;
   outline: none;
   -webkit-tap-highlight-color: transparent;
-  display: flex;
+  display: none;
   align-items: center;
   cursor: pointer;
   z-index: 10;
   transition: width 0.3s;
+}
+
+.carousel-container.has-overflow .carousel-arrow {
+  display: flex;
+}
+
+.carousel-container:not(.has-overflow) .carousel-track {
+  justify-content: center;
 }
 
 .carousel-arrow:focus,
