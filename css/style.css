@@ -57,6 +57,33 @@ body {
   transition: all 0.3s;
 }
 
+.site-logo {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3em;
+  color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 15px;
+  letter-spacing: 1.5px;
+  line-height: 1;
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+.site-logo:hover {
+  opacity: 0.7;
+}
+
+.site-logo .bold {
+  font-weight: 900;
+}
+
+.site-logo .thin {
+  font-weight: 200;
+  letter-spacing: 2px;
+}
+
 .header-right {
   display: flex;
   align-items: center;
@@ -1787,6 +1814,11 @@ a.pcard {
     height: 18px;
   }
 
+  .site-logo {
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+
   .hero {
     padding: 56px 24px 24px;
     gap: 16px;
@@ -2073,6 +2105,15 @@ a.pcard {
   .header-icon svg {
     width: 16px;
     height: 16px;
+  }
+
+  .site-logo {
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  .site-logo .thin {
+    display: none;
   }
 
   .hero {
@@ -2362,6 +2403,10 @@ a.pcard {
   .header-icon svg {
     width: 14px;
     height: 14px;
+  }
+
+  .site-logo {
+    display: none;
   }
 
   .hero {
