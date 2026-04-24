@@ -84,6 +84,19 @@ body {
   letter-spacing: 2px;
 }
 
+.site-logo--scroll {
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+body.hero-hidden .site-logo--scroll {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
 .header-right {
   display: flex;
   align-items: center;

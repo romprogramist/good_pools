@@ -224,4 +224,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  var heroTitle = document.querySelector('.hero-title');
+  if (heroTitle && 'IntersectionObserver' in window) {
+    var heroObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        document.body.classList.toggle('hero-hidden', !entry.isIntersecting);
+      });
+    }, { threshold: 0 });
+    heroObserver.observe(heroTitle);
+  }
 });
