@@ -172,18 +172,54 @@
     `;
   }
 
+  function renderNav() {
+    const isLast = state.step === TOTAL_STEPS;
+    const showBack = state.step > 1;
+    const nextLabel = isLast ? 'ПОЛУЧИТЬ ПРЕДЛОЖЕНИЕ' : 'ДАЛЕЕ →';
+    const nextAttr  = isLast ? 'data-quiz-submit' : 'data-quiz-next';
+    return `
+      <div class="quiz-nav">
+        <button type="button" class="quiz-btn quiz-btn--back" data-quiz-back ${showBack ? '' : 'hidden'}>← НАЗАД</button>
+        <button type="button" class="quiz-btn quiz-btn--next" ${nextAttr}>${nextLabel}</button>
+      </div>
+    `;
+  }
+
+  function showError(msg) {
+    const el = document.querySelector('[data-quiz-error]');
+    if (el) el.textContent = msg;
+  }
+
   function render() {
     const dlg = document.getElementById(DIALOG_ID);
     if (!dlg) return;
     const body = dlg.querySelector('[data-quiz-body]');
     if (!body) return;
     const step = STEPS[state.step - 1];
-    if (step.type === 'single')         body.innerHTML = renderSingle(step);
-    else if (step.type === 'multi')     body.innerHTML = renderMulti(step);
-    else if (step.type === 'contacts')  body.innerHTML = renderContacts(step);
+    let inner = '';
+    if (step.type === 'single')        inner = renderSingle(step);
+    else if (step.type === 'multi')    inner = renderMulti(step);
+    else if (step.type === 'contacts') inner = renderContacts(step);
+    body.innerHTML = inner + renderNav();
   }
 
   function onBodyClick(e) {
+    if (e.target.closest('[data-quiz-back]')) {
+      if (state.step > 1) { state.step--; render(); }
+      return;
+    }
+    if (e.target.closest('[data-quiz-next]')) {
+      const v = validateStep(state.step, state.answers);
+      if (!v.ok) { showError(v.message); return; }
+      state.step++;
+      render();
+      return;
+    }
+    if (e.target.closest('[data-quiz-submit]')) {
+      // Task 10 will implement submit
+      return;
+    }
+
     const pick = e.target.closest('[data-quiz-pick]');
     if (pick) {
       const step = STEPS[state.step - 1];
@@ -211,7 +247,7 @@
     const field = target.getAttribute('data-quiz-field');
     if (!field) return;
     state.answers[field] = target.value;
-    // Не делаем render() — потеряли бы фокус и курсор
+    showError('');
   }
 
   document.addEventListener('DOMContentLoaded', () => {
