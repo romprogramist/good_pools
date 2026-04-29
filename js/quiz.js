@@ -164,8 +164,8 @@
                autocomplete="given-name">
         <input type="tel" class="quiz-input"
                data-quiz-field="phone"
-               placeholder="Телефон"
-               value="${escapeHtml(state.answers.phone)}"
+               placeholder="+7 (___) ___-__-__"
+               value="${escapeHtml(formatPhoneMask(state.answers.phone))}"
                autocomplete="tel">
       </div>
       <p class="quiz-consent">Нажимая на кнопку вы соглашаетесь на обработку данных</p>
@@ -270,7 +270,14 @@
     if (!target || !target.getAttribute) return;
     const field = target.getAttribute('data-quiz-field');
     if (!field) return;
-    state.answers[field] = target.value;
+    if (field === 'phone') {
+      const formatted = formatPhoneMask(target.value);
+      target.value = formatted;
+      target.setSelectionRange(formatted.length, formatted.length);
+      state.answers.phone = formatted;
+    } else {
+      state.answers[field] = target.value;
+    }
     showError('');
   }
 
@@ -286,6 +293,20 @@
   function normalizePhone(raw) {
     if (raw == null) return '';
     return String(raw).replace(/\D/g, '');
+  }
+
+  function formatPhoneMask(raw) {
+    const digits = String(raw == null ? '' : raw).replace(/\D/g, '');
+    if (digits.length === 0) return '';
+    let core = digits;
+    if (core.charAt(0) === '7' || core.charAt(0) === '8') core = core.slice(1);
+    core = core.slice(0, 10);
+    if (core.length === 0) return '+7 ';
+    let s = '+7 (' + core.slice(0, 3);
+    if (core.length > 3) s += ') ' + core.slice(3, 6);
+    if (core.length > 6) s += '-' + core.slice(6, 8);
+    if (core.length > 8) s += '-' + core.slice(8, 10);
+    return s;
   }
 
   function validateStep(step, answers) {
