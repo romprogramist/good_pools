@@ -190,6 +190,30 @@
     if (el) el.textContent = msg;
   }
 
+  function handleSubmit() {
+    const v = validateStep(state.step, state.answers);
+    if (!v.ok) { showError(v.message); return; }
+
+    console.log('[quiz] submit', state.answers);
+    // TODO: replace with POST /api/leads when backend is ready
+
+    showThankYou();
+  }
+
+  function showThankYou() {
+    const dlg = document.getElementById(DIALOG_ID);
+    if (!dlg) return;
+    const body = dlg.querySelector('[data-quiz-body]');
+    if (!body) return;
+    body.innerHTML = `
+      <div class="quiz-thanks">
+        <h3 class="quiz-thanks-title">Спасибо! Заявка принята</h3>
+        <p class="quiz-thanks-text">Менеджер свяжется с вами в течение 10 минут</p>
+        <button type="button" class="quiz-btn quiz-btn--next" data-quiz-close>Закрыть</button>
+      </div>
+    `;
+  }
+
   function render() {
     const dlg = document.getElementById(DIALOG_ID);
     if (!dlg) return;
@@ -216,7 +240,7 @@
       return;
     }
     if (e.target.closest('[data-quiz-submit]')) {
-      // Task 10 will implement submit
+      handleSubmit();
       return;
     }
 
