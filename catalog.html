@@ -161,17 +161,18 @@
 
   /* Price row */
   .pcard-bottom {
-    display:flex; justify-content:space-between; align-items:center;
+    display:flex; justify-content:space-between; align-items:center; gap:16px;
     padding-top:20px; border-top:1px solid #e0f2fe;
   }
-  .pcard-price { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; }
-  .pcard-price strong { display:block; font-size:26px; font-weight:800; color:#0c4a6e; letter-spacing:0; text-transform:none; }
+  .pcard-price { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; min-width:0; }
+  .pcard-price strong { display:block; font-size:clamp(16px, 2vw, 26px); font-weight:800; color:#0c4a6e; letter-spacing:0; text-transform:none; white-space:nowrap; }
   .btn-card {
     background:linear-gradient(135deg,#0ea5e9,#0284c7); color:#fff;
     padding:14px 28px; border-radius:14px; border:none;
     font-family:inherit; font-size:13px; font-weight:700; cursor:pointer;
     box-shadow:0 4px 16px rgba(14,165,233,0.25);
     transition:all 0.3s;
+    flex-shrink:0;
   }
   .btn-card:hover {
     transform:translateY(-2px);
