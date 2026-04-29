@@ -136,6 +136,27 @@ body.hero-hidden .site-logo--scroll {
   stroke: none;
 }
 
+.header-icon.is-messenger {
+  background: #fff;
+  border-color: #fff;
+}
+
+.header-icon.is-messenger:hover {
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.header-icon.is-messenger svg {
+  width: 24px;
+  height: 24px;
+  fill: #0a0a0a;
+  stroke: none;
+}
+
+.header-icon.is-messenger svg.max-icon {
+  fill: #0a0a0a;
+  stroke: none;
+}
+
 .header-icon.is-search {
   background: #3b82f6;
   border-color: #3b82f6;
@@ -822,7 +843,6 @@ a.pcard {
   padding: 36px 32px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 
 .pcard-name {
@@ -857,6 +877,7 @@ a.pcard {
 .pcard-specs {
   display: flex;
   gap: 12px;
+  margin-top: auto;
   margin-bottom: 28px;
 }
 
