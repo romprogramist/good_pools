@@ -165,3 +165,18 @@ button.hero-cta-btn { font-family: inherit; border: none; cursor: pointer; }
 .quiz-thanks .quiz-btn--next {
   margin: 0 auto;
 }
+
+@media (max-width: 480px) {
+  .quiz-modal {
+    width: calc(100vw - 16px);
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+  }
+  .quiz-header { padding: 24px 20px 0; }
+  .quiz-body { padding: 14px 20px 24px; }
+  .quiz-title { font-size: 16px; }
+  .quiz-options { grid-template-columns: 1fr; }
+  .quiz-nav { flex-direction: column-reverse; align-items: stretch; gap: 8px; }
+  .quiz-btn--next { margin-left: 0; }
+  .quiz-btn--back { padding: 12px 0; text-align: center; }
+}
