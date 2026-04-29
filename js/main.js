@@ -158,7 +158,6 @@ document.addEventListener('DOMContentLoaded', () => {
     var imgStyle = hasPhoto
       ? 'background-image:url(' + m.gallery[0] + ');background-size:cover;background-position:center;'
       : '';
-    if (isFullWidth) imgStyle += 'min-height:300px;';
 
     function specVal(v) {
       if (v == null) return '&infin;';
@@ -191,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var link = 'models.html?category=' + m.category + '&model=' + m.id;
 
     return (
-      '<a href="' + link + '" class="pcard' + (isFeatured ? ' featured' : '') + '"' + (isFullWidth ? ' style="grid-column:1/-1;"' : '') + '>' +
+      '<a href="' + link + '" class="pcard' + (isFeatured ? ' featured' : '') + (isFullWidth ? ' fullwidth' : '') + '">' +
         '<div class="pcard-img" style="' + imgStyle + '">' +
           (m.badge ? '<div class="pcard-badge">' + m.badge + '</div>' : '') +
           '<div class="pcard-size">' + sizeLabel + '</div>' +

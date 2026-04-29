@@ -646,7 +646,7 @@ a.category-card {
 }
 
 .catalog > * {
-  max-width: 1260px;
+  max-width: 1100px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -960,6 +960,14 @@ a.pcard {
   grid-template-columns: 1.2fr 1fr;
   grid-template-rows: 1fr;
   min-height: 420px;
+}
+
+.pcard.fullwidth {
+  grid-column: 1 / -1;
+}
+
+.pcard.fullwidth .pcard-img {
+  min-height: 300px;
 }
 
 .featured .pcard-name { font-size: 48px; }
@@ -2017,7 +2025,11 @@ a.pcard {
   }
 
   .pcard-img {
-    min-height: 250px;
+    min-height: 200px;
+  }
+
+  .pcard.fullwidth .pcard-img {
+    min-height: 200px;
   }
 
   .pcard-info {
@@ -3442,7 +3454,7 @@ body.models-dark .work-meta { color: #22d3ee; }
   overflow: hidden;
 }
 .rr-inner {
-  max-width: 1260px;
+  max-width: 1100px;
   margin: 0 auto;
   position: relative;
   z-index: 1;
