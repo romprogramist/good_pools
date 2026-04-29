@@ -3704,3 +3704,65 @@ body.models-dark .work-meta { color: #22d3ee; }
   .rr-caption-meta { font-size: 13px; }
   .rr-badge { top: 12px; left: 12px; padding: 6px 12px; font-size: 10px; }
 }
+
+/* ===== Floating "Рассчитать стоимость" CTA ===== */
+.floating-cta {
+  position: fixed;
+  right: 24px;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(14,165,233,0.35), 0 2px 6px rgba(0,0,0,0.15);
+  z-index: 90;
+  opacity: 0;
+  transform: translateY(16px);
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease, box-shadow .25s ease;
+}
+
+.floating-cta.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.floating-cta:hover {
+  box-shadow: 0 12px 32px rgba(14,165,233,0.5), 0 4px 10px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
+
+.floating-cta__icon { width: 20px; height: 20px; }
+
+@media (max-width: 768px) {
+  .floating-cta {
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    padding: 0;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    justify-content: center;
+  }
+  .floating-cta__label {
+    position: absolute; width: 1px; height: 1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+  }
+  .floating-cta__icon { width: 24px; height: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-cta { transition: none; }
+  .floating-cta:hover { transform: none; }
+}
