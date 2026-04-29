@@ -16,6 +16,8 @@ button.hero-cta-btn { font-family: inherit; border: none; cursor: pointer; }
   border-radius: 14px;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
   font-family: 'Montserrat', 'Segoe UI', sans-serif;
+  inset: 0;
+  margin: auto;
 }
 .quiz-modal::backdrop { background: rgba(15, 17, 23, 0.55); }
 
