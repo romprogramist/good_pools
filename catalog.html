@@ -217,6 +217,7 @@
     100% { opacity:0.8; transform:translate(5px,-3px); }
   }
 </style>
+  <link rel="stylesheet" href="css/quiz.css?v=20260430-center">
 </head>
 <body>
 
@@ -357,5 +358,22 @@
 
 </section>
 
+  <button type="button" class="floating-cta" data-quiz-open aria-label="Рассчитать стоимость">
+    <svg class="floating-cta__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="4" y="2" width="16" height="20" rx="2"/>
+      <line x1="8" y1="6" x2="16" y2="6"/>
+      <line x1="8" y1="10" x2="8" y2="10"/>
+      <line x1="12" y1="10" x2="12" y2="10"/>
+      <line x1="16" y1="10" x2="16" y2="10"/>
+      <line x1="8" y1="14" x2="8" y2="14"/>
+      <line x1="12" y1="14" x2="12" y2="14"/>
+      <line x1="16" y1="14" x2="16" y2="14"/>
+      <line x1="8" y1="18" x2="8" y2="18"/>
+      <line x1="12" y1="18" x2="16" y2="18"/>
+    </svg>
+    <span class="floating-cta__label">Рассчитать стоимость</span>
+  </button>
+  <script src="js/quiz.js?v=20260430-mask" defer></script>
+  <script src="js/floating-cta.js?v=20260430" defer></script>
 </body>
 </html>
