@@ -21,6 +21,29 @@
     eq(Q.normalizePhone(null),                 '',            'normalizePhone null safe');
     eq(Q.normalizePhone(undefined),            '',            'normalizePhone undefined safe');
 
+    // validateStep
+    const v = (s, a) => Q.validateStep(s, a);
+    eq(v(1, { size: '3x5' }).ok,       true,  'step 1 with size → ok');
+    eq(v(1, { size: null }).ok,        false, 'step 1 without size → not ok');
+    eq(v(1, { size: null }).message,   'Выберите размер', 'step 1 error message');
+    eq(v(2, { finish: 'composite' }).ok, true, 'step 2 with finish → ok');
+    eq(v(2, { finish: null }).ok,      false, 'step 2 without finish → not ok');
+    eq(v(2, { finish: null }).message, 'Выберите тип отделки', 'step 2 error message');
+    eq(v(3, { filtration: 'yes' }).ok, true,  'step 3 with filtration → ok');
+    eq(v(3, {}).ok,                    false, 'step 3 without filtration → not ok');
+    eq(v(4, { options: [] }).ok,       true,  'step 4 empty multi → ok (optional)');
+    eq(v(4, { options: ['heating'] }).ok, true, 'step 4 with selection → ok');
+    eq(v(5, { budget: '1-2' }).ok,     true,  'step 5 with budget → ok');
+    eq(v(5, {}).ok,                    false, 'step 5 without budget → not ok');
+    eq(v(6, { timing: 'soon' }).ok,    true,  'step 6 with timing → ok');
+    eq(v(6, {}).ok,                    false, 'step 6 without timing → not ok');
+    eq(v(7, { name: 'Ив',  phone: '79991234567' }).ok, true,  'step 7 valid');
+    eq(v(7, { name: 'И',   phone: '79991234567' }).ok, false, 'step 7 short name → not ok');
+    eq(v(7, { name: 'И',   phone: '79991234567' }).message, 'Введите имя', 'step 7 name error');
+    eq(v(7, { name: 'Ив',  phone: '123' }).ok,         false, 'step 7 short phone → not ok');
+    eq(v(7, { name: 'Ив',  phone: '123' }).message,    'Введите телефон', 'step 7 phone error');
+    eq(v(7, { name: '   Ив   ', phone: '+7 (999) 123-45-67' }).ok, true, 'step 7 trims/normalizes');
+
     console.log(`---\nResult: ${pass} passed, ${fail} failed`);
   })();
 </script>
