@@ -611,6 +611,33 @@ a.category-card {
   transition: transform 0.3s;
 }
 
+.carousel-dots {
+  display: none;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 0 8px;
+}
+
+.carousel-dots .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  transition: background 0.3s, width 0.3s;
+}
+
+.carousel-dots .dot.active {
+  background: #fff;
+  width: 22px;
+  border-radius: 3px;
+}
+
+@media (max-width: 768px) {
+  .carousel-container.has-overflow .carousel-dots {
+    display: flex;
+  }
+}
+
 /* ===== CATALOG SECTION ===== */
 .catalog {
   padding: 100px 80px;

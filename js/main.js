@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
   var arrow = document.querySelector('.carousel-arrow--next');
   var arrowPrev = document.querySelector('.carousel-arrow--prev');
 
+  var categoryDots = document.getElementById('categoryDots');
+
   if (categoryTrack && typeof DataSource !== 'undefined') {
     DataSource.getCategories().then(function (categories) {
       categoryTrack.innerHTML = categories.map(function (cat) {
@@ -23,6 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
           '</a>'
         );
       }).join('');
+
+      if (categoryDots) {
+        categoryDots.innerHTML = categories.map(function () {
+          return '<span class="dot"></span>';
+        }).join('');
+      }
     });
   }
 
@@ -58,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (categoryTrack && typeof DataSource !== 'undefined') {
       DataSource.getCategories().then(function () {
         requestAnimationFrame(updateOverflow);
+        requestAnimationFrame(updateActiveDot);
       });
     }
     window.addEventListener('load', updateOverflow);
@@ -66,6 +75,25 @@ document.addEventListener('DOMContentLoaded', () => {
       clearTimeout(overflowTimer);
       overflowTimer = setTimeout(updateOverflow, 100);
     });
+
+    var updateActiveDot = function () {
+      if (!categoryDots) return;
+      var dots = categoryDots.querySelectorAll('.dot');
+      if (!dots.length) return;
+      var center = track.scrollLeft + track.clientWidth / 2;
+      var cards = track.querySelectorAll('.category-card');
+      var bestIdx = 0;
+      var bestDist = Infinity;
+      cards.forEach(function (card, i) {
+        var cardCenter = card.offsetLeft + card.offsetWidth / 2;
+        var dist = Math.abs(cardCenter - center);
+        if (dist < bestDist) { bestDist = dist; bestIdx = i; }
+      });
+      dots.forEach(function (d, i) {
+        d.classList.toggle('active', i === bestIdx);
+      });
+    };
+    track.addEventListener('scroll', updateActiveDot, { passive: true });
   }
 
   // Hamburger menu
