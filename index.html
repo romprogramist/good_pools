@@ -399,6 +399,32 @@
     </div>
   </section>
 
+  <section class="ask" id="ask">
+    <div class="ask-inner">
+      <div class="ask-head">
+        <h2 class="ask-title">
+          <strong>Не нашли ответ</strong>
+          <span>на свой вопрос?</span>
+        </h2>
+        <p class="ask-lead">Напишите его в окошко и наш менеджер ответит на него в течение 10 минут.</p>
+      </div>
+      <form class="ask-form" data-ask-form novalidate>
+        <label class="ask-field">
+          <textarea name="question" class="ask-textarea" placeholder="Ваш вопрос…" rows="4" data-ask-question></textarea>
+        </label>
+        <label class="ask-field">
+          <input type="text" name="name" class="ask-input" placeholder="Имя" autocomplete="name" data-ask-name>
+        </label>
+        <label class="ask-field">
+          <input type="tel" name="phone" class="ask-input" placeholder="+7 (000) 000-00-00" autocomplete="tel" inputmode="tel" data-ask-phone>
+        </label>
+        <p class="ask-error" data-ask-error hidden></p>
+        <button type="submit" class="ask-submit">Отправить</button>
+        <p class="ask-disclaimer">Нажимая на кнопку вы соглашаетесь на обработку данных</p>
+      </form>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-inner">
@@ -475,5 +501,6 @@
   <script src="js/quiz.js?v=20260430-mask"></script>
   <script src="js/floating-cta.js?v=20260430" defer></script>
   <script src="js/consult.js?v=20260430" defer></script>
+  <script src="js/ask.js?v=20260430" defer></script>
 </body>
 </html>
