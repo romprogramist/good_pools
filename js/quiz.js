@@ -61,6 +61,72 @@
 
   let state = makeInitialState();
 
+  const DIALOG_ID = 'quizModal';
+
+  function ensureDialog() {
+    let dlg = document.getElementById(DIALOG_ID);
+    if (dlg) return dlg;
+    dlg = document.createElement('dialog');
+    dlg.id = DIALOG_ID;
+    dlg.className = 'quiz-modal';
+    dlg.innerHTML = `
+      <button type="button" class="quiz-close" aria-label="Закрыть" data-quiz-close>×</button>
+      <div class="quiz-header">
+        <h2 class="quiz-title">РАССЧИТАТЬ СТОИМОСТЬ</h2>
+        <ul class="quiz-bait">
+          <li>до 10% выгоды в смете при заключении договора этим летом</li>
+          <li>3 месяца обслуживание бассейна бесплатно</li>
+        </ul>
+      </div>
+      <div class="quiz-body" data-quiz-body></div>
+    `;
+    document.body.appendChild(dlg);
+
+    // Закрытие по клику на бэкдроп (target === сам dialog)
+    dlg.addEventListener('click', (e) => {
+      if (e.target === dlg) closeQuiz();
+    });
+    // Кнопка ×
+    dlg.addEventListener('click', (e) => {
+      if (e.target.closest('[data-quiz-close]')) closeQuiz();
+    });
+    // Сброс state при закрытии (в т.ч. ESC и close-метод)
+    dlg.addEventListener('close', () => { state = makeInitialState(); });
+
+    return dlg;
+  }
+
+  function openQuiz() {
+    const dlg = ensureDialog();
+    state = makeInitialState();
+    render();
+    try { dlg.showModal(); }
+    catch (err) {
+      console.error('[quiz] showModal failed', err);
+      alert('Ваш браузер не поддерживает эту форму, обновите его.');
+    }
+  }
+
+  function closeQuiz() {
+    const dlg = document.getElementById(DIALOG_ID);
+    if (dlg && dlg.open) dlg.close();
+  }
+
+  function render() {
+    const body = document.querySelector('[data-quiz-body]');
+    if (!body) return;
+    body.innerHTML = `<p style="padding:24px 0;text-align:center;color:#888;">Шаг ${state.step} из ${TOTAL_STEPS} (заглушка — будет в следующих задачах)</p>`;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[data-quiz-open]').forEach((el) => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        openQuiz();
+      });
+    });
+  });
+
   function normalizePhone(raw) {
     if (raw == null) return '';
     return String(raw).replace(/\D/g, '');
@@ -97,5 +163,14 @@
     }
   }
 
-  window.__quiz = { normalizePhone, validateStep };
+  window.__quiz = {
+    normalizePhone,
+    validateStep,
+    _dev: {
+      state: () => state,
+      gotoStep: (n) => { state.step = n; render(); },
+      open: openQuiz,
+      close: closeQuiz
+    }
+  };
 })();

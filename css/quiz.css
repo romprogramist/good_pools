@@ -1,1 +1,55 @@
-/* css/quiz.css — будет наполнен в Task 5+ */
+/* css/quiz.css */
+
+/* Hero button reset (на случай если нужен после смены тега) */
+button.hero-cta-btn { font-family: inherit; border: none; cursor: pointer; }
+
+/* Modal */
+.quiz-modal {
+  border: none;
+  padding: 0;
+  background: #fff;
+  color: #0f1117;
+  max-width: 640px;
+  width: calc(100vw - 32px);
+  border-radius: 14px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
+}
+.quiz-modal::backdrop { background: rgba(15, 17, 23, 0.55); }
+
+.quiz-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  color: #555;
+}
+.quiz-close:hover { color: #000; }
+
+.quiz-header { padding: 28px 28px 0; }
+.quiz-title {
+  margin: 0 0 14px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.quiz-bait {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: #555;
+}
+.quiz-bait li::before { content: '✓ '; color: #0ea5e9; font-weight: 700; }
+
+.quiz-body { padding: 16px 28px 28px; min-height: 240px; position: relative; }
