@@ -1879,6 +1879,15 @@ a.pcard {
     height: 18px;
   }
 
+  .header-icon.is-messenger {
+    display: none;
+  }
+
+  .header-icon.is-messenger svg {
+    width: 20px;
+    height: 20px;
+  }
+
   .site-logo {
     font-size: 13px;
     letter-spacing: 1px;
@@ -2162,12 +2171,13 @@ a.pcard {
   }
 
   .site-logo {
-    font-size: 12px;
+    font-size: 11px;
     letter-spacing: 0.5px;
   }
 
   .site-logo .thin {
-    display: none;
+    font-weight: 200;
+    letter-spacing: 1px;
   }
 
   .hero {
@@ -2711,19 +2721,20 @@ body.models-dark .menu-overlay .menu-socials a { color: #94a3b8; }
   margin-bottom: 16px;
 }
 .models-title {
-  font-size: 88px;
+  font-size: clamp(40px, 9vw, 88px);
   line-height: 0.92;
   margin-bottom: 20px;
+  word-break: break-word;
 }
 .models-title .bold {
   font-weight: 900;
   color: #f1f5f9;
-  letter-spacing: 3px;
+  letter-spacing: clamp(1px, 0.4vw, 3px);
 }
 .models-title .thin {
   font-weight: 200;
   color: #22d3ee;
-  letter-spacing: 6px;
+  letter-spacing: clamp(2px, 0.7vw, 6px);
 }
 .models-subtitle {
   font-size: 15px;
@@ -2914,16 +2925,14 @@ body.models-dark .btn-consult:hover {
 @media (max-width: 1199px) {
   .models-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
   .models-page { padding: 110px 48px 72px; }
-  .models-title { font-size: 72px; }
 }
 
 @media (max-width: 767px) {
   .models-grid { grid-template-columns: 1fr; gap: 20px; }
   .models-page { padding: 96px 20px 56px; }
-  .models-title { font-size: 54px; }
-  .models-title .bold { letter-spacing: 2px; }
-  .models-title .thin { letter-spacing: 4px; }
   .models-hero { margin-bottom: 40px; }
+  .models-hero-label { letter-spacing: 3px; font-size: 11px; }
+  .models-subtitle { font-size: 13px; }
   .models-filter { gap: 8px; margin-bottom: 32px; padding-bottom: 24px; }
   .mchip { padding: 10px 16px; font-size: 12px; }
   .models-cta { padding: 40px 24px; margin-top: 56px; }
