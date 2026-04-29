@@ -914,11 +914,13 @@ a.pcard {
   padding: 12px 16px;
   border-radius: 14px;
   text-align: center;
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
 }
 
-.pspec-val { font-size: 20px; font-weight: 800; color: #fff; }
-.pspec-unit { font-size: 10px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+.pspec-val { font-size: 20px; font-weight: 800; color: #fff; overflow-wrap: anywhere; }
+.pspec-unit { font-size: 10px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 1px; overflow-wrap: anywhere; }
 
 .pcard-bottom {
   display: flex;
@@ -2360,12 +2362,16 @@ a.pcard {
   }
 
   .pspec {
-    padding: 10px 8px;
+    padding: 10px 6px;
     border-radius: 10px;
   }
 
   .pspec-val {
     font-size: 18px;
+  }
+
+  .pspec-unit {
+    letter-spacing: 0.5px;
   }
 
   .pcard-price strong {
