@@ -81,6 +81,7 @@
       <div class="quiz-body" data-quiz-body></div>
     `;
     document.body.appendChild(dlg);
+    dlg.querySelector('[data-quiz-body]').addEventListener('click', onBodyClick);
 
     // Закрытие по клику на бэкдроп (target === сам dialog)
     dlg.addEventListener('click', (e) => {
@@ -112,10 +113,43 @@
     if (dlg && dlg.open) dlg.close();
   }
 
+  function renderSingle(step) {
+    const selected = state.answers[step.id];
+    return `
+      <h3 class="quiz-step-title">${step.title}</h3>
+      <div class="quiz-error" data-quiz-error></div>
+      <div class="quiz-options">
+        ${step.options.map(opt => `
+          <button type="button"
+                  class="quiz-option ${selected === opt.value ? 'is-active' : ''}"
+                  data-quiz-pick="${opt.value}">${opt.label}</button>
+        `).join('')}
+      </div>
+    `;
+  }
+
   function render() {
-    const body = document.querySelector('[data-quiz-body]');
+    const dlg = document.getElementById(DIALOG_ID);
+    if (!dlg) return;
+    const body = dlg.querySelector('[data-quiz-body]');
     if (!body) return;
-    body.innerHTML = `<p style="padding:24px 0;text-align:center;color:#888;">Шаг ${state.step} из ${TOTAL_STEPS} (заглушка — будет в следующих задачах)</p>`;
+    const step = STEPS[state.step - 1];
+    if (step.type === 'single') {
+      body.innerHTML = renderSingle(step);
+    } else {
+      body.innerHTML = `<p style="padding:24px 0;text-align:center;color:#888;">Шаг ${state.step} (тип ${step.type} — будет в следующих задачах)</p>`;
+    }
+  }
+
+  function onBodyClick(e) {
+    const pick = e.target.closest('[data-quiz-pick]');
+    if (pick) {
+      const step = STEPS[state.step - 1];
+      if (step.type === 'single') {
+        state.answers[step.id] = pick.getAttribute('data-quiz-pick');
+        render();
+      }
+    }
   }
 
   document.addEventListener('DOMContentLoaded', () => {
