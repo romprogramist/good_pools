@@ -128,17 +128,30 @@
     `;
   }
 
+  function renderMulti(step) {
+    const selected = state.answers[step.id] || [];
+    return `
+      <h3 class="quiz-step-title">${step.title}</h3>
+      <div class="quiz-error" data-quiz-error></div>
+      <div class="quiz-options">
+        ${step.options.map(opt => `
+          <button type="button"
+                  class="quiz-option ${selected.includes(opt.value) ? 'is-active' : ''}"
+                  data-quiz-toggle="${opt.value}">${opt.label}</button>
+        `).join('')}
+      </div>
+    `;
+  }
+
   function render() {
     const dlg = document.getElementById(DIALOG_ID);
     if (!dlg) return;
     const body = dlg.querySelector('[data-quiz-body]');
     if (!body) return;
     const step = STEPS[state.step - 1];
-    if (step.type === 'single') {
-      body.innerHTML = renderSingle(step);
-    } else {
-      body.innerHTML = `<p style="padding:24px 0;text-align:center;color:#888;">Шаг ${state.step} (тип ${step.type} — будет в следующих задачах)</p>`;
-    }
+    if (step.type === 'single')      body.innerHTML = renderSingle(step);
+    else if (step.type === 'multi')  body.innerHTML = renderMulti(step);
+    else body.innerHTML = `<p style="padding:24px 0;text-align:center;color:#888;">Шаг ${state.step} (тип ${step.type} — будет в следующих задачах)</p>`;
   }
 
   function onBodyClick(e) {
@@ -149,6 +162,17 @@
         state.answers[step.id] = pick.getAttribute('data-quiz-pick');
         render();
       }
+      return;
+    }
+    const toggle = e.target.closest('[data-quiz-toggle]');
+    if (toggle) {
+      const step = STEPS[state.step - 1];
+      const value = toggle.getAttribute('data-quiz-toggle');
+      const arr = state.answers[step.id];
+      const idx = arr.indexOf(value);
+      if (idx >= 0) arr.splice(idx, 1); else arr.push(value);
+      render();
+      return;
     }
   }
 
