@@ -1903,19 +1903,8 @@ a.pcard {
     font-size: 14px;
   }
 
-  .carousel-arrow {
-    width: 40px;
-    height: 40px;
-  }
-
-  .carousel-arrow--next {
-    right: -38px;
-    padding: 0 6px 0 0;
-  }
-
-  .carousel-arrow--prev {
-    left: -38px;
-    padding: 0 0 0 6px;
+  .carousel-container.has-overflow .carousel-arrow {
+    display: none;
   }
 
   .catalog {
