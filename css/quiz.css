@@ -90,3 +90,26 @@ button.hero-cta-btn { font-family: inherit; border: none; cursor: pointer; }
   background: #eaf6fc;
   color: #0c4a6e;
 }
+.quiz-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.quiz-input {
+  padding: 14px 16px;
+  border: 1.5px solid #d8dde3;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 15px;
+  color: #0f1117;
+}
+.quiz-input::placeholder { color: #9aa1ab; }
+.quiz-input:focus {
+  border-color: #0ea5e9;
+  outline: none;
+}
+.quiz-consent {
+  font-size: 12px;
+  color: #888;
+  margin: 12px 0 0;
+}

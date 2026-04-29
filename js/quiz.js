@@ -82,6 +82,7 @@
     `;
     document.body.appendChild(dlg);
     dlg.querySelector('[data-quiz-body]').addEventListener('click', onBodyClick);
+    dlg.querySelector('[data-quiz-body]').addEventListener('input', onBodyInput);
 
     // Закрытие по клику на бэкдроп (target === сам dialog)
     dlg.addEventListener('click', (e) => {
@@ -143,15 +144,43 @@
     `;
   }
 
+  function escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function renderContacts(step) {
+    return `
+      <h3 class="quiz-step-title">${step.title}</h3>
+      <div class="quiz-error" data-quiz-error></div>
+      <div class="quiz-fields">
+        <input type="text" class="quiz-input"
+               data-quiz-field="name"
+               placeholder="Имя"
+               value="${escapeHtml(state.answers.name)}"
+               autocomplete="given-name">
+        <input type="tel" class="quiz-input"
+               data-quiz-field="phone"
+               placeholder="Телефон"
+               value="${escapeHtml(state.answers.phone)}"
+               autocomplete="tel">
+      </div>
+      <p class="quiz-consent">Нажимая на кнопку вы соглашаетесь на обработку данных</p>
+    `;
+  }
+
   function render() {
     const dlg = document.getElementById(DIALOG_ID);
     if (!dlg) return;
     const body = dlg.querySelector('[data-quiz-body]');
     if (!body) return;
     const step = STEPS[state.step - 1];
-    if (step.type === 'single')      body.innerHTML = renderSingle(step);
-    else if (step.type === 'multi')  body.innerHTML = renderMulti(step);
-    else body.innerHTML = `<p style="padding:24px 0;text-align:center;color:#888;">Шаг ${state.step} (тип ${step.type} — будет в следующих задачах)</p>`;
+    if (step.type === 'single')         body.innerHTML = renderSingle(step);
+    else if (step.type === 'multi')     body.innerHTML = renderMulti(step);
+    else if (step.type === 'contacts')  body.innerHTML = renderContacts(step);
   }
 
   function onBodyClick(e) {
@@ -174,6 +203,15 @@
       render();
       return;
     }
+  }
+
+  function onBodyInput(e) {
+    const target = e.target;
+    if (!target || !target.getAttribute) return;
+    const field = target.getAttribute('data-quiz-field');
+    if (!field) return;
+    state.answers[field] = target.value;
+    // Не делаем render() — потеряли бы фокус и курсор
   }
 
   document.addEventListener('DOMContentLoaded', () => {
