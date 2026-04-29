@@ -1,0 +1,109 @@
+.consult-modal {
+  border: none;
+  padding: 0;
+  background: #fff;
+  color: #0f1117;
+  max-width: 460px;
+  width: calc(100vw - 32px);
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 14px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
+  inset: 0;
+  margin: auto;
+}
+.consult-modal::backdrop { background: rgba(15,17,23,0.55); }
+
+.consult-close {
+  position: absolute;
+  top: 10px; right: 12px;
+  width: 36px; height: 36px;
+  border: none; background: transparent;
+  font-size: 28px; line-height: 1; cursor: pointer;
+  color: #555;
+}
+.consult-close:hover { color: #000; }
+
+.consult-body { padding: 36px 32px 28px; }
+
+.consult-title {
+  margin: 0 0 14px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  line-height: 1.25;
+}
+.consult-title-accent {
+  display: block;
+  color: #0ea5e9;
+}
+
+.consult-lead {
+  margin: 0 0 22px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #555;
+}
+
+.consult-form { display: flex; flex-direction: column; gap: 12px; }
+.consult-field { display: block; }
+.consult-input {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1.5px solid #d8dde3;
+  border-radius: 999px;
+  font: inherit; font-size: 15px;
+  color: #0f1117;
+  background: #fff;
+  box-sizing: border-box;
+}
+.consult-input::placeholder { color: #9aa1ab; }
+.consult-input:focus { border-color: #0ea5e9; outline: none; }
+
+.consult-error { margin: 0; font-size: 13px; color: #c0392b; }
+.consult-error[hidden] { display: none; }
+
+.consult-submit {
+  margin-top: 4px;
+  padding: 14px 26px;
+  border: none;
+  border-radius: 999px;
+  font: inherit; font-size: 14px; font-weight: 700;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(14,165,233,0.25);
+  transition: transform .2s, box-shadow .2s;
+}
+.consult-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(14,165,233,0.35);
+}
+.consult-submit:disabled {
+  opacity: .7; cursor: default;
+  transform: none; box-shadow: none;
+}
+
+.consult-disclaimer {
+  margin: 14px 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #888;
+  text-align: center;
+}
+
+.consult-thanks { text-align: center; padding: 8px 0 4px; }
+
+@media (max-width: 480px) {
+  .consult-modal { width: calc(100vw - 16px); }
+  .consult-body { padding: 28px 20px 24px; }
+  .consult-title { font-size: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .consult-submit { transition: none; }
+  .consult-submit:hover { transform: none; }
+}
