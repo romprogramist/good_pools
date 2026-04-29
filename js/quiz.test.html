@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="UTF-8"><title>quiz tests</title></head>
+<body>
+<h1>Quiz tests — открой DevTools → Console</h1>
+<script src="quiz.js"></script>
+<script>
+  (function () {
+    let pass = 0, fail = 0;
+    function eq(actual, expected, name) {
+      if (actual === expected) { pass++; console.log('OK:', name); }
+      else { fail++; console.error('FAIL:', name, '\n  expected:', JSON.stringify(expected), '\n  actual:', JSON.stringify(actual)); }
+    }
+    const Q = window.__quiz;
+
+    // normalizePhone
+    eq(Q.normalizePhone('+7 (123) 456-78-90'), '71234567890', 'normalizePhone strips non-digits');
+    eq(Q.normalizePhone(''),                   '',            'normalizePhone empty string');
+    eq(Q.normalizePhone('abc'),                '',            'normalizePhone non-numeric');
+    eq(Q.normalizePhone('  +7 999 \n123-45-67'),'79991234567','normalizePhone whitespace + symbols');
+    eq(Q.normalizePhone(null),                 '',            'normalizePhone null safe');
+    eq(Q.normalizePhone(undefined),            '',            'normalizePhone undefined safe');
+
+    console.log(`---\nResult: ${pass} passed, ${fail} failed`);
+  })();
+</script>
+</body>
+</html>
