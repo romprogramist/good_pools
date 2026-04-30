@@ -2155,11 +2155,12 @@ a.pcard {
     white-space: normal;
     flex-direction: column;
     gap: 0;
-    font-size: 11vw;
   }
+  .hero-title .bold { font-size: 11vw; }
+  .hero-title .thin { font-size: 10.5vw; letter-spacing: 2px; }
   .hero-tags {
-    justify-content: flex-start;
-    gap: 8px 16px;
+    justify-content: space-between;
+    gap: 8px 0;
   }
 }
 
@@ -2199,11 +2200,12 @@ a.pcard {
     gap: 12px;
   }
 
-  .hero-title {
+  .hero-title .bold {
     font-size: clamp(38px, 11vw, 56px);
   }
 
   .hero-title .thin {
+    font-size: clamp(36px, 10.5vw, 53px);
     letter-spacing: 2px;
   }
 
@@ -2466,6 +2468,14 @@ a.pcard {
   }
 }
 
+/* Very narrow phones (≤400px): stack hero tags vertically */
+@media (max-width: 400px) {
+  .hero-tags {
+    flex-direction: column;
+    gap: 10px 0;
+  }
+}
+
 /* Small phones (360px and below) */
 @media (max-width: 360px) {
   .header {
@@ -2496,12 +2506,13 @@ a.pcard {
     gap: 10px;
   }
 
-  .hero-title {
+  .hero-title .bold {
     font-size: 36px;
   }
 
   .hero-title .thin {
-    letter-spacing: 1px;
+    font-size: 34.5px;
+    letter-spacing: 2px;
   }
 
   .hero-tags {
