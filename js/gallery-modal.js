@@ -101,6 +101,15 @@
     if (leftover) leftover.remove();
 
     preloadNeighbors();
+
+    document.dispatchEvent(new CustomEvent('gallery:photo', {
+      detail: {
+        id: currentItem.id || null,
+        index: currentIndex,
+        total: gallery.length,
+        url: src || null
+      }
+    }));
   }
 
   function ensureMounted() {
@@ -142,6 +151,10 @@
     prevBodyOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
+    document.dispatchEvent(new CustomEvent('gallery:open', {
+      detail: { id: item.id || null, name: item.title || '' }
+    }));
+
     render();
     modalEl.hidden = false;
     closeBtn.focus();
@@ -154,6 +167,9 @@
     if (triggerEl && typeof triggerEl.focus === 'function') {
       triggerEl.focus();
     }
+    document.dispatchEvent(new CustomEvent('gallery:close', {
+      detail: { id: currentItem ? (currentItem.id || null) : null }
+    }));
     currentItem = null;
     triggerEl = null;
   }
