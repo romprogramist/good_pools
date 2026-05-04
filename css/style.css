@@ -142,7 +142,7 @@ body.hero-hidden .site-logo--scroll {
 }
 
 .header-icon.is-messenger:hover {
-  background: rgba(255, 255, 255, 0.92);
+  background: #fff;
 }
 
 .header-icon.is-messenger svg {
@@ -150,11 +150,24 @@ body.hero-hidden .site-logo--scroll {
   height: 24px;
   fill: #0a0a0a;
   stroke: none;
+  transition: fill 0.2s;
 }
 
 .header-icon.is-messenger svg.max-icon {
   fill: #0a0a0a;
   stroke: none;
+}
+
+.header-icon.is-messenger[aria-label="WhatsApp"]:hover svg {
+  fill: #25D366;
+}
+
+.header-icon.is-messenger[aria-label="Telegram"]:hover svg {
+  fill: #229ED9;
+}
+
+.header-icon.is-messenger[aria-label="MAX"]:hover svg.max-icon {
+  fill: #FF6630;
 }
 
 .header-icon.is-search {
