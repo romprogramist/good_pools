@@ -37,6 +37,7 @@
 
   function openModelInGallery(model, index, cardEl) {
     GalleryModal.open({
+      id: model.id,
       title: model.name,
       infoLines: [
         model.series,
