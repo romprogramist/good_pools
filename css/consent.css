@@ -1,4 +1,5 @@
-/* Чекбоксы согласия на обработку ПД и маркетинг (152-ФЗ). */
+/* Чекбоксы согласия на обработку ПД и маркетинг (152-ФЗ).
+   Цвет текста наследуется от родителя — на тёмных формах будет светлым, на белых модалках тёмным. */
 .consent {
   display: flex;
   align-items: flex-start;
@@ -6,7 +7,8 @@
   margin: 12px 0;
   font-size: 13px;
   line-height: 1.4;
-  color: rgba(0, 0, 0, .72);
+  color: inherit;
+  opacity: .9;
   cursor: pointer;
 }
 .consent input[type="checkbox"] {
@@ -15,17 +17,32 @@
   width: 16px;
   height: 16px;
   cursor: pointer;
+  accent-color: #0ea5e9;
 }
 .consent a {
   color: #0ea5e9;
   text-decoration: underline;
 }
-.consent a:hover { color: #0284c7; }
-.consent--marketing { color: rgba(0, 0, 0, .55); }
+.consent a:hover { color: #38bdf8; }
+.consent--marketing { opacity: .65; }
 
 /* Состояние «обязательный чекбокс не отмечен» — submit-кнопка визуально приглушена. */
 button[disabled].consent-blocked,
 .consent-blocked[disabled] {
   opacity: 0.55;
   cursor: not-allowed;
+}
+
+/* Явно светлый текст на формах с тёмным фоном (service-form, ask-section). */
+.service-form .consent,
+.ask .consent {
+  color: #e2e8f0;
+}
+.service-form .consent a,
+.ask .consent a {
+  color: #7dd3fc;
+}
+.service-form .consent a:hover,
+.ask .consent a:hover {
+  color: #bae6fd;
 }
