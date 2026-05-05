@@ -12,6 +12,7 @@
     dlg.className = 'consult-modal';
     dlg.innerHTML = renderForm();
     document.body.appendChild(dlg);
+    attachConsent(dlg);
 
     dlg.addEventListener('click', (e) => {
       if (e.target === dlg) closeConsult();
@@ -24,6 +25,13 @@
     });
 
     return dlg;
+  }
+
+  function attachConsent(dlg) {
+    if (!window.ConsentHelper) return;
+    const form = dlg.querySelector('[data-consult-form]');
+    const submitBtn = dlg.querySelector('.consult-submit');
+    if (form && submitBtn) window.ConsentHelper.attach(form, submitBtn);
   }
 
   function renderForm() {
@@ -43,8 +51,15 @@
             <input type="tel" name="phone" class="consult-input" placeholder="+7 (000) 000-00-00" autocomplete="tel" inputmode="tel" data-consult-phone>
           </label>
           <p class="consult-error" data-consult-error hidden></p>
+          <label class="consent">
+            <input type="checkbox" name="consent" required>
+            <span>Я согласен с <a href="/privacy.html" target="_blank">Политикой обработки персональных данных</a></span>
+          </label>
+          <label class="consent consent--marketing">
+            <input type="checkbox" name="marketing">
+            <span>Согласен получать рекламные сообщения и информацию об акциях</span>
+          </label>
           <button type="submit" class="consult-submit">Получить консультацию</button>
-          <p class="consult-disclaimer">Нажимая на кнопку вы соглашаетесь на обработку данных</p>
         </form>
       </div>
     `;
@@ -63,7 +78,10 @@
 
   function openConsult() {
     const dlg = ensureDialog();
-    if (state.submitted) dlg.innerHTML = renderForm();
+    if (state.submitted) {
+      dlg.innerHTML = renderForm();
+      attachConsent(dlg);
+    }
     if (typeof dlg.showModal === 'function') dlg.showModal();
     else dlg.setAttribute('open', '');
     const nameInput = dlg.querySelector('[data-consult-name]');
@@ -98,8 +116,22 @@
     }
     errEl.hidden = true;
 
-    console.log('[consult] submit', { name: state.name.trim(), phone: state.phone });
-    // TODO: replace with POST /api/leads when backend is ready
+    const consentState = window.ConsentHelper
+      ? window.ConsentHelper.read(e.target)
+      : { consent: true, marketing: false };
+    if (!consentState.consent) return;
+
+    fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        source: 'consult',
+        name: state.name.trim(),
+        phone: state.phone,
+        consent: true,
+        marketing: consentState.marketing
+      })
+    }).catch((err) => console.error('[consult] /api/leads failed', err));
 
     state.submitted = true;
     const dlg = document.getElementById(DIALOG_ID);
