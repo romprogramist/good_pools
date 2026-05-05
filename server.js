@@ -44,6 +44,12 @@ const adminRoutes = require('./routes/admin');
 app.use('/api', apiRoutes);
 app.use('/admin', adminRoutes);
 
+// Privacy policy lives in data/ so that the existing rsync ('css js images data')
+// already deploys it. Surfaced at /privacy.html via this route.
+app.get('/privacy.html', function (_req, res) {
+  res.sendFile(path.join(__dirname, 'public', 'data', 'privacy.html'));
+});
+
 // Static: frontend site (must be AFTER /api and /admin)
 app.use(express.static(path.join(__dirname, 'public')));
 
