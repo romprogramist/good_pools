@@ -430,8 +430,15 @@
           <input type="tel" name="phone" class="ask-input" placeholder="+7 (000) 000-00-00" autocomplete="tel" inputmode="tel" data-ask-phone>
         </label>
         <p class="ask-error" data-ask-error hidden></p>
+        <label class="consent">
+          <input type="checkbox" name="consent" required>
+          <span>Я согласен с <a href="/privacy.html" target="_blank">Политикой обработки персональных данных</a></span>
+        </label>
+        <label class="consent consent--marketing">
+          <input type="checkbox" name="marketing">
+          <span>Согласен получать рекламные сообщения и информацию об акциях</span>
+        </label>
         <button type="submit" class="ask-submit">Отправить</button>
-        <p class="ask-disclaimer">Нажимая на кнопку вы соглашаетесь на обработку данных</p>
       </form>
     </div>
   </section>

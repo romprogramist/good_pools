@@ -7,6 +7,9 @@
     const form = document.querySelector('[data-ask-form]');
     if (!form) return;
 
+    const submitBtn = form.querySelector('.ask-submit');
+    if (window.ConsentHelper && submitBtn) window.ConsentHelper.attach(form, submitBtn);
+
     form.addEventListener('input', onInput);
     form.addEventListener('submit', onSubmit);
   }
@@ -42,14 +45,26 @@
       return;
     }
 
-    console.log('[ask] submit', {
-      question: state.question.trim(),
-      name: state.name.trim(),
-      phone: state.phone
-    });
-    // TODO: replace with POST /api/leads when backend is ready
+    const consentState = window.ConsentHelper
+      ? window.ConsentHelper.read(form)
+      : { consent: true, marketing: false };
+    if (!consentState.consent) return;
 
-    showThanks();
+    fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        source: 'ask',
+        name: state.name.trim(),
+        phone: state.phone,
+        payload: { question: state.question.trim() },
+        consent: true,
+        marketing: consentState.marketing
+      })
+    }).then(showThanks).catch(() => {
+      errEl.textContent = 'Не удалось отправить, попробуйте позже';
+      errEl.hidden = false;
+    });
   }
 
   function validate() {
