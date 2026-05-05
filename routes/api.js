@@ -1,6 +1,9 @@
 const router = require('express').Router();
 const pool = require('../db/pool');
 
+const POLICY_VERSION = '2026-05-05';
+const VALID_SOURCES = ['service', 'ask', 'consult', 'quiz', 'interest-popup'];
+
 // GET /api/categories
 router.get('/categories', async function (req, res) {
   try {
@@ -172,6 +175,48 @@ router.get('/showroom', async function (req, res) {
     });
   } catch (err) {
     console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// POST /api/leads — приём заявок с фиксацией согласия на обработку ПД
+router.post('/leads', async function (req, res) {
+  try {
+    const body = req.body || {};
+    const source = String(body.source || '').trim();
+    const name = String(body.name || '').trim();
+    const phone = String(body.phone || '').trim();
+    const email = body.email ? String(body.email).trim() : null;
+    const payload = body.payload && typeof body.payload === 'object' ? body.payload : null;
+    const consent = body.consent === true;
+    const marketing = body.marketing === true;
+
+    if (!VALID_SOURCES.includes(source)) {
+      return res.status(400).json({ error: 'Invalid source' });
+    }
+    if (!consent) {
+      return res.status(400).json({ error: 'Consent required' });
+    }
+    if (name.length < 2 || name.length > 255) {
+      return res.status(400).json({ error: 'Invalid name' });
+    }
+    const phoneDigits = phone.replace(/\D/g, '');
+    if (phoneDigits.length < 10 || phoneDigits.length > 15) {
+      return res.status(400).json({ error: 'Invalid phone' });
+    }
+
+    const ip = (req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').toString().split(',')[0].trim().slice(0, 64);
+
+    await pool.query(
+      `INSERT INTO leads
+       (source, name, phone, email, payload, consent_given, consent_marketing, consent_ip, policy_version)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+      [source, name, phone, email, payload ? JSON.stringify(payload) : null, true, marketing, ip, POLICY_VERSION]
+    );
+
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('[api/leads]', err);
     res.status(500).json({ error: 'Server error' });
   }
 });
