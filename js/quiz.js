@@ -168,7 +168,14 @@
                value="${escapeHtml(formatPhoneMask(state.answers.phone))}"
                autocomplete="tel">
       </div>
-      <p class="quiz-consent">Нажимая на кнопку вы соглашаетесь на обработку данных</p>
+      <label class="consent">
+        <input type="checkbox" name="consent" required>
+        <span>Я согласен с <a href="/privacy.html" target="_blank">Политикой обработки персональных данных</a></span>
+      </label>
+      <label class="consent consent--marketing">
+        <input type="checkbox" name="marketing">
+        <span>Согласен получать рекламные сообщения и информацию об акциях</span>
+      </label>
     `;
   }
 
@@ -194,8 +201,32 @@
     const v = validateStep(state.step, state.answers);
     if (!v.ok) { showError(v.message); return; }
 
-    console.log('[quiz] submit', state.answers);
-    // TODO: replace with POST /api/leads when backend is ready
+    const dlg = document.getElementById(DIALOG_ID);
+    const body = dlg && dlg.querySelector('[data-quiz-body]');
+    const consentState = window.ConsentHelper && body
+      ? window.ConsentHelper.read(body)
+      : { consent: true, marketing: false };
+    if (!consentState.consent) return;
+
+    fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        source: 'quiz',
+        name: String(state.answers.name || '').trim(),
+        phone: state.answers.phone || '',
+        payload: {
+          size: state.answers.size,
+          finish: state.answers.finish,
+          filtration: state.answers.filtration,
+          options: state.answers.options,
+          budget: state.answers.budget,
+          timing: state.answers.timing
+        },
+        consent: true,
+        marketing: consentState.marketing
+      })
+    }).catch((err) => console.error('[quiz] /api/leads failed', err));
 
     showThankYou();
   }
@@ -225,6 +256,11 @@
     else if (step.type === 'multi')    inner = renderMulti(step);
     else if (step.type === 'contacts') inner = renderContacts(step);
     body.innerHTML = inner + renderNav();
+
+    if (step.type === 'contacts' && window.ConsentHelper) {
+      const submitBtn = body.querySelector('[data-quiz-submit]');
+      if (submitBtn) window.ConsentHelper.attach(body, submitBtn);
+    }
   }
 
   function onBodyClick(e) {
