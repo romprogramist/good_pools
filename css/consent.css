@@ -1,0 +1,31 @@
+/* Чекбоксы согласия на обработку ПД и маркетинг (152-ФЗ). */
+.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 12px 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: rgba(0, 0, 0, .72);
+  cursor: pointer;
+}
+.consent input[type="checkbox"] {
+  flex-shrink: 0;
+  margin-top: 2px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+.consent a {
+  color: #0ea5e9;
+  text-decoration: underline;
+}
+.consent a:hover { color: #0284c7; }
+.consent--marketing { color: rgba(0, 0, 0, .55); }
+
+/* Состояние «обязательный чекбокс не отмечен» — submit-кнопка визуально приглушена. */
+button[disabled].consent-blocked,
+.consent-blocked[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
