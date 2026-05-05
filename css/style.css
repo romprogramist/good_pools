@@ -3905,3 +3905,34 @@ body.models-dark .work-meta { color: #22d3ee; }
   .ask-submit { transition: none; }
   .ask-submit:hover { transform: none; }
 }
+
+/* Privacy link in footer-bottom (index.html) */
+.footer-policy-link {
+  margin-left: 16px;
+  color: rgba(255,255,255,.7);
+  text-decoration: underline;
+  font-size: 13px;
+}
+.footer-policy-link:hover { color: #fff; }
+
+/* Mini bottom bar for pages without full footer (catalog, models, portfolio) */
+.page-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 24px 32px;
+  border-top: 1px solid #eee;
+  font-size: 13px;
+  color: rgba(0,0,0,.55);
+  background: #fafafa;
+}
+.page-bottom__policy {
+  color: rgba(0,0,0,.7);
+  text-decoration: underline;
+}
+.page-bottom__policy:hover { color: #0ea5e9; }
+@media (max-width: 600px) {
+  .page-bottom { flex-direction: column; align-items: flex-start; padding: 20px 16px; }
+}
