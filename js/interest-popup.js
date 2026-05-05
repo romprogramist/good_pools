@@ -95,6 +95,11 @@
       dlg.addEventListener('submit', onSubmit);
     }
     dlg.innerHTML = renderForm();
+    if (window.ConsentHelper) {
+      const form = dlg.querySelector('[data-idlg-form]');
+      const submitBtn = dlg.querySelector('.interest-dialog__submit');
+      if (form && submitBtn) window.ConsentHelper.attach(form, submitBtn);
+    }
     if (typeof dlg.showModal === 'function') dlg.showModal();
     else dlg.setAttribute('open', '');
     setTimeout(function () {
@@ -132,8 +137,15 @@
             '</label>' +
           '</details>' +
           '<p class="interest-dialog__error" data-idlg-error hidden></p>' +
+          '<label class="consent">' +
+            '<input type="checkbox" name="consent" required>' +
+            '<span>Я согласен с <a href="/privacy.html" target="_blank">Политикой обработки персональных данных</a></span>' +
+          '</label>' +
+          '<label class="consent consent--marketing">' +
+            '<input type="checkbox" name="marketing">' +
+            '<span>Согласен получать рекламные сообщения и информацию об акциях</span>' +
+          '</label>' +
           '<button type="submit" class="interest-dialog__submit">Отправить заявку</button>' +
-          '<p class="interest-dialog__disclaimer">Нажимая, вы соглашаетесь на обработку данных</p>' +
         '</form>' +
       '</div>'
     );
@@ -176,26 +188,38 @@
     }
     errEl.hidden = true;
 
+    const consentState = window.ConsentHelper
+      ? window.ConsentHelper.read(e.target)
+      : { consent: true, marketing: false };
+    if (!consentState.consent) return;
+
     const snap = window.InterestTracker
       ? window.InterestTracker.getSnapshot(state.id)
       : { score: null, opens: null, photosViewed: null, activeSeconds: null, triggeredAt: null };
 
-    console.log('[interest-popup] submit', {
-      source: 'interest_popup',
-      model_id: state.id,
-      model_name: state.name,
-      name: state.form.name.trim(),
-      phone: state.form.phone,
-      location: state.form.location.trim(),
-      score: snap.score,
-      signals: {
-        activeSeconds: snap.activeSeconds,
-        photosViewed: snap.photosViewed,
-        opens: snap.opens
-      },
-      triggeredAt: snap.triggeredAt
-    });
-    // TODO: replace with POST /api/leads when backend is ready
+    fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        source: 'interest-popup',
+        name: state.form.name.trim(),
+        phone: state.form.phone,
+        payload: {
+          model_id: state.id,
+          model_name: state.name,
+          location: state.form.location.trim(),
+          score: snap.score,
+          signals: {
+            activeSeconds: snap.activeSeconds,
+            photosViewed: snap.photosViewed,
+            opens: snap.opens
+          },
+          triggeredAt: snap.triggeredAt
+        },
+        consent: true,
+        marketing: consentState.marketing
+      })
+    }).catch((err) => console.error('[interest-popup] /api/leads failed', err));
 
     state.submitted = true;
     if (window.InterestTracker) window.InterestTracker.markSubmitted(state.id);
