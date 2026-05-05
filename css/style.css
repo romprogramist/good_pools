@@ -167,7 +167,7 @@ body.hero-hidden .site-logo--scroll {
 }
 
 .header-icon.is-messenger[aria-label="MAX"]:hover svg.max-icon {
-  fill: #FF6630;
+  fill: #0000FF;
 }
 
 .header-icon.is-search {
