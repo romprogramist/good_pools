@@ -347,6 +347,15 @@
             <textarea id="sfComment" name="comment" rows="3" placeholder="Дополнительная информация (необязательно)"></textarea>
           </div>
 
+          <label class="consent">
+            <input type="checkbox" name="consent" required>
+            <span>Я согласен с <a href="/privacy.html" target="_blank">Политикой обработки персональных данных</a></span>
+          </label>
+          <label class="consent consent--marketing">
+            <input type="checkbox" name="marketing">
+            <span>Согласен получать рекламные сообщения и информацию об акциях</span>
+          </label>
+
           <button type="submit" class="service-submit">Отправить заявку</button>
           <div class="service-toast" id="serviceToast" role="status" aria-live="polite"></div>
         </form>

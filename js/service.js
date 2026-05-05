@@ -6,6 +6,8 @@
     if (!form) return;
 
     const toast = document.getElementById('serviceToast');
+    const submitBtn = form.querySelector('.service-submit');
+    if (window.ConsentHelper && submitBtn) window.ConsentHelper.attach(form, submitBtn);
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -14,10 +16,34 @@
         result.firstInvalid && result.firstInvalid.focus();
         return;
       }
+
+      const consentState = window.ConsentHelper
+        ? window.ConsentHelper.read(form)
+        : { consent: true, marketing: false };
+      if (!consentState.consent) return;
+
       const text = buildMessage(result.data);
       const url = `https://wa.me/${CONTACT_PHONE}?text=${encodeURIComponent(text)}`;
       window.open(url, '_blank', 'noopener');
       showToast(toast, 'Отправляем заявку…');
+
+      fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          source: 'service',
+          name: result.data.name,
+          phone: result.data.phone,
+          payload: {
+            size: result.data.size,
+            year: result.data.year,
+            automation: result.data.automation,
+            comment: result.data.comment
+          },
+          consent: true,
+          marketing: consentState.marketing
+        })
+      }).catch((err) => console.error('[service] /api/leads failed', err));
     });
 
     form.querySelectorAll('input, textarea').forEach((el) => {
