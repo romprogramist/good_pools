@@ -164,7 +164,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.btn-consult').forEach(function (btn) {
+    document.querySelectorAll('.btn-consult, [data-consult-open]').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.preventDefault();
         openConsult();
