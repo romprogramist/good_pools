@@ -15,10 +15,6 @@
       { value: 'concrete',  label: 'Бетонный' },
       { value: 'consult',   label: 'Не знаю, нужна консультация' }
     ]},
-    { id: 'filtration', title: 'Фильтрация воды', type: 'single', options: [
-      { value: 'yes',     label: 'Да' },
-      { value: 'consult', label: 'Нет, нужна консультация' }
-    ]},
     { id: 'options', title: 'Дополнительные опции', type: 'multi', options: [
       { value: 'heating',      label: 'Подогрев воды' },
       { value: 'lighting',     label: 'Подсветка' },
@@ -49,7 +45,6 @@
       answers: {
         size: null,
         finish: null,
-        filtration: null,
         options: [],
         budget: null,
         timing: null,
@@ -218,7 +213,6 @@
         payload: {
           size: state.answers.size,
           finish: state.answers.finish,
-          filtration: state.answers.filtration,
           options: state.answers.options,
           budget: state.answers.budget,
           timing: state.answers.timing
@@ -354,17 +348,14 @@
         if (!answers.finish) return { ok: false, message: 'Выберите тип отделки' };
         return { ok: true };
       case 3:
-        if (!answers.filtration) return { ok: false, message: 'Выберите вариант' };
         return { ok: true };
       case 4:
-        return { ok: true };
-      case 5:
         if (!answers.budget) return { ok: false, message: 'Выберите диапазон' };
         return { ok: true };
-      case 6:
+      case 5:
         if (!answers.timing) return { ok: false, message: 'Выберите срок' };
         return { ok: true };
-      case 7: {
+      case 6: {
         const name = String(answers.name || '').trim();
         if (name.length < 2) return { ok: false, message: 'Введите имя' };
         const digits = normalizePhone(answers.phone);
