@@ -1,0 +1,73 @@
+<div class="top-bar">
+  <h1>Заявка #<%= lead.id %></h1>
+  <a href="/admin/leads" class="btn btn-outline btn-sm">← К списку</a>
+</div>
+
+<div style="display:grid; grid-template-columns: 200px 1fr; gap:12px 24px; margin-bottom:24px; max-width:800px;">
+  <div style="color:#71717a;">Дата</div>
+  <div><%= new Date(lead.created_at).toLocaleString('ru-RU') %></div>
+
+  <div style="color:#71717a;">Статус</div>
+  <div>
+    <% if (lead.status === 'processed') { %>
+      <span style="background:#065f46; color:#6ee7b7; padding:2px 8px; border-radius:6px; font-size:12px;">обработана</span>
+      <% if (lead.processed_at) { %>
+        <span style="color:#71717a; font-size:13px; margin-left:8px;">в <%= new Date(lead.processed_at).toLocaleString('ru-RU') %></span>
+      <% } %>
+    <% } else { %>
+      <span style="background:#1e3a8a; color:#93c5fd; padding:2px 8px; border-radius:6px; font-size:12px;">новая</span>
+    <% } %>
+  </div>
+
+  <div style="color:#71717a;">Источник</div>
+  <div><%= lead.source_label || '—' %> <span style="color:#71717a; font-size:13px;">(<%= lead.source %>)</span></div>
+
+  <div style="color:#71717a;">Страница</div>
+  <div><%= lead.page_path || '—' %></div>
+
+  <div style="color:#71717a;">Имя</div>
+  <div><%= lead.name %></div>
+
+  <div style="color:#71717a;">Телефон</div>
+  <div><%= lead.phone %></div>
+
+  <div style="color:#71717a;">Email</div>
+  <div><%= lead.email || '—' %></div>
+
+  <div style="color:#71717a;">Согласие на ПД</div>
+  <div><%= lead.consent_given ? 'Да' : 'Нет' %>
+    <span style="color:#71717a; font-size:13px; margin-left:8px;"><%= new Date(lead.consent_at).toLocaleString('ru-RU') %></span>
+  </div>
+
+  <div style="color:#71717a;">Согласие на маркетинг</div>
+  <div><%= lead.consent_marketing ? 'Да' : 'Нет' %></div>
+
+  <div style="color:#71717a;">IP</div>
+  <div><%= lead.consent_ip || '—' %></div>
+
+  <div style="color:#71717a;">Версия политики</div>
+  <div><%= lead.policy_version %></div>
+
+  <div style="color:#71717a;">Payload</div>
+  <div>
+    <% if (lead.payload) { %>
+      <pre style="background:#1a1b23; padding:12px; border-radius:8px; overflow-x:auto; margin:0; font-size:13px;"><%= JSON.stringify(lead.payload, null, 2) %></pre>
+    <% } else { %>
+      <span style="color:#71717a;">—</span>
+    <% } %>
+  </div>
+</div>
+
+<div style="display:flex; gap:12px;">
+  <form method="POST" action="/admin/leads/<%= lead.id %>/status">
+    <% if (lead.status === 'processed') { %>
+      <button type="submit" class="btn btn-outline">Вернуть в новые</button>
+    <% } else { %>
+      <button type="submit" class="btn btn-primary">Отметить обработанной</button>
+    <% } %>
+  </form>
+
+  <form method="POST" action="/admin/leads/<%= lead.id %>/delete" onsubmit="return confirm('Удалить заявку безвозвратно?')">
+    <button type="submit" class="btn btn-danger">Удалить</button>
+  </form>
+</div>

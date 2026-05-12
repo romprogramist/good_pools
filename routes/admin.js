@@ -742,4 +742,53 @@ router.get('/leads', async function (req, res) {
   }
 });
 
+router.get('/leads/:id', async function (req, res) {
+  try {
+    const result = await pool.query('SELECT * FROM leads WHERE id = $1', [req.params.id]);
+    if (!result.rows.length) return res.redirect('/admin/leads');
+    renderAdmin(res, 'leads/show', {
+      pageTitle: 'Заявка #' + req.params.id,
+      active: 'leads',
+      lead: result.rows[0]
+    });
+  } catch (err) {
+    console.error(err);
+    res.redirect('/admin/leads');
+  }
+});
+
+router.post('/leads/:id/status', async function (req, res) {
+  try {
+    const cur = await pool.query('SELECT status FROM leads WHERE id = $1', [req.params.id]);
+    if (!cur.rows.length) {
+      req.session.error = 'Заявка не найдена';
+      return res.redirect('/admin/leads');
+    }
+    if (cur.rows[0].status === 'processed') {
+      await pool.query('UPDATE leads SET status = $1, processed_at = NULL WHERE id = $2', ['new', req.params.id]);
+      req.session.success = 'Возвращено в новые';
+    } else {
+      await pool.query('UPDATE leads SET status = $1, processed_at = NOW() WHERE id = $2', ['processed', req.params.id]);
+      req.session.success = 'Отмечено обработанной';
+    }
+    res.redirect('/admin/leads/' + req.params.id);
+  } catch (err) {
+    console.error(err);
+    req.session.error = 'Ошибка смены статуса';
+    res.redirect('/admin/leads/' + req.params.id);
+  }
+});
+
+router.post('/leads/:id/delete', async function (req, res) {
+  try {
+    await pool.query('DELETE FROM leads WHERE id = $1', [req.params.id]);
+    req.session.success = 'Заявка удалена';
+    res.redirect('/admin/leads');
+  } catch (err) {
+    console.error(err);
+    req.session.error = 'Ошибка удаления';
+    res.redirect('/admin/leads');
+  }
+});
+
 module.exports = router;
