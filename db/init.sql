@@ -167,6 +167,8 @@ WHERE NOT EXISTS (SELECT 1 FROM rr_slides);
 CREATE TABLE IF NOT EXISTS leads (
   id                BIGSERIAL PRIMARY KEY,
   source            VARCHAR(32)  NOT NULL,
+  source_label      VARCHAR(64),
+  page_path         VARCHAR(255),
   name              VARCHAR(255) NOT NULL,
   phone             VARCHAR(32)  NOT NULL,
   email             VARCHAR(255),
