@@ -178,8 +178,11 @@ CREATE TABLE IF NOT EXISTS leads (
   consent_at        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
   consent_ip        VARCHAR(64),
   policy_version    VARCHAR(32)  NOT NULL,
+  status            VARCHAR(16)  NOT NULL DEFAULT 'new',
+  processed_at      TIMESTAMPTZ,
   created_at        TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX IF NOT EXISTS leads_created_at_idx ON leads (created_at DESC);
 CREATE INDEX IF NOT EXISTS leads_source_idx     ON leads (source);
+CREATE INDEX IF NOT EXISTS leads_status_idx     ON leads (status);
