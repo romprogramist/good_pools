@@ -1,9 +1,47 @@
 <div class="top-bar">
-  <h1>Заявки</h1>
+  <h1>Заявки <% if (typeof total !== 'undefined') { %><span style="color:#71717a; font-size:14px; font-weight:normal;">(<%= total %>)</span><% } %></h1>
 </div>
 
+<form method="GET" action="/admin/leads" style="background:#1a1b23; padding:16px; border-radius:8px; margin-bottom:24px;">
+  <div style="display:grid; grid-template-columns: 1fr 1fr 1fr 1fr 2fr; gap:12px; align-items:end;">
+    <div class="form-group" style="margin:0;">
+      <label>Источник</label>
+      <select name="source">
+        <option value="">Все</option>
+        <% sources.forEach(function(s) { %>
+          <option value="<%= s.source %>" <%= query.source === s.source ? 'selected' : '' %>><%= s.label %></option>
+        <% }); %>
+      </select>
+    </div>
+    <div class="form-group" style="margin:0;">
+      <label>Статус</label>
+      <select name="status">
+        <option value="">Все</option>
+        <option value="new" <%= query.status === 'new' ? 'selected' : '' %>>Новые</option>
+        <option value="processed" <%= query.status === 'processed' ? 'selected' : '' %>>Обработанные</option>
+      </select>
+    </div>
+    <div class="form-group" style="margin:0;">
+      <label>С даты</label>
+      <input type="date" name="from" value="<%= query.from %>">
+    </div>
+    <div class="form-group" style="margin:0;">
+      <label>По дату</label>
+      <input type="date" name="to" value="<%= query.to %>">
+    </div>
+    <div class="form-group" style="margin:0;">
+      <label>Поиск (имя или телефон)</label>
+      <input type="text" name="q" value="<%= query.q %>" placeholder="Иван или +7...">
+    </div>
+  </div>
+  <div style="margin-top:12px; display:flex; gap:8px;">
+    <button type="submit" class="btn btn-primary btn-sm">Применить</button>
+    <a href="/admin/leads" class="btn btn-outline btn-sm">Сбросить</a>
+  </div>
+</form>
+
 <% if (leads.length === 0) { %>
-  <p style="color:#71717a;">Заявок пока нет.</p>
+  <p style="color:#71717a;">Заявок не найдено.</p>
 <% } else { %>
   <table class="admin-table">
     <thead>
@@ -36,14 +74,19 @@
     </tbody>
   </table>
 
-  <% if (totalPages > 1) { %>
+  <% if (totalPages > 1) {
+       function qs(extra) {
+         var p = Object.assign({}, query, extra);
+         return Object.keys(p).filter(function(k){ return p[k]; }).map(function(k){ return encodeURIComponent(k)+'='+encodeURIComponent(p[k]); }).join('&');
+       }
+  %>
     <div style="margin-top:16px; display:flex; gap:8px; align-items:center;">
       <% if (page > 1) { %>
-        <a href="/admin/leads?page=<%= page - 1 %>" class="btn btn-sm btn-outline">← Назад</a>
+        <a href="/admin/leads?<%= qs({page: page - 1}) %>" class="btn btn-sm btn-outline">← Назад</a>
       <% } %>
       <span style="color:#71717a; font-size:13px;">Стр. <%= page %> из <%= totalPages %></span>
       <% if (page < totalPages) { %>
-        <a href="/admin/leads?page=<%= page + 1 %>" class="btn btn-sm btn-outline">Вперёд →</a>
+        <a href="/admin/leads?<%= qs({page: page + 1}) %>" class="btn btn-sm btn-outline">Вперёд →</a>
       <% } %>
     </div>
   <% } %>

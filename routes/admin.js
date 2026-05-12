@@ -676,15 +676,48 @@ router.get('/leads', async function (req, res) {
     const limit = 50;
     const offset = (page - 1) * limit;
 
-    const [rows, total] = await Promise.all([
+    // --- разбор фильтров ---
+    const q = (req.query.q || '').trim();
+    const source = (req.query.source || '').trim();
+    const statusFilter = ['new', 'processed'].includes(req.query.status) ? req.query.status : '';
+
+    const fromDate = req.query.from ? new Date(req.query.from) : null;
+    const toDate = req.query.to ? new Date(req.query.to) : null;
+    const from = (fromDate && !isNaN(fromDate)) ? fromDate : null;
+    const to = (toDate && !isNaN(toDate)) ? toDate : null;
+    // to делаем включительной до конца дня
+    if (to) to.setHours(23, 59, 59, 999);
+
+    // --- сборка WHERE ---
+    const where = [];
+    const params = [];
+    function add(cond, value) { params.push(value); where.push(cond.replace('?', '$' + params.length)); }
+
+    if (source) add('source = ?', source);
+    if (statusFilter) add('status = ?', statusFilter);
+    if (from) add('created_at >= ?', from);
+    if (to) add('created_at <= ?', to);
+    if (q) {
+      params.push('%' + q + '%');
+      const ph = '$' + params.length;
+      where.push('(name ILIKE ' + ph + ' OR phone ILIKE ' + ph + ')');
+    }
+
+    const whereSql = where.length ? 'WHERE ' + where.join(' AND ') : '';
+
+    // --- параллельные запросы: данные, count, список источников ---
+    const dataParams = params.concat([limit, offset]);
+    const [rows, total, sources] = await Promise.all([
       pool.query(
         `SELECT id, created_at, source, source_label, name, phone, email, status
-         FROM leads
+         FROM leads ${whereSql}
          ORDER BY created_at DESC, id DESC
-         LIMIT $1 OFFSET $2`,
-        [limit, offset]
+         LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
+        dataParams
       ),
-      pool.query('SELECT COUNT(*)::int AS n FROM leads')
+      pool.query(`SELECT COUNT(*)::int AS n FROM leads ${whereSql}`, params),
+      pool.query(`SELECT DISTINCT source, COALESCE(source_label, source) AS label
+                  FROM leads ORDER BY label`)
     ]);
 
     renderAdmin(res, 'leads/index', {
@@ -693,7 +726,15 @@ router.get('/leads', async function (req, res) {
       leads: rows.rows,
       page: page,
       totalPages: Math.max(1, Math.ceil(total.rows[0].n / limit)),
-      query: {}
+      total: total.rows[0].n,
+      sources: sources.rows,
+      query: {
+        q: q,
+        source: source,
+        status: statusFilter,
+        from: req.query.from || '',
+        to: req.query.to || ''
+      }
     });
   } catch (err) {
     console.error(err);
