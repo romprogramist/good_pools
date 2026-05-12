@@ -668,4 +668,37 @@ router.post('/render-reality/slides/:id/delete', async function (req, res) {
   }
 });
 
+// ---------- Leads ----------
+
+router.get('/leads', async function (req, res) {
+  try {
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = 50;
+    const offset = (page - 1) * limit;
+
+    const [rows, total] = await Promise.all([
+      pool.query(
+        `SELECT id, created_at, source, source_label, name, phone, email, status
+         FROM leads
+         ORDER BY created_at DESC, id DESC
+         LIMIT $1 OFFSET $2`,
+        [limit, offset]
+      ),
+      pool.query('SELECT COUNT(*)::int AS n FROM leads')
+    ]);
+
+    renderAdmin(res, 'leads/index', {
+      pageTitle: 'Заявки',
+      active: 'leads',
+      leads: rows.rows,
+      page: page,
+      totalPages: Math.max(1, Math.ceil(total.rows[0].n / limit)),
+      query: {}
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
+
 module.exports = router;
