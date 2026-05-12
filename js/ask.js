@@ -55,6 +55,7 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         source: 'ask',
+        page: window.location.pathname,
         name: state.name.trim(),
         phone: state.phone,
         payload: { question: state.question.trim() },

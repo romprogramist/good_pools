@@ -208,6 +208,7 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         source: 'quiz',
+        page: window.location.pathname,
         name: String(state.answers.name || '').trim(),
         phone: state.answers.phone || '',
         payload: {

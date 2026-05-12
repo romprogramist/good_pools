@@ -32,6 +32,7 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           source: 'service',
+          page: window.location.pathname,
           name: result.data.name,
           phone: result.data.phone,
           payload: {

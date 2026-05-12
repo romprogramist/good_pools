@@ -126,6 +126,7 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         source: 'consult',
+        page: window.location.pathname,
         name: state.name.trim(),
         phone: state.phone,
         consent: true,

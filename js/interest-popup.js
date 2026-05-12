@@ -202,6 +202,7 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         source: 'interest-popup',
+        page: window.location.pathname,
         name: state.form.name.trim(),
         phone: state.form.phone,
         payload: {
