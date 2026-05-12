@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const pool = require('../db/pool');
+const mailer = require('../lib/mailer');
 
 const POLICY_VERSION = '2026-05-05';
 const VALID_SOURCES = ['service', 'ask', 'consult', 'quiz', 'interest-popup'];
@@ -213,6 +214,10 @@ router.post('/leads', async function (req, res) {
        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
       [source, name, phone, email, payload ? JSON.stringify(payload) : null, true, marketing, ip, POLICY_VERSION]
     );
+
+    mailer
+      .sendLeadEmail({ source, name, phone, email, payload, marketing, ip })
+      .catch(function (e) { console.error('[mailer] send failed:', e && e.message ? e.message : e); });
 
     res.json({ ok: true });
   } catch (err) {
