@@ -192,6 +192,13 @@ router.post('/leads', async function (req, res) {
     const consent = body.consent === true;
     const marketing = body.marketing === true;
 
+    let page_path = null;
+    if (typeof body.page === 'string') {
+      const p = body.page.trim();
+      if (p) page_path = p.length > 255 ? p.slice(0, 255) : p;
+    }
+    const source_label = mailer.SOURCE_LABEL[source] || null;
+
     if (!VALID_SOURCES.includes(source)) {
       return res.status(400).json({ error: 'Invalid source' });
     }
@@ -210,13 +217,13 @@ router.post('/leads', async function (req, res) {
 
     await pool.query(
       `INSERT INTO leads
-       (source, name, phone, email, payload, consent_given, consent_marketing, consent_ip, policy_version)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
-      [source, name, phone, email, payload ? JSON.stringify(payload) : null, true, marketing, ip, POLICY_VERSION]
+       (source, source_label, page_path, name, phone, email, payload, consent_given, consent_marketing, consent_ip, policy_version)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
+      [source, source_label, page_path, name, phone, email, payload ? JSON.stringify(payload) : null, true, marketing, ip, POLICY_VERSION]
     );
 
     mailer
-      .sendLeadEmail({ source, name, phone, email, payload, marketing, ip })
+      .sendLeadEmail({ source, source_label, page_path, name, phone, email, payload, marketing, ip })
       .catch(function (e) { console.error('[mailer] send failed:', e && e.message ? e.message : e); });
 
     res.json({ ok: true });
