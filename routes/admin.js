@@ -6,6 +6,15 @@ const pool = require('../db/pool');
 const requireAuth = require('../middleware/auth');
 const { processUpload, deleteFile } = require('../middleware/upload');
 
+// CSV-экранирование по RFC 4180 + защита от CSV-инъекции в Excel.
+function csvEscape(v) {
+  if (v == null) return '';
+  let s = String(v);
+  // Защита от CSV-injection: значения, начинающиеся со спецсимвола формул.
+  if (/^[=+\-@]/.test(s)) s = "'" + s;
+  return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+
 // Helper: render an EJS view inside the admin layout
 function renderAdmin(res, view, locals) {
   // Merge res.locals (user, success, error) into the locals for the inner template
@@ -736,6 +745,83 @@ router.get('/leads', async function (req, res) {
         to: req.query.to || ''
       }
     });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
+
+router.get('/leads/export.csv', async function (req, res) {
+  try {
+    // Парсим те же фильтры что и /admin/leads, без пагинации.
+    const q = (req.query.q || '').trim();
+    const source = (req.query.source || '').trim();
+    const statusFilter = ['new', 'processed'].includes(req.query.status) ? req.query.status : '';
+
+    const fromDate = req.query.from ? new Date(req.query.from) : null;
+    const toDate = req.query.to ? new Date(req.query.to) : null;
+    const from = (fromDate && !isNaN(fromDate)) ? fromDate : null;
+    const to = (toDate && !isNaN(toDate)) ? toDate : null;
+    if (to) to.setHours(23, 59, 59, 999);
+
+    const where = [];
+    const params = [];
+    function add(cond, value) { params.push(value); where.push(cond.replace('?', '$' + params.length)); }
+    if (source) add('source = ?', source);
+    if (statusFilter) add('status = ?', statusFilter);
+    if (from) add('created_at >= ?', from);
+    if (to) add('created_at <= ?', to);
+    if (q) {
+      params.push('%' + q + '%');
+      const ph = '$' + params.length;
+      where.push('(name ILIKE ' + ph + ' OR phone ILIKE ' + ph + ')');
+    }
+    const whereSql = where.length ? 'WHERE ' + where.join(' AND ') : '';
+
+    const result = await pool.query(
+      `SELECT id, created_at, source, source_label, page_path, name, phone, email,
+              status, processed_at, consent_given, consent_marketing, policy_version,
+              consent_ip, payload
+       FROM leads ${whereSql}
+       ORDER BY created_at DESC, id DESC
+       LIMIT 50000`,
+      params
+    );
+
+    const today = new Date().toISOString().slice(0, 10);
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="leads-' + today + '.csv"');
+    // UTF-8 BOM для Excel.
+    res.write('﻿');
+
+    const headers = [
+      'id', 'created_at', 'source', 'source_label', 'page_path', 'name', 'phone', 'email',
+      'status', 'processed_at', 'consent_given', 'consent_marketing', 'policy_version',
+      'consent_ip', 'payload'
+    ];
+    res.write(headers.join(',') + '\r\n');
+
+    for (const r of result.rows) {
+      const row = [
+        r.id,
+        r.created_at ? r.created_at.toISOString() : '',
+        r.source,
+        r.source_label,
+        r.page_path,
+        r.name,
+        r.phone,
+        r.email,
+        r.status,
+        r.processed_at ? r.processed_at.toISOString() : '',
+        r.consent_given,
+        r.consent_marketing,
+        r.policy_version,
+        r.consent_ip,
+        r.payload ? JSON.stringify(r.payload) : ''
+      ].map(csvEscape);
+      res.write(row.join(',') + '\r\n');
+    }
+    res.end();
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

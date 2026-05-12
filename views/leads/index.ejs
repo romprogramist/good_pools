@@ -1,5 +1,9 @@
 <div class="top-bar">
   <h1>Заявки <% if (typeof total !== 'undefined') { %><span style="color:#71717a; font-size:14px; font-weight:normal;">(<%= total %>)</span><% } %></h1>
+  <%
+    var exportQs = Object.keys(query).filter(function(k){ return query[k]; }).map(function(k){ return encodeURIComponent(k)+'='+encodeURIComponent(query[k]); }).join('&');
+  %>
+  <a href="/admin/leads/export.csv<%= exportQs ? '?' + exportQs : '' %>" class="btn btn-outline btn-sm">⬇ Экспорт CSV</a>
 </div>
 
 <form method="GET" action="/admin/leads" style="background:#1a1b23; padding:16px; border-radius:8px; margin-bottom:24px;">
