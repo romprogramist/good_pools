@@ -45,7 +45,8 @@
 </form>
 
 <% if (leads.length === 0) { %>
-  <p style="color:#71717a;">Заявок не найдено.</p>
+  <% var hasFilters = query.q || query.source || query.status || query.from || query.to; %>
+  <p style="color:#71717a;"><%= hasFilters ? 'Заявок не найдено.' : 'Заявок пока нет.' %></p>
 <% } else { %>
   <table class="admin-table">
     <thead>
