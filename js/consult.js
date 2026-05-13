@@ -137,6 +137,7 @@
     state.submitted = true;
     const dlg = document.getElementById(DIALOG_ID);
     if (dlg) dlg.innerHTML = renderThanks();
+    if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'form_submitted_successfully');
   }
 
   function validate() {

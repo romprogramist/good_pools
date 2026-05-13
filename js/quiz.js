@@ -223,6 +223,7 @@
       })
     }).catch((err) => console.error('[quiz] /api/leads failed', err));
 
+    if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'form_submitted_successfully');
     showThankYou();
   }
 

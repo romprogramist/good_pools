@@ -45,6 +45,8 @@
           marketing: consentState.marketing
         })
       }).catch((err) => console.error('[service] /api/leads failed', err));
+
+      if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'form_submitted_successfully');
     });
 
     form.querySelectorAll('input, textarea').forEach((el) => {

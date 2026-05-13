@@ -62,7 +62,10 @@
         consent: true,
         marketing: consentState.marketing
       })
-    }).then(showThanks).catch(() => {
+    }).then(() => {
+      if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'form_submitted_successfully');
+      showThanks();
+    }).catch(() => {
       errEl.textContent = 'Не удалось отправить, попробуйте позже';
       errEl.hidden = false;
     });
