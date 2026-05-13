@@ -97,7 +97,10 @@
     const dlg = ensureDialog();
     state = makeInitialState();
     render();
-    try { dlg.showModal(); }
+    try {
+      dlg.showModal();
+      if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'quiz_started');
+    }
     catch (err) {
       console.error('[quiz] showModal failed', err);
       alert('Ваш браузер не поддерживает эту форму, обновите его.');

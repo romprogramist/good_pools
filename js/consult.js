@@ -84,6 +84,7 @@
     }
     if (typeof dlg.showModal === 'function') dlg.showModal();
     else dlg.setAttribute('open', '');
+    if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'consult_opened');
     const nameInput = dlg.querySelector('[data-consult-name]');
     if (nameInput) setTimeout(() => nameInput.focus(), 50);
   }

@@ -102,6 +102,7 @@
     }
     if (typeof dlg.showModal === 'function') dlg.showModal();
     else dlg.setAttribute('open', '');
+    if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'interest_opened');
     setTimeout(function () {
       const nameInput = dlg.querySelector('[data-idlg-name]');
       if (nameInput) nameInput.focus();
