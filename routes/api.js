@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const pool = require('../db/pool');
 const mailer = require('../lib/mailer');
+const telegram = require('../lib/telegram');
 
 const POLICY_VERSION = '2026-05-05';
 const VALID_SOURCES = ['service', 'ask', 'consult', 'quiz', 'interest-popup'];
@@ -222,9 +223,11 @@ router.post('/leads', async function (req, res) {
       [source, source_label, page_path, name, phone, email, payload ? JSON.stringify(payload) : null, true, marketing, ip, POLICY_VERSION]
     );
 
-    mailer
-      .sendLeadEmail({ source, source_label, page_path, name, phone, email, payload, marketing, ip })
+    const leadForNotify = { source, source_label, page_path, name, phone, email, payload, marketing, ip };
+    mailer.sendLeadEmail(leadForNotify)
       .catch(function (e) { console.error('[mailer] send failed:', e && e.message ? e.message : e); });
+    telegram.sendLeadTelegram(leadForNotify)
+      .catch(function (e) { console.error('[telegram] send failed:', e && e.message ? e.message : e); });
 
     res.json({ ok: true });
   } catch (err) {
