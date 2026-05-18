@@ -3972,3 +3972,48 @@ body.models-dark .work-meta { color: #22d3ee; }
 @media (max-width: 600px) {
   .page-bottom { flex-direction: column; align-items: flex-start; padding: 20px 16px; }
 }
+
+/* ===== MOTION FOUNDATION ===== */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(var(--reveal-y));
+  transition:
+    opacity var(--motion-slow) var(--ease-spring),
+    transform var(--motion-slow) var(--ease-spring);
+  transition-delay: calc(var(--reveal-delay, 0ms) + var(--stagger-i, 0) * 80ms);
+  will-change: opacity, transform;
+}
+[data-reveal][data-reveal-y="sm"] { transform: translateY(var(--reveal-y-sm)); }
+[data-reveal].is-revealed { opacity: 1; transform: none; will-change: auto; }
+
+/* Hero stagger items */
+[data-reveal-hero] {
+  opacity: 0;
+  transform: translateY(var(--reveal-y-sm));
+  transition:
+    opacity var(--motion-stage) var(--ease-spring),
+    transform var(--motion-stage) var(--ease-spring);
+  transition-delay: calc(var(--stagger-i, 0) * 120ms);
+}
+[data-reveal-hero].is-revealed { opacity: 1; transform: none; }
+
+/* Lazy images: fade-in */
+img[loading="lazy"], img[data-fade] {
+  opacity: 0;
+  transition: opacity var(--motion-slow) var(--ease-out);
+}
+img.img-loaded { opacity: 1; }
+
+/* Header hide on scroll */
+.header {
+  transition: transform var(--motion-base) var(--ease-out);
+  will-change: transform;
+}
+body.header-hidden .header { transform: translateY(-100%); }
+
+/* Global smooth scroll fallback */
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+/* ===== /MOTION FOUNDATION ===== */
