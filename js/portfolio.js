@@ -21,7 +21,7 @@ function cardHtml(work, modifier) {
   modifier = modifier || '';
   var cls = 'work-card' + (modifier ? ' ' + modifier : '');
   return (
-    '<article class="' + cls + '" data-category="' + work.category + '" data-work-id="' + work.id + '" tabindex="0" role="button" aria-label="Открыть галерею проекта: ' + work.title + '">' +
+    '<article class="' + cls + '" data-category="' + work.category + '" data-work-id="' + work.id + '" tabindex="0" role="button" aria-label="Открыть галерею проекта: ' + work.title + '" data-reveal data-reveal-y="sm">' +
       cardInnerHtml(work) +
     '</article>'
   );
@@ -172,6 +172,8 @@ document.addEventListener('DOMContentLoaded', function () {
       if (document.querySelector('.works-grid')) {
         renderPortfolioFilter();
         renderPortfolioGrid();
+        var worksGrid = document.querySelector('.works-grid');
+        if (window.Motion && window.Motion.observeNew) window.Motion.observeNew(worksGrid);
         attachPortfolioFilter();
         attachPortfolioGallery();
         applyPortfolioDeepLink();

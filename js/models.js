@@ -18,7 +18,7 @@
   function renderGrid(container, models, categoryImage) {
     container.innerHTML = models.map(function (m) {
       return (
-        '<article class="mcard" data-id="' + m.id + '" data-category="' + m.category + '" tabindex="0" role="button" aria-label="Открыть галерею: ' + m.name + '">' +
+        '<article class="mcard" data-id="' + m.id + '" data-category="' + m.category + '" tabindex="0" role="button" aria-label="Открыть галерею: ' + m.name + '" data-reveal data-reveal-y="sm">' +
           '<div class="mcard-img">' +
             '<img src="' + (m.gallery && m.gallery.length ? m.gallery[0] : categoryImage[m.category]) + '" alt="' + m.name + '">' +
             (m.badge ? '<div class="mcard-badge">' + m.badge + '</div>' : '') +
@@ -133,6 +133,7 @@
 
         renderFilter(filterEl, categories);
         renderGrid(gridEl, models, categoryImage);
+        if (window.Motion && window.Motion.observeNew) window.Motion.observeNew(gridEl);
         attachFilter(filterEl, gridEl);
         attachModelGallery(gridEl, models);
 

@@ -150,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (custom) html += catalogCardHtml(custom, false, true);
 
       catGrid.innerHTML = html;
+      if (window.Motion && window.Motion.observeNew) window.Motion.observeNew(catGrid);
     });
   }
 
@@ -190,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var link = 'models.html?category=' + m.category + '&model=' + m.id;
 
     return (
-      '<a href="' + link + '" class="pcard' + (isFeatured ? ' featured' : '') + (isFullWidth ? ' fullwidth' : '') + '">' +
+      '<a href="' + link + '" class="pcard' + (isFeatured ? ' featured' : '') + (isFullWidth ? ' fullwidth' : '') + '" data-reveal data-reveal-y="sm">' +
         '<div class="pcard-img" style="' + imgStyle + '">' +
           (m.badge ? '<div class="pcard-badge">' + m.badge + '</div>' : '') +
           '<div class="pcard-size">' + sizeLabel + '</div>' +
@@ -235,6 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
           '</div>' +
         '</div>' +
         galleryHtml;
+      if (window.Motion && window.Motion.observeNew) window.Motion.observeNew(showroomEl);
 
       // Click on photo → open gallery
       if (data.gallery && data.gallery.length && typeof GalleryModal !== 'undefined') {
