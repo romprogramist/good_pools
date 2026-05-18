@@ -670,6 +670,10 @@ a.category-card {
 }
 
 @media (hover: hover) {
+  .carousel-arrow:hover {
+    transform: scale(1.1);
+  }
+
   .carousel-arrow--next:hover svg {
     transform: translateX(4px);
   }
