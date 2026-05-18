@@ -136,12 +136,20 @@
         consent: true,
         marketing: consentState.marketing
       })
-    }).catch((err) => console.error('[consult] /api/leads failed', err));
-
-    state.submitted = true;
-    const dlg = document.getElementById(DIALOG_ID);
-    if (dlg) dlg.innerHTML = renderThanks();
-    if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'form_submitted_successfully');
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        state.submitted = true;
+        const dlg = document.getElementById(DIALOG_ID);
+        if (dlg) dlg.innerHTML = renderThanks();
+        if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'form_submitted_successfully');
+      })
+      .catch(function (netErr) {
+        console.error('[consult] /api/leads failed', netErr);
+        if (submitBtn) submitBtn.classList.remove('is-loading');
+        errEl.textContent = 'Не удалось отправить заявку. Проверьте интернет и попробуйте ещё раз.';
+        errEl.hidden = false;
+      });
   }
 
   function validate() {

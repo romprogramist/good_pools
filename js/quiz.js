@@ -208,6 +208,7 @@
 
     var submitBtn = document.querySelector('[data-quiz-submit]');
     if (submitBtn) submitBtn.classList.add('is-loading');
+    showError('');
 
     fetch('/api/leads', {
       method: 'POST',
@@ -227,10 +228,17 @@
         consent: true,
         marketing: consentState.marketing
       })
-    }).catch((err) => console.error('[quiz] /api/leads failed', err));
-
-    if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'form_submitted_successfully');
-    showThankYou();
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'form_submitted_successfully');
+        showThankYou();
+      })
+      .catch(function (err) {
+        console.error('[quiz] /api/leads failed', err);
+        if (submitBtn) submitBtn.classList.remove('is-loading');
+        showError('Не удалось отправить заявку. Проверьте интернет и попробуйте ещё раз.');
+      });
   }
 
   function showThankYou() {
