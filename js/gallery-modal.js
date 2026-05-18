@@ -164,12 +164,12 @@
   }
 
   function close() {
-    if (!modalEl || modalEl.hidden) return;
+    if (!modalEl || !modalEl.classList.contains('is-open')) return;
     modalEl.classList.remove('is-open');
     setTimeout(function () {
       modalEl.hidden = true;
+      document.body.style.overflow = prevBodyOverflow;
     }, 300); // = --motion-base + small buffer
-    document.body.style.overflow = prevBodyOverflow;
     if (triggerEl && typeof triggerEl.focus === 'function') {
       triggerEl.focus();
     }
