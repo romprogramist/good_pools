@@ -157,12 +157,18 @@
 
     render();
     modalEl.hidden = false;
+    // Forced reflow before adding class so the transition fires
+    void modalEl.offsetWidth;
+    modalEl.classList.add('is-open');
     closeBtn.focus();
   }
 
   function close() {
     if (!modalEl || modalEl.hidden) return;
-    modalEl.hidden = true;
+    modalEl.classList.remove('is-open');
+    setTimeout(function () {
+      modalEl.hidden = true;
+    }, 300); // = --motion-base + small buffer
     document.body.style.overflow = prevBodyOverflow;
     if (triggerEl && typeof triggerEl.focus === 'function') {
       triggerEl.focus();

@@ -20,9 +20,17 @@
       '<button type="button" class="cookie-banner__btn">Принять</button>';
 
     document.body.appendChild(banner);
+
+    // Delay 800ms before slide-in so it doesn't punch the user in the face on load
+    setTimeout(function () {
+      banner.classList.add('is-visible');
+    }, 800);
+
     banner.querySelector('.cookie-banner__btn').addEventListener('click', function () {
       try { localStorage.setItem(STORAGE_KEY, '1'); } catch (_) { /* ignore */ }
-      banner.remove();
+      banner.classList.remove('is-visible');
+      banner.classList.add('is-leaving');
+      setTimeout(function () { banner.remove(); }, 320); // = --motion-base + buffer
     });
   }
 

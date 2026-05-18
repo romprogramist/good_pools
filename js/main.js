@@ -102,6 +102,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (hamburger && menuOverlay) {
     hamburger.addEventListener('click', () => {
+      if (!menuOverlay.classList.contains('open')) {
+        var sbw = window.innerWidth - document.documentElement.clientWidth;
+        document.documentElement.style.setProperty('--scrollbar-width', sbw + 'px');
+      }
       hamburger.classList.toggle('active');
       menuOverlay.classList.toggle('open');
       document.body.classList.toggle('menu-open');
