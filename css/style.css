@@ -4088,12 +4088,14 @@ body.models-dark .work-meta { color: #22d3ee; }
 }
 [data-reveal-hero].is-revealed { opacity: 1; transform: none; }
 
-/* Lazy images: fade-in */
-img[loading="lazy"], img[data-fade] {
+/* Images opt into fade-in via data-fade. Auto-applying to loading="lazy"
+   breaks dynamically-rendered imgs (showroom, mcards, etc.) whose load events
+   fire before motion.js can attach listeners. */
+img[data-fade] {
   opacity: 0;
   transition: opacity var(--motion-slow) var(--ease-out);
 }
-img.img-loaded { opacity: 1; }
+img[data-fade].img-loaded { opacity: 1; }
 
 /* Header hide on scroll */
 .header {

@@ -84,7 +84,7 @@
 
   // ---------- 5. Image fade-in on load ----------
   function initImageFade() {
-    document.querySelectorAll('img[loading="lazy"], img[data-fade]').forEach(function (img) {
+    document.querySelectorAll('img[data-fade]').forEach(function (img) {
       if (img.complete && img.naturalWidth > 0) {
         img.classList.add('img-loaded');
         return;
