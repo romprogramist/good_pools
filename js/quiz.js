@@ -274,6 +274,8 @@
         const submitBtn = body.querySelector('[data-quiz-submit]');
         if (submitBtn) window.ConsentHelper.attach(body, submitBtn);
       }
+      // Two rAFs: first frame commits the initial is-entering class to CSSOM,
+      // second frame removes it so the browser animates between the two states.
       requestAnimationFrame(function () {
         requestAnimationFrame(function () {
           newInner.classList.remove('is-entering', 'is-entering-back');
@@ -281,10 +283,7 @@
       });
     }
 
-    if (oldInner && !direction) {
-      // No direction = first render or in-place; just mount without leaving animation
-      mount();
-    } else if (oldInner) {
+    if (oldInner) {
       oldInner.classList.add(isBack ? 'is-leaving-back' : 'is-leaving');
       setTimeout(mount, 280); // = --motion-base
     } else {
