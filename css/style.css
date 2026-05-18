@@ -651,6 +651,7 @@ a.category-card {
 
 .carousel-arrow:active {
   outline: none;
+  /* Intentional: stronger press than --press-scale (.97) — arrows need crisper feedback */
   transform: scale(0.92);
   transition: transform var(--motion-fast) var(--ease-press);
 }
@@ -793,7 +794,7 @@ a.category-card {
   letter-spacing: 1px;
   text-transform: uppercase;
   text-decoration: none;
-  transition: color 0.2s;
+  transition: color var(--motion-fast) var(--ease-out);
 }
 
 @media (hover: hover) {
@@ -807,6 +808,11 @@ a.category-card {
 
 @media (hover: hover) {
   .btn-all-top:hover .arrow { transform: translateX(5px); }
+}
+
+.btn-all-top:active {
+  transform: scale(var(--press-scale));
+  transition: transform var(--motion-fast) var(--ease-press);
 }
 
 /* Grid */
@@ -866,9 +872,11 @@ a.pcard {
   left: 0;
 }
 
-.pcard:hover .pcard-img .pool-visual {
-  transform: scale(1.03);
-  transition: transform 0.6s;
+@media (hover: hover) {
+  .pcard:hover .pcard-img .pool-visual {
+    transform: scale(1.03);
+    transition: transform var(--motion-slow) var(--ease-out);
+  }
 }
 
 /* Pool shapes */
