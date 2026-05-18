@@ -1,5 +1,5 @@
 // good_pools motion utilities — IntersectionObserver reveal, smooth scroll,
-// header hide-on-scroll, image fade-in. No dependencies. ~80 LOC.
+// header hide-on-scroll, image fade-in, public observeNew API. No dependencies.
 (function () {
   'use strict';
 

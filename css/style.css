@@ -3986,6 +3986,18 @@ body.models-dark .work-meta { color: #22d3ee; }
 [data-reveal][data-reveal-y="sm"] { transform: translateY(var(--reveal-y-sm)); }
 [data-reveal].is-revealed { opacity: 1; transform: none; will-change: auto; }
 
+/* Stagger children — inherit initial state automatically (children don't need their own [data-reveal]) */
+[data-reveal-stagger] > * {
+  opacity: 0;
+  transform: translateY(var(--reveal-y-sm));
+  transition:
+    opacity var(--motion-slow) var(--ease-spring),
+    transform var(--motion-slow) var(--ease-spring);
+  transition-delay: calc(var(--stagger-i, 0) * 80ms);
+  will-change: opacity, transform;
+}
+[data-reveal-stagger] > *.is-revealed { opacity: 1; transform: none; will-change: auto; }
+
 /* Hero stagger items */
 [data-reveal-hero] {
   opacity: 0;
