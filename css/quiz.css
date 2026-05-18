@@ -130,7 +130,10 @@ button.hero-cta-btn { font-family: inherit; border: none; cursor: pointer; }
   font-weight: 700;
   letter-spacing: 1px;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  transition:
+    transform var(--motion-base) var(--ease-spring),
+    box-shadow var(--motion-base) var(--ease-out),
+    background var(--motion-fast) var(--ease-out);
 }
 .quiz-btn--back {
   background: transparent;

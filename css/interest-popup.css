@@ -187,9 +187,11 @@
   box-shadow: 0 6px 16px rgba(14, 165, 233, 0.25);
   transition: transform var(--motion-base) var(--ease-spring), box-shadow var(--motion-base) var(--ease-out);
 }
-.interest-dialog__submit:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 22px rgba(14, 165, 233, 0.35);
+@media (hover: hover) {
+  .interest-dialog__submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px rgba(14, 165, 233, 0.35);
+  }
 }
 
 .interest-dialog__disclaimer {
