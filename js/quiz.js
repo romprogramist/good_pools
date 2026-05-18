@@ -96,7 +96,7 @@
   function openQuiz() {
     const dlg = ensureDialog();
     state = makeInitialState();
-    render();
+    renderSame();
     try {
       dlg.showModal();
       if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'quiz_started');
@@ -206,6 +206,9 @@
       : { consent: true, marketing: false };
     if (!consentState.consent) return;
 
+    var submitBtn = document.querySelector('[data-quiz-submit]');
+    if (submitBtn) submitBtn.classList.add('is-loading');
+
     fetch('/api/leads', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -236,15 +239,21 @@
     const body = dlg.querySelector('[data-quiz-body]');
     if (!body) return;
     body.innerHTML = `
-      <div class="quiz-thanks">
-        <h3 class="quiz-thanks-title">Спасибо! Заявка принята</h3>
-        <p class="quiz-thanks-text">Менеджер свяжется с вами в течение 10 минут</p>
-        <button type="button" class="quiz-btn quiz-btn--next" data-quiz-close>Закрыть</button>
+      <div class="quiz-body-inner">
+        <div class="quiz-thanks">
+          <svg class="quiz-thanks-check" viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="35"/>
+            <path d="M24 41 L36 53 L57 30"/>
+          </svg>
+          <h3 class="quiz-thanks-title">Спасибо! Заявка принята</h3>
+          <p class="quiz-thanks-text">Менеджер свяжется с вами в течение 10 минут</p>
+          <button type="button" class="quiz-btn quiz-btn--next" data-quiz-close>Закрыть</button>
+        </div>
       </div>
     `;
   }
 
-  function render() {
+  function render(direction) {
     const dlg = document.getElementById(DIALOG_ID);
     if (!dlg) return;
     const body = dlg.querySelector('[data-quiz-body]');
@@ -254,8 +263,47 @@
     if (step.type === 'single')        inner = renderSingle(step);
     else if (step.type === 'multi')    inner = renderMulti(step);
     else if (step.type === 'contacts') inner = renderContacts(step);
-    body.innerHTML = inner + renderNav();
 
+    const isBack = direction === 'back';
+    const oldInner = body.querySelector('.quiz-body-inner');
+
+    function mount() {
+      body.innerHTML = '<div class="quiz-body-inner ' + (isBack ? 'is-entering-back' : 'is-entering') + '">' + inner + renderNav() + '</div>';
+      const newInner = body.querySelector('.quiz-body-inner');
+      if (step.type === 'contacts' && window.ConsentHelper) {
+        const submitBtn = body.querySelector('[data-quiz-submit]');
+        if (submitBtn) window.ConsentHelper.attach(body, submitBtn);
+      }
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          newInner.classList.remove('is-entering', 'is-entering-back');
+        });
+      });
+    }
+
+    if (oldInner && !direction) {
+      // No direction = first render or in-place; just mount without leaving animation
+      mount();
+    } else if (oldInner) {
+      oldInner.classList.add(isBack ? 'is-leaving-back' : 'is-leaving');
+      setTimeout(mount, 280); // = --motion-base
+    } else {
+      mount();
+    }
+  }
+
+  function renderSame() {
+    // In-place re-render WITHOUT entrance animation (used when selecting an option on same step)
+    const dlg = document.getElementById(DIALOG_ID);
+    if (!dlg) return;
+    const body = dlg.querySelector('[data-quiz-body]');
+    if (!body) return;
+    const step = STEPS[state.step - 1];
+    let inner = '';
+    if (step.type === 'single')        inner = renderSingle(step);
+    else if (step.type === 'multi')    inner = renderMulti(step);
+    else if (step.type === 'contacts') inner = renderContacts(step);
+    body.innerHTML = '<div class="quiz-body-inner">' + inner + renderNav() + '</div>';
     if (step.type === 'contacts' && window.ConsentHelper) {
       const submitBtn = body.querySelector('[data-quiz-submit]');
       if (submitBtn) window.ConsentHelper.attach(body, submitBtn);
@@ -264,14 +312,14 @@
 
   function onBodyClick(e) {
     if (e.target.closest('[data-quiz-back]')) {
-      if (state.step > 1) { state.step--; render(); }
+      if (state.step > 1) { state.step--; render('back'); }
       return;
     }
     if (e.target.closest('[data-quiz-next]')) {
       const v = validateStep(state.step, state.answers);
       if (!v.ok) { showError(v.message); return; }
       state.step++;
-      render();
+      render('forward');
       return;
     }
     if (e.target.closest('[data-quiz-submit]')) {
@@ -284,7 +332,7 @@
       const step = STEPS[state.step - 1];
       if (step.type === 'single') {
         state.answers[step.id] = pick.getAttribute('data-quiz-pick');
-        render();
+        renderSame();
       }
       return;
     }
@@ -295,7 +343,7 @@
       const arr = state.answers[step.id];
       const idx = arr.indexOf(value);
       if (idx >= 0) arr.splice(idx, 1); else arr.push(value);
-      render();
+      renderSame();
       return;
     }
   }
@@ -377,7 +425,7 @@
     validateStep,
     _dev: {
       state: () => state,
-      gotoStep: (n) => { state.step = n; render(); },
+      gotoStep: (n) => { state.step = n; renderSame(); },
       open: openQuiz,
       close: closeQuiz
     }

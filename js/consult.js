@@ -122,6 +122,9 @@
       : { consent: true, marketing: false };
     if (!consentState.consent) return;
 
+    const submitBtn = e.target.querySelector('.consult-submit');
+    if (submitBtn) submitBtn.classList.add('is-loading');
+
     fetch('/api/leads', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
