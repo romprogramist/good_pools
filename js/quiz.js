@@ -89,16 +89,22 @@
     });
     // Сброс state при закрытии (в т.ч. ESC и close-метод)
     dlg.addEventListener('close', () => { state = makeInitialState(); });
+    dlg.addEventListener('cancel', (e) => {
+      e.preventDefault();
+      closeQuiz();
+    });
 
     return dlg;
   }
 
   function openQuiz() {
     const dlg = ensureDialog();
+    if (dlg.open) return; // guard against re-open during close animation
     state = makeInitialState();
     renderSame();
     try {
       dlg.showModal();
+      requestAnimationFrame(() => dlg.classList.add('is-open'));
       if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'quiz_started');
     }
     catch (err) {
@@ -109,7 +115,10 @@
 
   function closeQuiz() {
     const dlg = document.getElementById(DIALOG_ID);
-    if (dlg && dlg.open) dlg.close();
+    if (!dlg || !dlg.open) return;
+    if (!dlg.classList.contains('is-open')) { dlg.close(); return; }
+    dlg.classList.remove('is-open');
+    setTimeout(() => { if (dlg.open) dlg.close(); }, 280); // matches --motion-slow
   }
 
   function renderSingle(step) {
