@@ -82,6 +82,7 @@
 
   function openConsult() {
     const dlg = ensureDialog();
+    if (dlg.open) return; // guard against re-open during close animation
     if (state.submitted) {
       dlg.innerHTML = renderForm();
       attachConsent(dlg);
@@ -91,6 +92,7 @@
       requestAnimationFrame(() => dlg.classList.add('is-open'));
     } else {
       dlg.setAttribute('open', '');
+      void dlg.offsetWidth; // force reflow so transition fires
       dlg.classList.add('is-open');
     }
     if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'consult_opened');
@@ -103,7 +105,7 @@
     if (!dlg || !dlg.open) return;
     if (!dlg.classList.contains('is-open')) { dlg.close(); return; }
     dlg.classList.remove('is-open');
-    setTimeout(() => { if (dlg.open) dlg.close(); }, 280);
+    setTimeout(() => { if (dlg.open) dlg.close(); }, 280); // matches --motion-slow
   }
 
   function onInput(e) {
