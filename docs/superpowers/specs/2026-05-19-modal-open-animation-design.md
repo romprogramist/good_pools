@@ -76,6 +76,8 @@ function closeWithAnim(dlg) {
 }
 ```
 
+Магическое число `280` в `setTimeout` сознательно дублирует значение `--motion-slow` — если когда-нибудь токен поменяется, эти три места в JS надо синхронизировать руками. Альтернатива (читать значение через `getComputedStyle(root).getPropertyValue('--motion-slow')`) добавляет шум ради гипотетического изменения — не стоит.
+
 **Точки замены:**
 - Все прямые `dlg.showModal()` → `openWithAnim(dlg)`
 - Все прямые `dlg.close()` → `closeWithAnim(dlg)`
