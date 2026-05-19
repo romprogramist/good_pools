@@ -35,7 +35,11 @@
     const dlg = document.getElementById(DIALOG_ID);
     if (dlg && dlg.open && !state.submitted) {
       if (window.InterestTracker) window.InterestTracker.markDismissed(state.id);
-      dlg.close();
+      if (!dlg.classList.contains('is-open')) { dlg.close(); }
+      else {
+        dlg.classList.remove('is-open');
+        setTimeout(function () { if (dlg.open) dlg.close(); }, 280); // matches --motion-slow
+      }
     }
   });
 
@@ -82,6 +86,7 @@
 
   function openDialog() {
     let dlg = document.getElementById(DIALOG_ID);
+    if (dlg && dlg.open) return; // guard against re-open during close animation
     if (!dlg) {
       dlg = document.createElement('dialog');
       dlg.id = DIALOG_ID;
@@ -93,6 +98,10 @@
       });
       dlg.addEventListener('input', onInput);
       dlg.addEventListener('submit', onSubmit);
+      dlg.addEventListener('cancel', function (e) {
+        e.preventDefault();
+        closeDialog();
+      });
     }
     dlg.innerHTML = renderForm();
     if (window.ConsentHelper) {
@@ -100,8 +109,14 @@
       const submitBtn = dlg.querySelector('.interest-dialog__submit');
       if (form && submitBtn) window.ConsentHelper.attach(form, submitBtn);
     }
-    if (typeof dlg.showModal === 'function') dlg.showModal();
-    else dlg.setAttribute('open', '');
+    if (typeof dlg.showModal === 'function') {
+      dlg.showModal();
+      requestAnimationFrame(function () { dlg.classList.add('is-open'); });
+    } else {
+      dlg.setAttribute('open', '');
+      void dlg.offsetWidth; // force reflow so transition fires
+      dlg.classList.add('is-open');
+    }
     if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'interest_opened');
     setTimeout(function () {
       const nameInput = dlg.querySelector('[data-idlg-name]');
@@ -115,7 +130,9 @@
     if (!state.submitted) {
       if (window.InterestTracker) window.InterestTracker.markDismissed(state.id);
     }
-    dlg.close();
+    if (!dlg.classList.contains('is-open')) { dlg.close(); return; }
+    dlg.classList.remove('is-open');
+    setTimeout(function () { if (dlg.open) dlg.close(); }, 280); // matches --motion-slow
   }
 
   function renderForm() {
