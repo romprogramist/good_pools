@@ -134,3 +134,19 @@
   border-radius: 50%;
   animation: quiz-spin .8s linear infinite;
 }
+
+/* ===== Open/close animation ===== */
+.consult-modal {
+  opacity: 0;
+  transform: scale(0.96);
+  transition:
+    opacity var(--motion-slow) var(--ease-out),
+    transform var(--motion-slow) var(--ease-spring);
+}
+.consult-modal.is-open { opacity: 1; transform: scale(1); }
+
+.consult-modal::backdrop {
+  opacity: 0;
+  transition: opacity var(--motion-slow) var(--ease-out);
+}
+.consult-modal.is-open::backdrop { opacity: 1; }

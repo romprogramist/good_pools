@@ -23,6 +23,10 @@
     dlg.addEventListener('close', () => {
       state = { name: '', phone: '', submitted: false };
     });
+    dlg.addEventListener('cancel', (e) => {
+      e.preventDefault();
+      closeConsult();
+    });
 
     return dlg;
   }
@@ -82,8 +86,13 @@
       dlg.innerHTML = renderForm();
       attachConsent(dlg);
     }
-    if (typeof dlg.showModal === 'function') dlg.showModal();
-    else dlg.setAttribute('open', '');
+    if (typeof dlg.showModal === 'function') {
+      dlg.showModal();
+      requestAnimationFrame(() => dlg.classList.add('is-open'));
+    } else {
+      dlg.setAttribute('open', '');
+      dlg.classList.add('is-open');
+    }
     if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'consult_opened');
     const nameInput = dlg.querySelector('[data-consult-name]');
     if (nameInput) setTimeout(() => nameInput.focus(), 50);
@@ -91,7 +100,10 @@
 
   function closeConsult() {
     const dlg = document.getElementById(DIALOG_ID);
-    if (dlg && dlg.open) dlg.close();
+    if (!dlg || !dlg.open) return;
+    if (!dlg.classList.contains('is-open')) { dlg.close(); return; }
+    dlg.classList.remove('is-open');
+    setTimeout(() => { if (dlg.open) dlg.close(); }, 280);
   }
 
   function onInput(e) {
