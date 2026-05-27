@@ -41,7 +41,7 @@ jobs:
           [ -f package-lock.json ] && EXTRA="package-lock.json"
           rsync -az --delete-after -e "ssh $SSH_OPTS" \
             package.json $EXTRA server.js create-admin.js \
-            routes middleware views db lib \
+            routes middleware views db lib scripts \
             "$SSH_USER@$SSH_HOST:/var/www/good-pools/"
 
       - name: Deploy frontend to /var/www/good-pools/public/
@@ -60,5 +60,6 @@ jobs:
             cd /var/www/good-pools
             npm install --omit=dev
             node db/migrate.js
+            node scripts/generate-webp.js || echo "webp generation reported errors (continuing)"
             pm2 restart good-pools
           EOF

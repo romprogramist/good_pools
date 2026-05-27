@@ -35,8 +35,11 @@ app.use(function (req, res, next) {
   next();
 });
 
-// Static: uploaded files
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Static: uploaded files (webp first if browser accepts it)
+const webpMiddleware = require('./middleware/webp');
+const uploadsDir = path.join(__dirname, 'uploads');
+app.use('/uploads', webpMiddleware(uploadsDir));
+app.use('/uploads', express.static(uploadsDir, { maxAge: '1y' }));
 
 // Routes
 const apiRoutes = require('./routes/api');
@@ -51,7 +54,9 @@ app.get('/privacy.html', function (_req, res) {
 });
 
 // Static: frontend site (must be AFTER /api and /admin)
-app.use(express.static(path.join(__dirname, 'public')));
+const publicDir = path.join(__dirname, 'public');
+app.use(webpMiddleware(publicDir));
+app.use(express.static(publicDir, { maxAge: '1y' }));
 
 app.listen(PORT, '0.0.0.0', function () {
   console.log('good-pools running on http://0.0.0.0:' + PORT);
