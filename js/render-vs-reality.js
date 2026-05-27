@@ -130,7 +130,11 @@
       index = (i + total) % total;
       track.style.transform = 'translateX(-' + (index * 100) + '%)';
       slides.forEach(function (s, k) { s.classList.toggle('is-active', k === index); });
-      dotsHost.querySelectorAll('.rr-dot').forEach(function (d, k) { d.classList.toggle('is-active', k === index); });
+      dotsHost.querySelectorAll('.rr-dot').forEach(function (d, k) {
+        var active = k === index;
+        d.classList.toggle('is-active', active);
+        d.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
       if (prev) prev.disabled = false;
       if (next) next.disabled = false;
     }
@@ -148,6 +152,8 @@
         var dot = document.createElement('button');
         dot.type = 'button';
         dot.className = 'rr-dot' + (idx === 0 ? ' is-active' : '');
+        dot.setAttribute('role', 'tab');
+        dot.setAttribute('aria-selected', idx === 0 ? 'true' : 'false');
         dot.setAttribute('aria-label', 'Проект ' + (idx + 1));
         dot.addEventListener('click', function () { goTo(idx); });
         dotsHost.appendChild(dot);

@@ -40,7 +40,7 @@
 .cookie-banner__text a { color: #7dd3fc; text-decoration: underline; }
 .cookie-banner__btn {
   flex-shrink: 0;
-  background: #0ea5e9;
+  background: #0369a1;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -51,7 +51,7 @@
   transition: background var(--motion-fast) var(--ease-out);
 }
 @media (hover: hover) {
-  .cookie-banner__btn:hover { background: #0284c7; }
+  .cookie-banner__btn:hover { background: #075985; }
 }
 
 @media (max-width: 480px) {
