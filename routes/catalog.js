@@ -130,4 +130,32 @@ router.get('/feed.xml', async function (req, res) {
   }
 });
 
+// GET /sitemap.xml — статические страницы + все карточки
+router.get('/sitemap.xml', async function (req, res) {
+  try {
+    const rows = await getAllModelsForFeed();
+    const staticPages = ['/', '/models.html', '/portfolio.html', '/catalog.html'];
+    const urls = staticPages.map(function (p) { return absUrl(p); })
+      .concat(rows.map(function (m) { return absUrl('/pool/' + m.slug); }));
+    const body = urls.map(function (u) {
+      return '  <url><loc>' + xmlEscape(u) + '</loc></url>';
+    }).join('\n');
+    const xml =
+      '<?xml version="1.0" encoding="UTF-8"?>\n' +
+      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+      body + '\n' +
+      '</urlset>\n';
+    res.set('Content-Type', 'application/xml; charset=utf-8').send(xml);
+  } catch (err) {
+    console.error('[catalog] /sitemap.xml error', err);
+    res.status(500).send('Server error');
+  }
+});
+
+// GET /robots.txt — отдаём маршрутом (отдельный файл не задеплоился бы через rsync)
+router.get('/robots.txt', function (req, res) {
+  const txt = 'User-agent: *\nAllow: /\nSitemap: ' + BASE_URL + '/sitemap.xml\n';
+  res.set('Content-Type', 'text/plain; charset=utf-8').send(txt);
+});
+
 module.exports = router;
