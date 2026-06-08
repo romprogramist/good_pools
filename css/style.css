@@ -4110,3 +4110,7 @@ html { scroll-behavior: smooth; }
   html { scroll-behavior: auto; }
 }
 /* ===== /MOTION FOUNDATION ===== */
+
+/* Ссылка "Подробнее" на карточках каталога → страница-карточка /pool/:slug */
+.mcard-more { display: inline-block; margin-top: 10px; color: #2e7dd1; text-decoration: none; font-size: 14px; }
+.mcard-more:hover { text-decoration: underline; }

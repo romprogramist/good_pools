@@ -29,6 +29,7 @@
             '<div class="mcard-series">' + m.series + '</div>' +
             '<div class="mcard-desc">' + m.desc + '</div>' +
             '<div class="mcard-price">' + m.price + '</div>' +
+            '<a class="mcard-more" href="/pool/' + m.id + '">Подробнее →</a>' +
           '</div>' +
         '</article>'
       );
@@ -58,6 +59,7 @@
     };
 
     gridEl.addEventListener('click', function (e) {
+      if (e.target.closest('.mcard-more')) return; // клик по ссылке "Подробнее" — это переход, не галерея
       const card = e.target.closest('.mcard');
       if (card) tryOpen(card);
     });
