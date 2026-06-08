@@ -74,4 +74,60 @@ router.get('/pool/:slug', async function (req, res) {
   }
 });
 
+// Все бассейны + обложка для фида/sitemap.
+async function getAllModelsForFeed() {
+  const res = await pool.query(`
+    SELECT m.slug, m.name, m.series, m.description, m.price,
+           c.label AS category_label,
+           (SELECT image_path FROM model_images mi
+            WHERE mi.model_id = m.id ORDER BY is_cover DESC, sort_order, id LIMIT 1) AS cover
+    FROM models m JOIN categories c ON c.id = m.category_id
+    ORDER BY m.sort_order, m.id
+  `);
+  return res.rows;
+}
+
+// GET /feed.xml — товарный фид (Google Shopping XML) для Яндекс.Директа
+router.get('/feed.xml', async function (req, res) {
+  try {
+    const rows = await getAllModelsForFeed();
+    const items = rows.map(function (m) {
+      const price = parsePrice(m.price);
+      if (price == null) return ''; // без цены товар в фид не идёт
+      const title = m.series ? (m.name + ' ' + m.series) : m.name;
+      const link = absUrl('/pool/' + m.slug);
+      const image = m.cover ? absUrl('/' + m.cover) : '';
+      return [
+        '    <item>',
+        '      <g:id>' + xmlEscape(m.slug) + '</g:id>',
+        '      <g:title>' + xmlEscape(title) + '</g:title>',
+        '      <g:link>' + xmlEscape(link) + '</g:link>',
+        image ? '      <g:image_link>' + xmlEscape(image) + '</g:image_link>' : '',
+        '      <g:description>' + xmlEscape(m.description || title) + '</g:description>',
+        '      <g:price>' + price + ' RUB</g:price>',
+        '      <g:availability>in stock</g:availability>',
+        '      <g:brand>Хорошие Бассейны</g:brand>',
+        '      <g:product_type>' + xmlEscape(m.category_label) + '</g:product_type>',
+        '    </item>'
+      ].filter(Boolean).join('\n');
+    }).filter(Boolean).join('\n');
+
+    const xml =
+      '<?xml version="1.0" encoding="UTF-8"?>\n' +
+      '<rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">\n' +
+      '  <channel>\n' +
+      '    <title>Хорошие Бассейны</title>\n' +
+      '    <link>' + xmlEscape(BASE_URL) + '</link>\n' +
+      '    <description>Каталог бассейнов</description>\n' +
+      items + '\n' +
+      '  </channel>\n' +
+      '</rss>\n';
+
+    res.set('Content-Type', 'application/xml; charset=utf-8').send(xml);
+  } catch (err) {
+    console.error('[catalog] /feed.xml error', err);
+    res.status(500).send('Server error');
+  }
+});
+
 module.exports = router;
