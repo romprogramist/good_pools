@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <% if (notFound) { %>
+    <title>Бассейн не найден — Хорошие Бассейны</title>
+    <meta name="robots" content="noindex">
+  <% } else { %>
+    <title><%= model.name %> — Хорошие Бассейны</title>
+    <meta name="description" content="<%= (model.description || model.name).slice(0, 160) %>">
+    <link rel="canonical" href="<%= baseUrl %>/pool/<%= model.slug %>">
+  <% } %>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/consult.css">
+  <link rel="stylesheet" href="/css/pool.css">
+  <% if (!notFound && jsonLd) { %>
+    <script type="application/ld+json"><%- jsonLd %></script>
+  <% } %>
+</head>
+<body class="models-dark">
+  <header class="header">
+    <div class="header-left">
+      <a class="site-logo" href="/index.html" aria-label="На главную">
+        <span class="bold">ХОРОШИЕ</span><span class="thin">БАССЕЙНЫ</span>
+      </a>
+    </div>
+    <div class="header-right">
+      <a class="header-icon is-phone" href="tel:+79613201050" aria-label="Позвонить">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <main class="pool-page">
+  <% if (notFound) { %>
+    <section class="pool-notfound">
+      <h1>Бассейн не найден</h1>
+      <p><a href="/models.html">← Ко всем моделям</a></p>
+    </section>
+  <% } else { %>
+    <nav class="pool-breadcrumbs" aria-label="Хлебные крошки">
+      <a href="/index.html">Главная</a> →
+      <a href="/models.html">Каталог</a> →
+      <a href="/models.html?category=<%= model.category %>"><%= model.category_label %></a> →
+      <span><%= model.name %></span>
+    </nav>
+
+    <section class="pool-hero">
+      <div class="pool-gallery">
+        <% if (cover) { %>
+          <img class="pool-cover" src="<%= cover %>" alt="<%= model.name %>">
+          <% if (model.gallery.length > 1) { %>
+            <div class="pool-thumbs">
+              <% model.gallery.forEach(function (g) { %>
+                <img src="<%= g %>" alt="<%= model.name %>" loading="lazy">
+              <% }) %>
+            </div>
+          <% } %>
+        <% } %>
+      </div>
+
+      <div class="pool-info">
+        <% if (model.badge) { %><div class="pool-badge"><%= model.badge %></div><% } %>
+        <h1 class="pool-name"><%= model.name %></h1>
+        <% if (model.series) { %><div class="pool-series"><%= model.series %></div><% } %>
+
+        <table class="pool-specs">
+          <% if (model.length_m) { %><tr><td>Длина</td><td><%= model.length_m %> м</td></tr><% } %>
+          <% if (model.width_m) { %><tr><td>Ширина</td><td><%= model.width_m %> м</td></tr><% } %>
+          <% if (model.depth_m) { %><tr><td>Глубина</td><td><%= model.depth_m %></td></tr><% } %>
+          <% if (!model.length_m && model.specs_label) { %><tr><td>Размер</td><td><%= model.specs_label %></td></tr><% } %>
+        </table>
+
+        <% if (model.price) { %><div class="pool-price"><%= model.price %></div><% } %>
+        <button type="button" class="consult-trigger pool-cta" data-consult-open>Оставить заявку</button>
+      </div>
+    </section>
+
+    <% if (model.description) { %>
+      <section class="pool-description">
+        <h2>Описание</h2>
+        <p><%= model.description %></p>
+      </section>
+    <% } %>
+  <% } %>
+  </main>
+
+  <script src="/js/main.js" defer></script>
+  <script src="/js/consult.js" defer></script>
+</body>
+</html>

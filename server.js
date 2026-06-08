@@ -44,8 +44,10 @@ app.use('/uploads', express.static(uploadsDir, { maxAge: '1y' }));
 // Routes
 const apiRoutes = require('./routes/api');
 const adminRoutes = require('./routes/admin');
+const catalogRoutes = require('./routes/catalog');
 app.use('/api', apiRoutes);
 app.use('/admin', adminRoutes);
+app.use('/', catalogRoutes);
 
 // Privacy policy lives in data/ so that the existing rsync ('css js images data')
 // already deploys it. Surfaced at /privacy.html via this route.
