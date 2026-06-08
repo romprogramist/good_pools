@@ -26,9 +26,9 @@
       '<button class="pgal-btn pgal-close" aria-label="Закрыть">×</button>' +
       '<div class="pgal-stage">' +
         '<div class="pgal-image-wrap">' +
-          '<button class="pgal-btn pgal-nav pgal-nav--prev" aria-label="Предыдущее фото">‹</button>' +
+          '<button class="pgal-btn pgal-nav pgal-nav--prev" aria-label="Предыдущее фото"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>' +
           '<img class="pgal-image" alt="" />' +
-          '<button class="pgal-btn pgal-nav pgal-nav--next" aria-label="Следующее фото">›</button>' +
+          '<button class="pgal-btn pgal-nav pgal-nav--next" aria-label="Следующее фото"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>' +
         '</div>' +
         '<div class="pgal-info">' +
           '<h2 class="pgal-title" id="pgal-title"></h2>' +

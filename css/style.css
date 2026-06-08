@@ -3541,6 +3541,7 @@ body.models-dark .work-meta { color: #22d3ee; }
 }
 .pgal-nav--prev { left: 16px; }
 .pgal-nav--next { right: 16px; }
+.pgal-nav svg { width: 24px; height: 24px; display: block; }
 
 @media (max-width: 720px) {
   .pgal-nav { display: none; }
