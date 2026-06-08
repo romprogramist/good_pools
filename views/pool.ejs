@@ -49,11 +49,11 @@
     <section class="pool-hero">
       <div class="pool-gallery">
         <% if (cover) { %>
-          <img class="pool-cover" src="<%= cover %>" alt="<%= model.name %>">
+          <img class="pool-cover" src="<%= cover %>" alt="<%= model.name %>" data-gallery-index="0">
           <% if (model.gallery.length > 1) { %>
             <div class="pool-thumbs">
-              <% model.gallery.forEach(function (g) { %>
-                <img src="<%= g %>" alt="<%= model.name %>" loading="lazy">
+              <% model.gallery.forEach(function (g, i) { %>
+                <img src="<%= g %>" alt="<%= model.name %>" loading="lazy" data-gallery-index="<%= i %>">
               <% }) %>
             </div>
           <% } %>
@@ -88,5 +88,27 @@
 
   <script src="/js/main.js" defer></script>
   <script src="/js/consult.js" defer></script>
+  <script src="/js/gallery-modal.js" defer></script>
+  <% if (!notFound) { %>
+  <script>
+    (function () {
+      var gallery = <%- JSON.stringify(model.gallery || []) %>;
+      var title = <%- JSON.stringify(model.name || '') %>;
+      if (!gallery.length) return;
+      document.querySelectorAll('.pool-gallery [data-gallery-index]').forEach(function (el) {
+        el.style.cursor = 'zoom-in';
+        el.addEventListener('click', function () {
+          if (!window.GalleryModal) return;
+          window.GalleryModal.open({
+            title: title,
+            gallery: gallery,
+            startIndex: parseInt(el.dataset.galleryIndex, 10) || 0,
+            triggerEl: el
+          });
+        });
+      });
+    })();
+  </script>
+  <% } %>
 </body>
 </html>

@@ -146,7 +146,7 @@
   function open(item) {
     ensureMounted();
     currentItem = item;
-    currentIndex = 0;
+    currentIndex = item.startIndex || 0;
     triggerEl = item.triggerEl || null;
     prevBodyOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
