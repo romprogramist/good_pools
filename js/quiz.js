@@ -2,38 +2,40 @@
   'use strict';
 
   const STEPS = [
-    { id: 'size', title: 'Размер бассейна', type: 'single', options: [
-      { value: '3x5',    label: '3 × 5 м' },
-      { value: '3x6',    label: '3 × 6 м' },
-      { value: '3x7',    label: '3 × 7 м' },
-      { value: '4x8',    label: '4 × 8 м' },
-      { value: '5x10',   label: '5 × 10 м' },
-      { value: 'custom', label: 'Мне нужен индивидуальный размер' }
-    ]},
-    { id: 'finish', title: 'Тип отделки', type: 'single', options: [
-      { value: 'composite', label: 'Композитный' },
-      { value: 'concrete',  label: 'Бетонный' },
-      { value: 'consult',   label: 'Не знаю, нужна консультация' }
-    ]},
-    { id: 'options', title: 'Дополнительные опции', type: 'multi', options: [
-      { value: 'heating',      label: 'Подогрев воды' },
-      { value: 'lighting',     label: 'Подсветка' },
-      { value: 'autodose',     label: 'Автодозирование химии' },
-      { value: 'uv',           label: 'УФ лампа' },
-      { value: 'chlorinefree', label: 'Безхлорная система' },
-      { value: 'hydromassage', label: 'Гидромассаж / Аэромассаж' },
-      { value: 'waterfall',    label: 'Водопад' }
-    ]},
-    { id: 'budget', title: 'Бюджет', type: 'single', options: [
-      { value: '1-2', label: '1–2 млн руб' },
-      { value: '2-3', label: '2–3 млн руб' },
-      { value: '3-4', label: '3–4 млн руб' }
-    ]},
-    { id: 'timing', title: 'Сроки', type: 'single', options: [
-      { value: 'soon',     label: 'В ближайшее время' },
-      { value: 'season',   label: 'В тёплый сезон' },
-      { value: 'browsing', label: 'Пока просто прицениваюсь' }
-    ]},
+    // QUIZ-DISABLED 2026-06-12: шаги-вопросы отключены — при клике сразу показываем
+    // итоговую форму заявки (шаг contacts). Чтобы вернуть квиз — раскомментировать блок.
+    // { id: 'size', title: 'Размер бассейна', type: 'single', options: [
+    //   { value: '3x5',    label: '3 × 5 м' },
+    //   { value: '3x6',    label: '3 × 6 м' },
+    //   { value: '3x7',    label: '3 × 7 м' },
+    //   { value: '4x8',    label: '4 × 8 м' },
+    //   { value: '5x10',   label: '5 × 10 м' },
+    //   { value: 'custom', label: 'Мне нужен индивидуальный размер' }
+    // ]},
+    // { id: 'finish', title: 'Тип отделки', type: 'single', options: [
+    //   { value: 'composite', label: 'Композитный' },
+    //   { value: 'concrete',  label: 'Бетонный' },
+    //   { value: 'consult',   label: 'Не знаю, нужна консультация' }
+    // ]},
+    // { id: 'options', title: 'Дополнительные опции', type: 'multi', options: [
+    //   { value: 'heating',      label: 'Подогрев воды' },
+    //   { value: 'lighting',     label: 'Подсветка' },
+    //   { value: 'autodose',     label: 'Автодозирование химии' },
+    //   { value: 'uv',           label: 'УФ лампа' },
+    //   { value: 'chlorinefree', label: 'Безхлорная система' },
+    //   { value: 'hydromassage', label: 'Гидромассаж / Аэромассаж' },
+    //   { value: 'waterfall',    label: 'Водопад' }
+    // ]},
+    // { id: 'budget', title: 'Бюджет', type: 'single', options: [
+    //   { value: '1-2', label: '1–2 млн руб' },
+    //   { value: '2-3', label: '2–3 млн руб' },
+    //   { value: '3-4', label: '3–4 млн руб' }
+    // ]},
+    // { id: 'timing', title: 'Сроки', type: 'single', options: [
+    //   { value: 'soon',     label: 'В ближайшее время' },
+    //   { value: 'season',   label: 'В тёплый сезон' },
+    //   { value: 'browsing', label: 'Пока просто прицениваюсь' }
+    // ]},
     { id: 'contacts', title: 'Контакты', type: 'contacts' }
   ];
 
@@ -43,11 +45,12 @@
     return {
       step: 1,
       answers: {
-        size: null,
-        finish: null,
-        options: [],
-        budget: null,
-        timing: null,
+        // QUIZ-DISABLED 2026-06-12: ответы на вопросы квиза больше не собираются
+        // size: null,
+        // finish: null,
+        // options: [],
+        // budget: null,
+        // timing: null,
         name: '',
         phone: ''
       }
@@ -228,11 +231,12 @@
         name: String(state.answers.name || '').trim(),
         phone: state.answers.phone || '',
         payload: {
-          size: state.answers.size,
-          finish: state.answers.finish,
-          options: state.answers.options,
-          budget: state.answers.budget,
-          timing: state.answers.timing
+          // QUIZ-DISABLED 2026-06-12: поля квиза больше не собираются — payload пустой
+          // size: state.answers.size,
+          // finish: state.answers.finish,
+          // options: state.answers.options,
+          // budget: state.answers.budget,
+          // timing: state.answers.timing
         },
         consent: true,
         marketing: consentState.marketing
@@ -410,21 +414,22 @@
 
   function validateStep(step, answers) {
     switch (step) {
-      case 1:
-        if (!answers.size) return { ok: false, message: 'Выберите размер' };
-        return { ok: true };
-      case 2:
-        if (!answers.finish) return { ok: false, message: 'Выберите тип отделки' };
-        return { ok: true };
-      case 3:
-        return { ok: true };
-      case 4:
-        if (!answers.budget) return { ok: false, message: 'Выберите диапазон' };
-        return { ok: true };
-      case 5:
-        if (!answers.timing) return { ok: false, message: 'Выберите срок' };
-        return { ok: true };
-      case 6: {
+      // QUIZ-DISABLED 2026-06-12: проверки шагов-вопросов отключены вместе с самими шагами.
+      // case 1:
+      //   if (!answers.size) return { ok: false, message: 'Выберите размер' };
+      //   return { ok: true };
+      // case 2:
+      //   if (!answers.finish) return { ok: false, message: 'Выберите тип отделки' };
+      //   return { ok: true };
+      // case 3:
+      //   return { ok: true };
+      // case 4:
+      //   if (!answers.budget) return { ok: false, message: 'Выберите диапазон' };
+      //   return { ok: true };
+      // case 5:
+      //   if (!answers.timing) return { ok: false, message: 'Выберите срок' };
+      //   return { ok: true };
+      case 1: { // contacts — теперь единственный (и последний) шаг
         const name = String(answers.name || '').trim();
         if (name.length < 2) return { ok: false, message: 'Введите имя' };
         const digits = normalizePhone(answers.phone);
