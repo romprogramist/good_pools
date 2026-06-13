@@ -1,0 +1,298 @@
+/* =========================================================================
+   ТЕМА «БАССЕЙН» — светлая «чистая вода» (включается по кнопке в подвале).
+   Полная альтернативная тема всего сайта: светлый фон (как прозрачная вода и
+   небо), тёмный текст, водяные сине-бирюзовые акценты и единый ЯНТАРНЫЙ цвет
+   действия на кнопках конверсии (вода + солнце = бассейн летом).
+
+   ПО УМОЛЧАНИЮ сайт — тёмная классическая тема (нетронутый style.css): когда
+   атрибут data-theme отсутствует, правила ниже НЕ применяются. Светлая тема
+   включается атрибутом html[data-theme="pool"] (через переключатель/localStorage).
+   Лайтбокс галереи (.pgal-*) намеренно остаётся тёмным в обеих темах.
+   ========================================================================= */
+
+:root {
+  /* действие (солнце) */
+  --gp-cta:        #f59e0b;
+  --gp-cta-strong: #d97706;
+  --gp-cta-grad:   linear-gradient(135deg, #fbbf24, #f59e0b);
+  --gp-cta-ink:    #0b1a24;
+  --gp-cta-shadow:        rgba(245, 158, 11, 0.30);
+  --gp-cta-shadow-strong: rgba(245, 158, 11, 0.45);
+
+  /* светлая палитра (вода) */
+  --l-bg:        linear-gradient(180deg, #eef7ff 0%, #ffffff 55%, #e3f3fc 100%);
+  --l-surface:   #ffffff;
+  --l-surface-2: #f1f5f9;
+  --l-ink:       #0b2030;   /* основной текст / заголовки */
+  --l-soft:      #475569;   /* вторичный текст */
+  --l-blue:      #0369a1;   /* подписи/лейблы (замена невидимых светло-голубых) */
+  --l-accent:    #0284c7;   /* акцент на белом */
+  --l-border:    rgba(2, 32, 71, 0.12);
+  --l-shadow:    0 10px 30px rgba(2, 32, 71, 0.08);
+}
+
+/* короткий алиас области новой темы */
+:where(html[data-theme="pool"]) {}
+
+/* ===================== ФОН СТРАНИЦЫ ===================== */
+html[data-theme="pool"] body { background: var(--l-bg) fixed; }
+
+/* ===================== ШАПКА ===================== */
+html[data-theme="pool"] .header {
+  background: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid var(--l-border);
+}
+html[data-theme="pool"] .hamburger span { background: var(--l-ink); }
+html[data-theme="pool"] .site-logo { color: var(--l-ink); }
+html[data-theme="pool"] .header-icon {
+  background: rgba(2, 32, 71, 0.05);
+  border-color: var(--l-border);
+}
+html[data-theme="pool"] .header-icon:hover { background: rgba(2, 32, 71, 0.09); }
+html[data-theme="pool"] .header-icon svg { stroke: var(--l-ink); }
+html[data-theme="pool"] .header-icon.max-icon,
+html[data-theme="pool"] .header-icon svg.max-icon { fill: var(--l-ink); }
+/* белые «мессенджер»-кружки на светлом фоне — добавляем видимую обводку */
+html[data-theme="pool"] .header-icon.is-messenger { border-color: var(--l-border); }
+/* синяя «поиск» и зелёная «телефон» кнопки контрастны на светлом — оставляем */
+
+/* ===================== МЕНЮ (оверлей) ===================== */
+html[data-theme="pool"] .menu-bg { background: #eef7ff; }
+html[data-theme="pool"] .menu-text { color: var(--l-ink); }
+html[data-theme="pool"] .menu-contact a,
+html[data-theme="pool"] .menu-contact span { color: var(--l-soft); }
+html[data-theme="pool"] .menu-socials a { color: #64748b; }
+html[data-theme="pool"] body.menu-open .header { background: transparent; }
+
+/* ===================== HERO ===================== */
+html[data-theme="pool"] .hero-title { color: var(--l-ink); }
+html[data-theme="pool"] .hero-tags { color: rgba(11, 32, 48, 0.55); }
+html[data-theme="pool"] .hero-cta-text { color: rgba(11, 32, 48, 0.65); }
+html[data-theme="pool"] .hero-cta-text strong { color: rgba(11, 32, 48, 0.9); }
+
+/* ===================== КАРУСЕЛЬ / КАТЕГОРИИ ===================== */
+html[data-theme="pool"] .card-title-bold,
+html[data-theme="pool"] .card-title-thin { color: var(--l-ink); }
+html[data-theme="pool"] .card-dot { background: #cbd5e1; }
+html[data-theme="pool"] .category-card:hover .card-dot { background: var(--l-accent); }
+html[data-theme="pool"] .carousel-arrow svg { stroke: var(--l-ink); }
+html[data-theme="pool"] .carousel-dots .dot { background: rgba(2, 32, 71, 0.2); }
+html[data-theme="pool"] .carousel-dots .dot.active { background: var(--l-accent); }
+
+/* ===================== КАТАЛОГ (pcards) ===================== */
+html[data-theme="pool"] .catalog { color: var(--l-ink); }
+html[data-theme="pool"] .cat-header-left h2 .bold { color: var(--l-ink); }
+html[data-theme="pool"] .cat-header-right p { color: var(--l-soft); }
+html[data-theme="pool"] .btn-all-top { color: #334155; }
+html[data-theme="pool"] .pcard {
+  background: var(--l-surface);
+  border: 1px solid var(--l-border);
+  box-shadow: var(--l-shadow);
+}
+html[data-theme="pool"] .pcard-name,
+html[data-theme="pool"] .pspec-val,
+html[data-theme="pool"] .pcard-price strong { color: var(--l-ink); }
+html[data-theme="pool"] .pcard-desc { color: var(--l-soft); }
+html[data-theme="pool"] .pspec { background: var(--l-surface-2); }
+html[data-theme="pool"] .pcard-bottom { border-top-color: var(--l-border); }
+html[data-theme="pool"] .pcard-size { color: var(--l-ink); background: rgba(2, 32, 71, 0.08); }
+html[data-theme="pool"] .cat-bottom p { color: var(--l-ink); }
+
+/* ===================== КОНТАКТЫ ===================== */
+html[data-theme="pool"] .contacts { color: var(--l-ink); }
+html[data-theme="pool"] .contacts-info h2 .bold { color: var(--l-ink); }
+html[data-theme="pool"] .contact-value,
+html[data-theme="pool"] .contact-link { color: #334155; }
+html[data-theme="pool"] .messenger-link { background: var(--l-surface-2); }
+html[data-theme="pool"] .messenger-link:hover { background: var(--l-accent); color: #fff; }
+
+/* ===================== ФУТЕР ===================== */
+html[data-theme="pool"] .footer { color: var(--l-soft); }
+html[data-theme="pool"] .footer-inner { border-bottom-color: var(--l-border); }
+html[data-theme="pool"] .footer-logo,
+html[data-theme="pool"] .footer-col-title { color: var(--l-ink); }
+html[data-theme="pool"] .footer-socials a { background: var(--l-surface-2); color: var(--l-soft); }
+html[data-theme="pool"] .footer-socials a:hover { background: var(--l-accent); color: #fff; }
+html[data-theme="pool"] .footer-col ul li a { color: var(--l-soft); }
+html[data-theme="pool"] .footer-policy-link { color: rgba(11, 32, 48, 0.7); }
+html[data-theme="pool"] .footer-policy-link:hover { color: var(--l-ink); }
+
+/* ===================== «ПОЧЕМУ МЫ» ===================== */
+html[data-theme="pool"] .why-label { color: var(--l-blue); }
+html[data-theme="pool"] .why-left h2 .bold { color: var(--l-ink); }
+html[data-theme="pool"] .why-left h2 .thin { color: var(--l-accent); }
+html[data-theme="pool"] .why-desc,
+html[data-theme="pool"] .why-card-text { color: var(--l-soft); }
+html[data-theme="pool"] .why-stat-val { color: var(--l-ink); }
+html[data-theme="pool"] .why-stat-label { color: var(--l-blue); }
+html[data-theme="pool"] .why-card {
+  background: var(--l-surface);
+  border: 1px solid var(--l-border);
+  box-shadow: var(--l-shadow);
+}
+html[data-theme="pool"] .why-card:hover { background: #f8fcff; }
+html[data-theme="pool"] .why-card-icon svg { color: var(--l-blue); }
+html[data-theme="pool"] .why-card-title { color: var(--l-ink); }
+
+/* ===================== ПЛОЩАДКА (showroom) ===================== */
+html[data-theme="pool"] .showroom-head-left h2 .bold { color: var(--l-ink); }
+html[data-theme="pool"] .showroom-head-left h2 .thin { color: var(--l-accent); }
+html[data-theme="pool"] .showroom-address { color: #334155; }
+
+/* ===================== УСЛУГИ / ФОРМА ЗАЯВКИ ===================== */
+html[data-theme="pool"] .service { color: var(--l-ink); }
+html[data-theme="pool"] .service-left h2 .bold { color: var(--l-ink); }
+html[data-theme="pool"] .service-left h2 .thin { color: var(--l-accent); }
+html[data-theme="pool"] .service-desc { color: var(--l-soft); }
+html[data-theme="pool"] .service-stat-val { color: var(--l-ink); }
+html[data-theme="pool"] .service-stat-label { color: var(--l-blue); }
+html[data-theme="pool"] .service-form {
+  background: var(--l-surface);
+  border: 1px solid var(--l-border);
+  box-shadow: var(--l-shadow);
+}
+html[data-theme="pool"] .service-form-title { color: var(--l-ink); }
+html[data-theme="pool"] .service-field > legend { color: var(--l-blue); }
+html[data-theme="pool"] .service-field input[type="text"],
+html[data-theme="pool"] .service-field input[type="tel"],
+html[data-theme="pool"] .service-field input[type="number"],
+html[data-theme="pool"] .service-field textarea {
+  background: #fff; border-color: var(--l-border); color: var(--l-ink);
+}
+html[data-theme="pool"] .service-radio span {
+  background: var(--l-surface-2); border-color: var(--l-border); color: var(--l-soft);
+}
+html[data-theme="pool"] .service-radio input:checked + span { color: var(--l-ink); }
+html[data-theme="pool"] .service-toast { color: var(--l-accent); }
+
+/* ===================== МОДЕЛИ (models.html, body.models-dark) ===================== */
+html[data-theme="pool"] body.models-dark { color: var(--l-ink); }
+html[data-theme="pool"] body.models-dark .menu-overlay .menu-bg { background: #eef7ff; }
+html[data-theme="pool"] body.models-dark .menu-overlay .menu-link { color: var(--l-ink); }
+html[data-theme="pool"] .mchip { color: var(--l-soft); }
+html[data-theme="pool"] .mchip:hover { color: var(--l-ink); }
+html[data-theme="pool"] .mcard {
+  background: var(--l-surface);
+  border: 1px solid var(--l-border);
+  box-shadow: var(--l-shadow);
+}
+html[data-theme="pool"] .mcard-size { color: var(--l-ink); background: rgba(2, 32, 71, 0.08); }
+html[data-theme="pool"] .mcard-name,
+html[data-theme="pool"] .mcard-price { color: var(--l-ink); }
+html[data-theme="pool"] .mcard-series { color: var(--l-accent); }
+html[data-theme="pool"] .mcard-desc { color: var(--l-soft); }
+html[data-theme="pool"] .models-title .bold { color: var(--l-ink); }
+html[data-theme="pool"] .models-title .thin { color: var(--l-accent); }
+html[data-theme="pool"] .models-cta-title { color: var(--l-ink); }
+html[data-theme="pool"] .models-cta-sub { color: var(--l-soft); }
+
+/* ===================== ПОРТФОЛИО ===================== */
+html[data-theme="pool"] .port-header-left h2 .bold { color: var(--l-ink); }
+html[data-theme="pool"] .port-header-left h2 .thin { color: var(--l-accent); }
+html[data-theme="pool"] .work-card-img { background: #e0f2fe; }
+html[data-theme="pool"] body.models-dark .work-card {
+  background: var(--l-surface); border: 1px solid var(--l-border); box-shadow: var(--l-shadow);
+}
+html[data-theme="pool"] body.models-dark .work-title { color: #0c4a6e; }
+html[data-theme="pool"] body.models-dark .work-location { color: var(--l-soft); }
+
+/* ===================== РЕНДЕР ↔ РЕАЛЬНОСТЬ ===================== */
+html[data-theme="pool"] .rr-title { color: var(--l-ink); }
+html[data-theme="pool"] .rr-sub { color: rgba(11, 32, 48, 0.6); }
+html[data-theme="pool"] .rr-toggle { background: rgba(2, 32, 71, 0.05); }
+html[data-theme="pool"] .rr-tab { color: rgba(11, 32, 48, 0.55); }
+html[data-theme="pool"] .rr-tab:hover:not(.is-active) { color: var(--l-ink); }
+html[data-theme="pool"] .rr-arrow { background: rgba(2, 32, 71, 0.06); color: var(--l-ink); }
+html[data-theme="pool"] .rr-arrow:hover { background: rgba(2, 132, 199, 0.18); }
+html[data-theme="pool"] .rr-frame { background: #dbeafe; }
+html[data-theme="pool"] .rr-caption { background: rgba(2, 32, 71, 0.04); }
+html[data-theme="pool"] .rr-caption-title { color: var(--l-ink); }
+html[data-theme="pool"] .rr-caption-meta { color: rgba(11, 32, 48, 0.55); }
+html[data-theme="pool"] .rr-dot { background: rgba(2, 32, 71, 0.2); }
+
+/* ===================== ASK ===================== */
+html[data-theme="pool"] .ask { color: var(--l-ink); }
+html[data-theme="pool"] .ask-title { color: var(--l-ink); }
+html[data-theme="pool"] .ask-lead { color: rgba(11, 32, 48, 0.6); }
+html[data-theme="pool"] .ask-input {
+  color: var(--l-ink); background: #fff; border-color: var(--l-border);
+}
+html[data-theme="pool"] .ask-input::placeholder { color: rgba(11, 32, 48, 0.45); }
+
+/* =========================================================================
+   ЕДИНЫЙ ЯНТАРНЫЙ ЦВЕТ ДЕЙСТВИЯ (кнопки конверсии) — в обеих темах новой темы
+   ========================================================================= */
+html[data-theme="pool"] .hero-cta-btn {
+  background: var(--gp-cta-grad);
+  color: var(--gp-cta-ink);
+  box-shadow: 0 8px 24px -6px var(--gp-cta-shadow);
+}
+@media (hover: hover) {
+  html[data-theme="pool"] .hero-cta-btn:hover {
+    background: linear-gradient(135deg, #f59e0b, var(--gp-cta-strong));
+    box-shadow: 0 14px 28px -8px var(--gp-cta-shadow-strong);
+  }
+}
+html[data-theme="pool"] .btn-card,
+html[data-theme="pool"] .btn-consult,
+html[data-theme="pool"] .service-submit,
+html[data-theme="pool"] .quiz-btn--next,
+html[data-theme="pool"] .consult-submit,
+html[data-theme="pool"] .interest-dialog__submit,
+html[data-theme="pool"] .ask-submit,
+html[data-theme="pool"] body.models-dark .btn-consult,
+html[data-theme="pool"] .floating-cta {
+  background: var(--gp-cta-grad);
+  color: var(--gp-cta-ink);
+  box-shadow: 0 6px 20px var(--gp-cta-shadow);
+}
+html[data-theme="pool"] .floating-cta {
+  box-shadow: 0 8px 24px var(--gp-cta-shadow-strong), 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+html[data-theme="pool"] .btn-card:hover,
+html[data-theme="pool"] .btn-consult:hover,
+html[data-theme="pool"] .service-submit:hover,
+html[data-theme="pool"] .quiz-btn--next:hover,
+html[data-theme="pool"] .consult-submit:hover,
+html[data-theme="pool"] .interest-dialog__submit:hover {
+  box-shadow: 0 8px 28px var(--gp-cta-shadow-strong);
+}
+html[data-theme="pool"] .ask-submit:hover {
+  background: linear-gradient(135deg, #f59e0b, var(--gp-cta-strong));
+}
+html[data-theme="pool"] .floating-cta:hover {
+  box-shadow: 0 12px 32px var(--gp-cta-shadow-strong), 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+html[data-theme="pool"] .pool-cta { background: var(--gp-cta); color: var(--gp-cta-ink); }
+html[data-theme="pool"] .pool-cta:hover { background: var(--gp-cta-strong); }
+
+/* =========================================================================
+   Переключатель темы в подвале (работает в обеих темах)
+   ========================================================================= */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  /* по умолчанию — тёмная (классическая) тема: кнопка под тёмный подвал */
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.theme-toggle:hover { color: #e2e8f0; border-color: rgba(255, 255, 255, 0.28); }
+.theme-toggle__dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; background: #0ea5e9; }
+/* светлая тема «Бассейн»: индикатор — солнце, кнопка под светлый подвал */
+html[data-theme="pool"] .theme-toggle {
+  color: var(--l-soft);
+  background: rgba(2, 32, 71, 0.05);
+  border-color: var(--l-border);
+}
+html[data-theme="pool"] .theme-toggle:hover { color: var(--l-ink); border-color: rgba(2, 32, 71, 0.28); }
+html[data-theme="pool"] .theme-toggle__dot { background: var(--gp-cta); }
