@@ -176,6 +176,12 @@ html[data-theme="pool"] .mcard {
   border: 1px solid var(--l-border);
   box-shadow: var(--l-shadow);
 }
+/* подложка фото карточки: в светлой теме — светлая «вода» вместо тёмного градиента
+   (картинки object-fit:contain, тёмный фон проступал «рамками») */
+html[data-theme="pool"] .mcard-img {
+  background: radial-gradient(ellipse at center, rgba(2, 132, 199, 0.10) 0%, rgba(255, 255, 255, 0) 65%),
+              linear-gradient(135deg, #eef7ff 0%, #e3f3fc 100%);
+}
 html[data-theme="pool"] .mcard-size { color: var(--l-ink); background: rgba(2, 32, 71, 0.08); }
 html[data-theme="pool"] .mcard-name,
 html[data-theme="pool"] .mcard-price { color: var(--l-ink); }
@@ -214,10 +220,19 @@ html[data-theme="pool"] .rr-dot { background: rgba(2, 32, 71, 0.2); }
 html[data-theme="pool"] .ask { color: var(--l-ink); }
 html[data-theme="pool"] .ask-title { color: var(--l-ink); }
 html[data-theme="pool"] .ask-lead { color: rgba(11, 32, 48, 0.6); }
-html[data-theme="pool"] .ask-input {
+html[data-theme="pool"] .ask-input,
+html[data-theme="pool"] .ask-textarea {
   color: var(--l-ink); background: #fff; border-color: var(--l-border);
 }
-html[data-theme="pool"] .ask-input::placeholder { color: rgba(11, 32, 48, 0.45); }
+html[data-theme="pool"] .ask-input::placeholder,
+html[data-theme="pool"] .ask-textarea::placeholder { color: rgba(11, 32, 48, 0.45); }
+/* текст согласий на формах ask/сервис — на светлом фоне (consent.css задаёт светлый под тёмную тему) */
+html[data-theme="pool"] .ask .consent,
+html[data-theme="pool"] .service-form .consent { color: var(--l-soft); }
+html[data-theme="pool"] .ask .consent a,
+html[data-theme="pool"] .service-form .consent a { color: var(--l-accent); }
+html[data-theme="pool"] .ask .consent a:hover,
+html[data-theme="pool"] .service-form .consent a:hover { color: var(--l-ink); }
 
 /* =========================================================================
    ЕДИНЫЙ ЯНТАРНЫЙ ЦВЕТ ДЕЙСТВИЯ (кнопки конверсии) — в обеих темах новой темы
