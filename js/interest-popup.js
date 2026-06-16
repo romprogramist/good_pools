@@ -117,7 +117,10 @@
       void dlg.offsetWidth; // force reflow so transition fires
       dlg.classList.add('is-open');
     }
-    if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'interest_opened');
+    if (typeof window.ym === 'function') {
+      window.ym(100792239, 'reachGoal', 'interest_opened');
+      window.ym(100792239, 'reachGoal', 'form_opened');
+    }
     setTimeout(function () {
       const nameInput = dlg.querySelector('[data-idlg-name]');
       if (nameInput) nameInput.focus();
@@ -238,6 +241,8 @@
         consent: true,
         marketing: consentState.marketing
       })
+    }).then(function (res) {
+      if (res.ok && typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'form_submitted_successfully');
     }).catch((err) => console.error('[interest-popup] /api/leads failed', err));
 
     state.submitted = true;
@@ -245,7 +250,6 @@
 
     const dlg = document.getElementById(DIALOG_ID);
     if (dlg) dlg.innerHTML = renderThanks();
-    if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'form_submitted_successfully');
   }
 
   function validate() {

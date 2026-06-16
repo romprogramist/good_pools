@@ -108,7 +108,10 @@
     try {
       dlg.showModal();
       requestAnimationFrame(() => dlg.classList.add('is-open'));
-      if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'quiz_started');
+      if (typeof window.ym === 'function') {
+        window.ym(100792239, 'reachGoal', 'quiz_started');
+        window.ym(100792239, 'reachGoal', 'form_opened');
+      }
     }
     catch (err) {
       console.error('[quiz] showModal failed', err);

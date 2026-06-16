@@ -44,9 +44,14 @@
           consent: true,
           marketing: consentState.marketing
         })
+      }).then((res) => {
+        if (res.ok && typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'form_submitted_successfully');
       }).catch((err) => console.error('[service] /api/leads failed', err));
+    });
 
-      if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'form_submitted_successfully');
+    form.addEventListener('focusin', function fireFormOpened() {
+      form.removeEventListener('focusin', fireFormOpened);
+      if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'form_opened');
     });
 
     form.querySelectorAll('input, textarea').forEach((el) => {

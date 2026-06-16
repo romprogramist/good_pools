@@ -12,6 +12,10 @@
 
     form.addEventListener('input', onInput);
     form.addEventListener('submit', onSubmit);
+    form.addEventListener('focusin', function fireFormOpened() {
+      form.removeEventListener('focusin', fireFormOpened);
+      if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'form_opened');
+    });
   }
 
   function onInput(e) {
@@ -62,7 +66,8 @@
         consent: true,
         marketing: consentState.marketing
       })
-    }).then(() => {
+    }).then((res) => {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
       if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'form_submitted_successfully');
       showThanks();
     }).catch(() => {

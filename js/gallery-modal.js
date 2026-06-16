@@ -154,6 +154,7 @@
     document.dispatchEvent(new CustomEvent('gallery:open', {
       detail: { id: item.id || null, name: item.title || '' }
     }));
+    if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'item_opened');
 
     render();
     modalEl.hidden = false;

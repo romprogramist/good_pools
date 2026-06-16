@@ -95,7 +95,10 @@
       void dlg.offsetWidth; // force reflow so transition fires
       dlg.classList.add('is-open');
     }
-    if (typeof window.ym === 'function') window.ym(100792239, 'reachGoal', 'consult_opened');
+    if (typeof window.ym === 'function') {
+      window.ym(100792239, 'reachGoal', 'consult_opened');
+      window.ym(100792239, 'reachGoal', 'form_opened');
+    }
     const nameInput = dlg.querySelector('[data-consult-name]');
     if (nameInput) setTimeout(() => nameInput.focus(), 50);
   }
