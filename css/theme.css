@@ -54,6 +54,13 @@ html[data-theme="pool"] .header-icon.max-icon,
 html[data-theme="pool"] .header-icon svg.max-icon { fill: var(--l-ink); }
 /* белые «мессенджер»-кружки на светлом фоне — добавляем видимую обводку */
 html[data-theme="pool"] .header-icon.is-messenger { border-color: var(--l-border); }
+/* на белом сплошной чёрный глиф выглядит жирно — красим в фирменные цвета.
+   ВАЖНО: общая навы-обводка (.header-icon svg{stroke}) перекрывает stroke:none
+   у мессенджеров и рисует тёмное кольцо — гасим её здесь же. */
+html[data-theme="pool"] .header-icon.is-messenger svg { stroke: none; }
+html[data-theme="pool"] .header-icon.is-messenger[aria-label="WhatsApp"] svg { fill: #25D366; }
+html[data-theme="pool"] .header-icon.is-messenger[aria-label="Telegram"] svg { fill: #229ED9; }
+html[data-theme="pool"] .header-icon.is-messenger[aria-label="MAX"] svg.max-icon { fill: #2563EB; }
 /* синяя «поиск» и зелёная «телефон» кнопки контрастны на светлом — оставляем */
 
 /* ===================== МЕНЮ (оверлей) ===================== */
