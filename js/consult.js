@@ -194,6 +194,9 @@
     return s;
   }
 
+  // Экспорт для внешних триггеров (промо-баннер на страницах без quiz.js, напр. /pool).
+  window.openConsult = openConsult;
+
   document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.btn-consult, [data-consult-open]').forEach(function (btn) {
       btn.addEventListener('click', function (e) {

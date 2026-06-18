@@ -387,6 +387,10 @@
     showError('');
   }
 
+  // Экспорт для внешних триггеров (промо-баннер), т.к. квиз биндит клики
+  // только на статические элементы в DOMContentLoaded.
+  window.openQuiz = openQuiz;
+
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-quiz-open]').forEach((el) => {
       el.addEventListener('click', (e) => {
