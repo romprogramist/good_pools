@@ -5,7 +5,9 @@
 /* Резервируем место над фикс-шапкой ровно на высоту полосы.
    При --promo-h:0 (баннер скрыт/закрыт) поведение идентично исходному. */
 body   { padding-top: var(--promo-h); transition: padding-top var(--motion-slow) var(--ease-out); }
-.header { top: var(--promo-h); }
+/* top едет синхронно с body.padding-top; transform-переход (scroll-hide из style.css)
+   обязательно рестейтим в том же объявлении, иначе shorthand его затрёт. */
+.header { top: var(--promo-h); transition: transform var(--motion-base) var(--ease-out), top var(--motion-slow) var(--ease-out); }
 
 .promo-bar {
   position: fixed;
