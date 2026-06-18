@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="UTF-8"><title>promo-banner tests</title></head>
+<body>
+<h1>promo-banner tests — открой DevTools → Console</h1>
+<script src="promo-banner.js"></script>
+<script>
+  (function () {
+    let pass = 0, fail = 0;
+    function eq(actual, expected, name) {
+      if (actual === expected) { pass++; console.log('OK:', name); }
+      else { fail++; console.error('FAIL:', name, '\n  expected:', JSON.stringify(expected), '\n  actual:', JSON.stringify(actual)); }
+    }
+    const P = window.__promo;
+
+    eq(P.shouldShow({ getItem: function () { return '1'; } }), false, 'closed flag → не показывать');
+    eq(P.shouldShow({ getItem: function () { return null; } }), true,  'нет флага → показывать');
+    eq(P.shouldShow({ getItem: function () { return '0'; } }), true,  'другое значение → показывать');
+    eq(P.shouldShow(null), true, 'нет storage → показывать');
+    eq(P.shouldShow({ getItem: function () { throw new Error('blocked'); } }), true, 'storage кидает → показывать');
+
+    console.log(`\n${pass} passed, ${fail} failed`);
+  })();
+</script>
+</body>
+</html>
