@@ -16,8 +16,7 @@ body   { padding-top: var(--promo-h); transition: padding-top var(--motion-slow)
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 9px 44px 9px 16px; /* справа место под крестик */
+  padding: 9px 44px; /* симметрично: справа крестик, слева столько же — текст центрируется честно */
   background: var(--gp-cta-grad);
   color: var(--gp-cta-ink);
   font-size: 14px;
@@ -36,15 +35,16 @@ body   { padding-top: var(--promo-h); transition: padding-top var(--motion-slow)
 
 .promo-bar.is-visible { opacity: 1; transform: translateY(0); }
 
+/* Обычный текстовый поток (не flex): длинная фраза переносится по словам
+   и центрируется. inline-flex ломал перенос на узких экранах — анонимные
+   текстовые куски не разбивались внутри себя и обрезались справа. */
 .promo-bar__text {
-  display: inline-flex;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: break-word;
 }
-.promo-bar__text b { font-weight: 800; }
-.promo-bar__emoji { font-size: 16px; }
+.promo-bar__text b { font-weight: 800; white-space: nowrap; }
+.promo-bar__emoji { font-size: 16px; margin-right: 5px; }
 
 .promo-bar__close {
   position: absolute;
@@ -74,5 +74,11 @@ body   { padding-top: var(--promo-h); transition: padding-top var(--motion-slow)
 .promo-bar__close:focus-visible { outline: 2px solid var(--gp-cta-ink); outline-offset: 1px; }
 
 @media (max-width: 480px) {
-  .promo-bar { font-size: 12.5px; padding: 8px 40px 8px 12px; }
+  /* симметричный отступ под крестик с обеих сторон; меньше шрифт и плотнее строки */
+  .promo-bar { font-size: 12.5px; line-height: 1.25; padding: 7px 38px; }
+  .promo-bar__close { width: 32px; height: 32px; right: 4px; font-size: 24px; }
+}
+
+@media (max-width: 360px) {
+  .promo-bar { font-size: 11.5px; padding: 7px 36px; }
 }
