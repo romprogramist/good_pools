@@ -24,12 +24,16 @@
     // Delay 800ms before slide-in so it doesn't punch the user in the face on load
     setTimeout(function () {
       banner.classList.add('is-visible');
+      // Пока баннер виден — резервируем место снизу (CSS поднимает hero-CTA над баннером)
+      // и прячем плавающую кнопку, иначе на мобильных баннер перехватывает тапы по кнопкам заявки.
+      document.body.classList.add('cookie-visible');
     }, 800);
 
     banner.querySelector('.cookie-banner__btn').addEventListener('click', function () {
       try { localStorage.setItem(STORAGE_KEY, '1'); } catch (_) { /* ignore */ }
       banner.classList.remove('is-visible');
       banner.classList.add('is-leaving');
+      document.body.classList.remove('cookie-visible');
       setTimeout(function () { banner.remove(); }, 320); // = --motion-base + buffer
     });
   }

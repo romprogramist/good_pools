@@ -55,6 +55,30 @@
 }
 
 @media (max-width: 480px) {
-  .cookie-banner { flex-direction: column; align-items: stretch; }
-  .cookie-banner__btn { width: 100%; }
+  /* Компактная полоса снизу, а не высокая карточка: иначе баннер накрывал
+     кнопки заявки («Рассчитать стоимость» / плавающую) и тапы не доходили. */
+  .cookie-banner {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 10px;
+    padding: 10px 12px;
+    font-size: 12.5px;
+    line-height: 1.35;
+  }
+  .cookie-banner__text { flex: 1 1 180px; }
+  .cookie-banner__btn { width: auto; flex: 0 0 auto; padding: 9px 16px; font-size: 13px; }
+}
+
+/* Пока cookie-баннер показан — не даём ему перекрывать кнопки заявки:
+   1) поднимаем hero-CTA выше зоны баннера (резерв места снизу, как промо-бар сверху);
+   2) прячем плавающую кнопку (она тоже внизу и конфликтует с баннером). */
+@media (max-width: 768px) {
+  body.cookie-visible .floating-cta { display: none !important; }
+}
+@media (max-width: 480px) {
+  body.cookie-visible .hero { padding-bottom: 150px; }
 }
