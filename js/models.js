@@ -28,7 +28,7 @@
             '<div class="mcard-name">' + m.name + '</div>' +
             '<div class="mcard-series">' + m.series + '</div>' +
             '<div class="mcard-desc">' + m.desc + '</div>' +
-            '<div class="mcard-price">' + m.price + '</div>' +
+            '<div class="mcard-price">Цена по запросу</div>' +
             '<a class="mcard-more" href="/pool/' + m.id + '">Подробнее →</a>' +
           '</div>' +
         '</article>'
@@ -43,7 +43,7 @@
       infoLines: [
         model.series,
         model.desc,
-        model.specs + ' · ' + model.price
+        model.specs
       ],
       gallery: model.gallery && model.gallery.length ? model.gallery : [],
       triggerEl: cardEl

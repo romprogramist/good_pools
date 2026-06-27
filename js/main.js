@@ -181,16 +181,8 @@ document.addEventListener('DOMContentLoaded', () => {
       ? m.length_m + ' &times; ' + m.width_m + ' м'
       : (m.specs || 'Любой размер');
 
-    var priceLabel = m.price && m.price !== 'По проекту'
-      ? m.price.replace(/^от\s*/, 'от<strong>') + ' &#8381;</strong>'
-      : 'Цена<strong>По проекту</strong>';
-
-    // Fix price — if it already contains ₽, don't add again
-    if (m.price && m.price.indexOf('₽') !== -1) {
-      priceLabel = m.price.replace(/^от\s*/, 'от<strong>') + '</strong>';
-    } else if (m.price === 'По проекту') {
-      priceLabel = 'Цена<strong>По проекту</strong>';
-    }
+    // Цены на сайте скрыты — показываем «Цена по запросу» (см. docs/superpowers/specs/2026-06-27-hide-prices-design.md)
+    var priceLabel = '<strong>Цена по запросу</strong>';
 
     var link = 'models.html?category=' + m.category + '&model=' + m.id;
 
