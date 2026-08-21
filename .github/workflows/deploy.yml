@@ -49,7 +49,7 @@ jobs:
           rsync -az --delete-after -e "ssh $SSH_OPTS" \
             --exclude='models.html.bak' \
             index.html catalog.html models.html portfolio.html \
-            slider-data.js \
+            slider-data.js favicon.ico site.webmanifest \
             css js images data \
             "$SSH_USER@$SSH_HOST:/var/www/good-pools/public/"
 

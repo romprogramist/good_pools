@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Хорошие Бассейны">
+  <defs>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="45%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#075985"/>
+    </linearGradient>
+    <linearGradient id="sun" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="55%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <clipPath id="tile">
+      <rect x="0" y="0" width="64" height="64" rx="14" ry="14"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#tile)">
+    <rect width="64" height="64" fill="url(#water)"/>
+
+    <!-- солнце -->
+    <circle cx="44" cy="20" r="9" fill="url(#sun)"/>
+
+    <!-- волны -->
+    <g fill="none" stroke="#ffffff" stroke-linecap="round">
+      <path d="M4 43q7-6.4 14 0t14 0 14 0 14 0" stroke-width="5.4"/>
+      <path d="M-3 53.5q7-6.4 14 0t14 0 14 0 14 0" stroke-width="5" opacity=".62"/>
+    </g>
+  </g>
+</svg>

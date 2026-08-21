@@ -1,0 +1,14 @@
+{
+  "name": "Хорошие Бассейны",
+  "short_name": "Бассейны",
+  "description": "Производство и монтаж бетонных и композитных бассейнов под ключ",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0284c7",
+  "icons": [
+    { "src": "/images/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/images/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/images/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
